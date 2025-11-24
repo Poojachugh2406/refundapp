@@ -31,8 +31,8 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://Hawk Agencyapp.vercel.app'] 
-    : ['https://Hawk Agencyapp.vercel.app', 'http://localhost:5173' , 'http://localhost:4173'],
+    ? ['https://hawkagency-portal-kushal.vercel.app'] 
+    : ['https://hawkagency-portal-kushal.vercel.app', 'http://localhost:5173' , 'http://localhost:4173'],
   credentials: true
 }));
 

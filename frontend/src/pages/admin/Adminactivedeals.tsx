@@ -480,7 +480,7 @@ const ActiveDeals: React.FC<ActiveDealsProps> = () => {
 *View Product:* ${product.productLink}
 ${slotMessage}
 *Place your order here:*
-https://Hawk Agencyapp.vercel.app/order
+https://hawkagency-portal-kushal.vercel.app/order
 `;
 
    // 3. Copy to clipboard
