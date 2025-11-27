@@ -18,7 +18,7 @@ const seedDatabase = async () => {
 
     // Create admin user
     const adminUser = new User({
-      email: process.env.ADMIN_EMAIL || 'admin@Hawk Agency.com',
+      email: process.env.ADMIN_EMAIL || 'admin@hawkagency.com',
       password: process.env.ADMIN_PASSWORD || 'admin123',
       role: 'admin',
       phone:'9090909090',
@@ -27,8 +27,6 @@ const seedDatabase = async () => {
 
     await adminUser.save();
     console.log('Admin user created successfully');
-
-
     console.log('Database seeding completed successfully!');
     process.exit(0);
   } catch (error) {
