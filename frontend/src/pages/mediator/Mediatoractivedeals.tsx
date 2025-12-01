@@ -474,13 +474,15 @@ const MediatorActiveDeals: React.FC<ActiveDealsProps> = () => {
     // 2. Build the final deal message
     // You can customize this text format however you like
     const dealMessage = `🔥 *Hawk Agency Deal!* 🔥
+    *Do not change the link*
 *Product:* ${product.name}
+*Product code:* ${product.productCode}
 *Brand:* ${product.brand}
 *Platform:* ${product.productPlatform}
 *View Product:* ${product.productLink}
 ${slotMessage}
 *Place your order here:*
-https://Hawk Agencyapp.vercel.app/order
+deals.hawkagency.in
 `;
 
     // 3. Copy to clipboard
