@@ -120,11 +120,12 @@ const OrderModal: React.FC<{
 
                   <p><span className="font-medium">Order Number:</span> {data.orderNumber}</p>
                   <p><span className="font-medium">Reviewer Name:</span> {data.name}</p>
-                  <p><span className="font-medium">Reviewer Email:</span> {data.email}</p>
+                  {/* <p><span className="font-medium">Reviewer Email:</span> {data.email}</p>
                   <p><span className="font-medium">Reviewer Contact:</span> {data.phone}</p>
- 
-                  <p><span className="font-medium">Mediator Name:</span> {data.mediator?.nickName ?? data.mediator?.name??"N/A"}</p>
+  */}
+                  {/* <p><span className="font-medium">Mediator Name:</span> {data.mediator?.nickName ?? data.mediator?.name??"N/A"}</p>
                   <p><span className="font-medium">Mediator phone:</span> {data.mediator?.phone??"N/A"}</p>
+                  */}
                   <p><span className="font-medium">Replacement :</span> {data.isReplacement ? "Yes" : "No"}</p>
                   <p><span className="font-medium">Rating / Review:</span> {data.ratingOrReview}</p>
                   <p><span className="font-medium">Deal Type:</span> {data.dealType}</p>

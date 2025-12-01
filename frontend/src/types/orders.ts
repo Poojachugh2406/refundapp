@@ -7,7 +7,7 @@ export type OrderStatus = 'accepted' | 'pending' | 'rejected' | 'payment_done' |
 export interface Order {
   _id: string;
   product: string | Product;
-  mediator: string | User;
+  //mediator: string | User;
   name: string;
   email: string;
   phone: string;

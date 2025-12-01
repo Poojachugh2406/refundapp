@@ -571,10 +571,10 @@ const TrackOrderPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div>
+                  {/* <div>
                     <label className="text-sm font-medium text-gray-700">Mediator Name</label>
                     <p className="text-lg font-semibold text-gray-900">{trackingData.mediator.name}</p>
-                  </div>
+                  </div> */}
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>

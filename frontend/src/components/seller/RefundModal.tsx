@@ -160,8 +160,8 @@ const RefundModal: React.FC<{
                   <p><span className="font-medium text-gray-800">Less Price:</span> {data.order.lessPrice ?? "N/A"}</p>
                   <p><span className="font-medium text-gray-800">Exchange Product:</span> {data.order.exchangeProduct ?? "N/A"}</p>
                   <p><span className="font-medium text-gray-800">Refund Amount:</span> {data.order.orderAmount - data.order.lessPrice}</p>
-                  <p><span className="font-medium text-gray-800">Mediator Name:</span> {data.order.mediator?.nickName ?? "N/A"}</p>
-                  {/* <p><span className="font-medium text-gray-800">Refund Note :</span> {data.note ?? "N/A"}</p> */}
+                  {/* <p><span className="font-medium text-gray-800">Mediator Name:</span> {data.order.mediator?.nickName ?? "N/A"}</p>
+                  <p><span className="font-medium text-gray-800">Refund Note :</span> {data.note ?? "N/A"}</p> */}
                   {/* <p><span className="font-medium text-gray-800">Order Note :</span> {data.order.note ?? "N/A"}</p> */}
                 </div>
               </div>

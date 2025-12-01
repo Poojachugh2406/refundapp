@@ -24,7 +24,7 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
     const [filters, setFilters] = useState({
         status: '',
         brand: '',
-        mediator: '',
+       // mediator: '',
         platform: '',
         productName: '',
         brandName: '',
@@ -78,7 +78,7 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
 
         const matchesFilters =
             (!filters.status || item.orderStatus === filters.status) &&
-            (!filters.mediator || (item.mediator && item.mediator._id && item.mediator?._id?.toLowerCase().includes(filters.mediator.toLowerCase()))) &&
+           // (!filters.mediator || (item.mediator && item.mediator._id && item.mediator?._id?.toLowerCase().includes(filters.mediator.toLowerCase()))) &&
             // (!filters.seller || (item.product && item.product.seller && item.product.seller.name && item.product.seller?._id?.toLowerCase().includes(filters.seller.toLowerCase()))) &&
             (!filters.platform || item.product?.productPlatform?.toLowerCase().includes(filters.platform.toLowerCase())) &&
             (!filters.productName || (item.product && item.product._id && item.product?._id?.toLowerCase().includes(filters.productName.toLowerCase())));
@@ -118,7 +118,9 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
         setIsExporting(true);
 
         try {
-            let response: any = await apiGet(`/order/download?status=${filters.status}&mediator=${filters.mediator}&product=${filters.productName}&platform=${filters.platform}&searchQuery=${searchTerm}&seller=${sellerId}&fromDate=${filters.fromDate}&toDate=${filters.toDate}`);
+            //let response: any = await apiGet(`/order/download?status=${filters.status}&mediator=${filters.mediator}&product=${filters.productName}&platform=${filters.platform}&searchQuery=${searchTerm}&seller=${sellerId}&fromDate=${filters.fromDate}&toDate=${filters.toDate}`);
+
+            let response: any = await apiGet(`/order/download?status=${filters.status}&product=${filters.productName}&platform=${filters.platform}&searchQuery=${searchTerm}&seller=${sellerId}&fromDate=${filters.fromDate}&toDate=${filters.toDate}`);
             if (response.success) {
                 const formattedData = formatOrdersForExport(response.data);
                 exportToExcel(formattedData, 'orders');
@@ -126,7 +128,9 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
             } else {
                 throw new Error(response.message);
             }
-           response = await apiGet(`/refund/download?status=${filters.status}&mediator=${filters.mediator}&product=${filters.productName}&platform=${filters.platform}&searchQuery=${searchTerm}&seller=${sellerId}&fromDate=${filters.fromDate}&toDate=${filters.toDate}`);
+            response = await apiGet(`/refund/download?status=${filters.status}&product=${filters.productName}&platform=${filters.platform}&searchQuery=${searchTerm}&seller=${sellerId}&fromDate=${filters.fromDate}&toDate=${filters.toDate}`);
+          
+           // response = await apiGet(`/refund/download?status=${filters.status}&mediator=${filters.mediator}&product=${filters.productName}&platform=${filters.platform}&searchQuery=${searchTerm}&seller=${sellerId}&fromDate=${filters.fromDate}&toDate=${filters.toDate}`);
             if (response.success) {
                 console.log(response.data);
                 const formattedData = formatRefundsForExport(response.data);
@@ -179,7 +183,7 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
                         <Button
                             variant="outline"
                             onClick={() => {
-                                setFilters({ status: '', brand: '', mediator: '', platform: '', brandName: '', productName: '',  fromDate: '', toDate: '' });
+                                setFilters({ status: '', brand: '', platform: '', brandName: '', productName: '',  fromDate: '', toDate: '' });
                                 setSearchTerm('');
                             }}
                             className="w-full"
@@ -267,7 +271,7 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
                         </select>
                     </div>
                 
-                    
+{/*                     
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Mediator</label>
 
@@ -293,7 +297,7 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
                                 );
                             })}
                         </select>
-                    </div>
+                    </div> */}
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -338,9 +342,9 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
                                 {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Platform
                                 </th> */}
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Mediator
-                                </th>
+                                </th> */}
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Amount
                                 </th>
@@ -392,9 +396,9 @@ function OrderTable({ orders, sellerId }: {sellerId:string, orders: OrderWithDet
                                         {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {item.product?.productPlatform ?? "N/A"}
                                         </td> */}
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {item.mediator?.nickName || 'N/A'}
-                                        </td>
+                                        </td> */}
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             ₹{item.orderAmount}
                                         </td>
