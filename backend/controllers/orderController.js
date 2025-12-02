@@ -2,6 +2,7 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import Refund from '../models/Refund.js';
 import User from '../models/User.js';
+import { sendOrderConfirmationEmail } from '../services/otpService.js';
 import { MEDIATOR } from '../utils/constants.js';
 import mongoose from 'mongoose';
 
@@ -58,11 +59,15 @@ export const createOrder = async (req, res) => {
     await newOrder.save();
     // const order = await newOrder.save();
 
+    await sendOrderConfirmationEmail(newOrder.email, newOrder.orderNumber);
+    
     res.status(201).json({
       success: true,
       message: 'Order created successfully',
       // data: order
     });
+
+
   } catch (error) {
     console.error('Create order error:', error);
     if (error.code === 11000) {

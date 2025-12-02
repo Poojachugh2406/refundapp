@@ -1023,7 +1023,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
   {/* Main Modal */}
   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4">
     <div className="bg-white rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-
+    
       {/* Modal Header */}
       <div className="flex items-center justify-between p-3 sm:p-4 md:p-6 border-b border-gray-200">
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
@@ -1161,7 +1161,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
             Close
           </Button>
 
-          { data.orderStatus !== 'payment_done' || data.orderStatus !== 'accepted' && (
+          { data.orderStatus !== 'payment_done' && data.orderStatus !== 'accepted' && (
             <Button
               onClick={handleAccepted}
               isLoading={acceptOrderMutation.isPending}
