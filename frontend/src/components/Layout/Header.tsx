@@ -19,7 +19,8 @@ console.log('isAuthenticated', isAuthenticated);
             <div className="flex items-center">
               <Link to="/admin" className="flex items-center space-x-2">
                 {/* <Package className="h-8 w-8 text-blue-600" /> */}
-                <img width="70" src = {bblogo} alt = "Logo"/>
+                {/* <img width="70" src = {bblogo} alt = "Logo"/> */}
+                <img width="180" src = {bblogo} alt = "Logo" className='mt-auto'/>
                 <span className="text-xl font-bold text-gray-900">Refund Admin</span>
               </Link>
             </div>
@@ -48,11 +49,11 @@ console.log('isAuthenticated', isAuthenticated);
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
+          <div className="flex items-center mt-2  ">
+            <Link to="/" className="flex items-center space-x-2 m-2 p-4">
               {/* <Package className="h-8 w-8 text-blue-600" /> */}
-              <img width="70" src = {bblogo} alt = "Logo"/>
-              <span className="text-xl font-bold text-gray-900">Hawk Agency</span>
+              <img width="180" src = {bblogo} alt = "Logo" className='mt-auto'/>
+              {/* <span className="text-xl font-bold text-gray-900">Hawk Agency</span> */}
             </Link>
           </div>
           

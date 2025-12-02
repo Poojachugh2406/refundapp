@@ -69,9 +69,9 @@ const Login: React.FC = () => {
       <div className="relative hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-sky-500 to-indigo-600 text-white">
         {/* Logo */}
         <div className="flex items-center space-x-3 z-10">
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
+          <div className="w-20 bg-gray-300 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
             {/* <Package className="h-7 w-7 text-white" /> */}
-            <img width="70" src = {bblogo} alt = "Logo"/>
+            <img width="180" src = {bblogo} alt = "Logo"/>
           </div>
           <h1 className="text-3xl font-bold">Hawk Agency</h1>
         </div>
@@ -106,12 +106,12 @@ const Login: React.FC = () => {
       <div className="flex flex-col justify-center py-12 px-6 sm:px-10 lg:px-16">
         <div className="w-full max-w-md mx-auto">
           {/* Mobile Logo (visible on small screens) */}
-          <div className="flex items-center space-x-3 mb-8 lg:hidden">
-            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+          <div className="flex items-center space-x-3 mb-8 lg:hidden justify-center">
+            <div className="w-40  bg-gray-50 rounded-lg flex items-center justify-center">
               {/* <Package className="h-6 w-6 text-white" /> */}
-              <img width="70" src = {bblogo} alt = "Logo"/>
+              <img width="170" src = {bblogo} alt = "Logo"/>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Hawk Agency</h1>
+            {/* <h1 className="text-2xl font-bold text-gray-900">Hawk Agency</h1> */}
           </div>
 
           {/* Form Header */}
@@ -165,7 +165,6 @@ const Login: React.FC = () => {
                 Forgot password?
               </Link>
             </div>
-
             <Button
               type="submit"
               variant="primary"
