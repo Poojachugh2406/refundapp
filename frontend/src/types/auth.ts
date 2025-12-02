@@ -41,18 +41,26 @@ export interface AuthResponse {
 export interface User {
   _id: string;
   name: string;
-  nickName?:string;
   email: string;
   phone: string;
-  role?: 'admin' | 'mediator' | 'user' | 'seller';
+  role: 'admin' | 'mediator' | 'user' | 'seller';
+  nickName?: string;
   isActive: boolean;
-  isVerified: boolean;
+  // --- ADD THESE NEW FIELDS ---
+  aadhaarNumber?: string;
+  panNumber?: string;
   upiId?: string;
+  communityLink?: string;
+  aadhaarImageUrl?: string; // For the image URL
+  // bankDetails?: {          // Keep this structure if your backend sends it nested
+  //   bankName: string;
+  //   ifscCode: string;
+  //   accountNumber: string;
+  // }; 
+  // OR if your backend sends them flat (as seen in your Modal code):
+  bankName?: string;
+  ifscCode?: string;
   accountNumber?: string;
-  accountIfsc?: string;
-  lastLogin?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface LoginCredentials{

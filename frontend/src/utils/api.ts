@@ -80,7 +80,7 @@ export const apiDelete = async <T>(url: string): Promise<ApiResponse<T>> => {
 export const apiUpload = async <T>(url: string, formData: FormData): Promise<ApiResponse<T>> => {
   const response = await api.post<ApiResponse<T>>(url, formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      //'Content-Type': 'multipart/form-data',
     },
     timeout: 120000, // 2 minutes timeout specifically for file uploads
   });
@@ -92,8 +92,14 @@ export const authAPI = {
   login: (data: LoginData): Promise<ApiResponse<{ token: string; user: User }>> =>
     apiPost('/auth/login', data),
 
-  register: (data: RegisterData): Promise<ApiResponse<{ token: string; user: User }>> =>
-    apiPost('/auth/register', data),
+ register: (data: RegisterData | FormData): Promise<ApiResponse<{ token: string; user: User }>> => {
+    // Check if the data is FormData (contains files)
+    if (data instanceof FormData) {
+      return apiUpload('/auth/register', data);
+    }
+    // Otherwise send as normal JSON
+    return apiPost('/auth/register', data);
+  },
 
   verify: (data: VerifyData): Promise<ApiResponse<{ user: User }>> =>
     apiPost('/auth/verify', data),

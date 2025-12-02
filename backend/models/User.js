@@ -20,7 +20,12 @@ const userSchema = new mongoose.Schema({
         minlength: [12, 'Must be 12 digit-number'],
         select: false
     },
-    aadhaarImageUrl: { type: String, required: false }, // Store the URL after upload
+    aadhaarImageUrl: 
+    { type: String, 
+        trim:true,
+         },
+    
+    // Store the URL after upload
   panNumber: { type: String, required: false },
   communityLink: { type: String },
     email:{
@@ -65,6 +70,25 @@ const userSchema = new mongoose.Schema({
     
         type:String
     },
+    aadhaarNumber:{
+        type:String
+    },
+    panNumber:{
+        type:String
+    },
+    bankName:{
+        type:String
+    },
+    communityLink:{
+        typr:String
+    },
+    ifscCode:{
+        type:String
+    },
+    // aadhaarImageUrl:{
+    //     type:FileList
+    // },
+    
     isVerified:{
         type:Boolean,
         default:false
