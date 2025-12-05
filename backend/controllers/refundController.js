@@ -1,7 +1,6 @@
 import Refund from '../models/Refund.js';
 import Order from '../models/Order.js';
 import mongoose from 'mongoose';
-import { sendRefundConfirmationEmail } from '../services/otpService.js';
 // @desc    Create new refund
 // @route   POST /api/refunds
 // @access  Public
@@ -81,8 +80,6 @@ export const createRefund = async (req, res) => {
     await isOrderExists.save();
     console.log('Refund created successfully:', refund._id);
     // Populate order details
-
-    await sendRefundConfirmationEmail(isOrderExists.email , isOrderExists.orderNumber);
     await refund.populate('order', 'orderNumber name email phone orderAmount');
     res.status(201).json({
       success: true,
