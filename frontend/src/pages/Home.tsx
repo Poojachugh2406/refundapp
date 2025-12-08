@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Package, RefreshCw, Search, ArrowRight, Tag, User } from 'lucide-react';
+import { Package, RefreshCw, Search, ArrowRight, Tag, User, ShieldCheck, Users } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 
 const Home: React.FC = () => {
