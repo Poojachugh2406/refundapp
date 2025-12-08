@@ -21,63 +21,74 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
-  {[
-    {
-      title: "Mediator Login",
-      desc: "Access the mediator dashboard to manage active deals, verify submissions, and facilitate order processing.",
-      iconBg: "bg-blue-100",
-      iconColor: "text-blue-600",
-      icon: Package,
-      btnColor: "bg-blue-600 hover:bg-blue-700",
-      link: "/mediator",
-      btnText: "Login",
-    },
-    {
-      title: "User Login",
-      desc: "Log in to submit new orders, upload proof of purchase, request refunds, and track your personal status.",
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
-      icon: RefreshCw,
-      btnColor: "bg-green-600 hover:bg-green-700",
-      link: "/user",
-      btnText: "Login", 
-    },
-    {
-      title: "Admin Login",
-      desc: "Restricted access for system administrators to oversee all users, manage platform settings, and view analytics.",
-      iconBg: "bg-purple-100",
-      iconColor: "text-purple-600",
-      icon: Search,
-      btnColor: "bg-purple-600 hover:bg-purple-700",
-      link: "/seller",
-      btnText: "Login",
-    },
-  ].map((card, index) => (
-    <div
-      key={index}
-      className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col justify-between"
-    >
-      <div>
-        <div
-          className={`flex items-center justify-center w-16 h-16 ${card.iconBg} rounded-full mb-6 mx-auto`}
-        >
-          <card.icon className={`h-8 w-8 ${card.iconColor}`} />
-        </div>
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
-          {card.title}
-        </h3>
-        <p className="text-gray-600 text-center mb-6">{card.desc}</p>
-      </div>
-      <Link
-        to={card.link}
-        className={`w-full ${card.btnColor} text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2`}
-      >
-        <span>{card.btnText}</span>
-        <ArrowRight className="h-4 w-4" />
-      </Link>
-    </div>
-  ))}
-</div>
+            {[
+//pooja
+              // {
+              //   title: "Active Deals",
+              //   desc: "Explore current active deals and special offers. Find the best opportunities.",
+              //   iconBg: "bg-orange-100",
+              //   iconColor: "text-orange-600",
+              //   icon: Tag,
+              //   btnColor: "bg-orange-500 hover:bg-orange-600",
+              //   link: "/activedeals",
+              //   btnText: "View Deals",
+              // },
+              {
+                title: "Submit Order",
+                desc: "Submit a new order with all required details and supporting documents.",
+                iconBg: "bg-blue-100",
+                iconColor: "text-blue-600",
+                icon: Package,
+                btnColor: "bg-blue-600 hover:bg-blue-700",
+                link: "/order",
+                btnText: "Submit Order",
+              },
+              {
+                title: "Request Refund",
+                desc: "Already have an order? Request a refund by providing your order number and refund details.",
+                iconBg: "bg-green-100",
+                iconColor: "text-green-600",
+                icon: RefreshCw,
+                btnColor: "bg-green-600 hover:bg-green-700",
+                link: "/refund",
+                btnText: "Request Refund",
+              },
+              {
+                title: "Track Order",
+                desc: "Track the status of your order or refund request. View timeline and get real-time updates.",
+                iconBg: "bg-purple-100",
+                iconColor: "text-purple-600",
+                icon: Search,
+                btnColor: "bg-purple-600 hover:bg-purple-700",
+                link: "/track",
+                btnText: "Track Order",
+              },
+            ].map((card, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col justify-between"
+              >
+                <div>
+                  <div
+                    className={`flex items-center justify-center w-16 h-16 ${card.iconBg} rounded-full mb-6 mx-auto`}
+                  >
+                    <card.icon className={`h-8 w-8 ${card.iconColor}`} />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
+                    {card.title}
+                  </h3>
+                  <p className="text-gray-600 text-center mb-6">{card.desc}</p>
+                </div>
+                <Link
+                  to={card.link}
+                  className={`w-full ${card.btnColor} text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2`}
+                >
+                  <span>{card.btnText}</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            ))}
+          </div>
 
           {/* Features Section */}
           <div className="mt-20">
