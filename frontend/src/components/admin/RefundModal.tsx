@@ -1,7 +1,3 @@
-// new
-// 998487d
-// frontend\src\components\admin\RefundModal.tsx
-// @@ -0,0 +1,1586 @@
 
 
 
@@ -1270,7 +1266,8 @@ const RefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refundId }) 
                                     <p><span className="font-medium text-gray-800">Less Price:</span> {data?.order.lessPrice ?? "N/A"}</p>
                                     <p><span className="font-medium text-gray-800">Exchange Product:</span> {data?.order?.exchangeProduct ?? "N/A"}</p>
                                     <p><span className="font-medium text-gray-800">Refund Amount:</span> {data?.order?.orderAmount - data.order?.lessPrice}</p>
-                                    <p><span className="font-medium text-gray-800">Mediator Name:</span> {data?.order?.mediator?.nickName ?? "N/A"}</p>
+                                    {/* <p><span className="font-medium text-gray-800">Mediator Name:</span> {data?.order?.mediator?.nickName ?? "N/A"}</p>
+                               */}
                                 </div>
                             </div>
                         </div>
@@ -1314,7 +1311,7 @@ const RefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refundId }) 
                     <div className="flex flex-col gap-2 xs:gap-3 md:flex-row justify-between md:justify-end items-stretch md:items-center p-3 xs:p-4 sm:p-5 md:p-6 border-t border-gray-200 w-full">
                         {/* Mobile: Grid layout */}
                         <div className="grid grid-cols-3 xs:grid-cols-3 gap-1 xs:gap-2 w-full md:hidden">
-                            {data.status !== 'accepted' && (
+                            {data.orderStatus !== 'payment_done' || data.orderStatus !== 'accepted'   && (
                                 <Button onClick={handleAccepted} isLoading={acceptedMutation.isPending} className="w-full justify-center text-xs py-1.5">
                                     <FileCheck className="w-3 h-3 mr-1" />
                                     Accept
@@ -1412,7 +1409,7 @@ const RefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refundId }) 
                                 </Button>
                             )}
     
-                            {data.status !== 'accepted' && (
+                                             {data.orderStatus !== 'payment_done' || data.orderStatus !== 'accepted'   && (
                                 <Button onClick={handleAccepted} isLoading={acceptedMutation.isPending} className="flex-shrink-0 text-xs xs:text-sm py-1.5 xs:py-2">
                                     <FileCheck className="w-3 h-3 xs:w-4 xs:h-4 mr-1 xs:mr-2" />
                                     Accept
