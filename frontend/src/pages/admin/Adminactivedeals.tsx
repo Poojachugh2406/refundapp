@@ -443,7 +443,7 @@ const ActiveDeals: React.FC<ActiveDealsProps> = () => {
       if (response.success) {
         setProducts(response.data || []);
       } else {
-        throw new Error(response.message || 'Failed to fetch products');
+        throw new Error(response.message || 'Failed to  fetch products');
       }
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to load active deals');
