@@ -323,7 +323,7 @@
 
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { X, User as UserIcon, CreditCard, FileText, Users } from 'lucide-react';
+import { X, User as UserIcon } from 'lucide-react';
 import Button from '@/components/UI/Button';
 import Input from '@/components/UI/Input';
 import type { User } from '@/types/auth';
@@ -372,14 +372,14 @@ const MediatorModal: React.FC<MediatorModalProps> = ({
         password: '', // Keep password empty on edit unless changing
         nickName: mediator.nickName || '',
         role: 'mediator',
-        aadhaarNumber: mediator.aadhaarNumber || '',
-        panNumber: mediator.panNumber || '',
-        upiId: mediator.upiId || '',
-        communityLink: mediator.communityLink || '',
-        // Handle nested bankDetails safely
-        bankName: mediator.bankName || '',
-        ifscCode: mediator.ifscCode || '',
-        accountNumber: mediator.accountNumber || ''
+        // aadhaarNumber: mediator.aadhaarNumber || '',
+        // panNumber: mediator.panNumber || '',
+        // upiId: mediator.upiId || '',
+        // communityLink: mediator.communityLink || '',
+        // // Handle nested bankDetails safely
+        // bankName: mediator.bankName || '',
+        // ifscCode: mediator.ifscCode || '',
+        // accountNumber: mediator.accountNumber || ''
       });
     } else {
       // Reset for Create Mode
@@ -478,7 +478,7 @@ const MediatorModal: React.FC<MediatorModalProps> = ({
           </div>
 
           {/* Section 2: Identity Proofs */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="flex items-center space-x-2 text-blue-600 border-b pb-2">
               <FileText className="w-5 h-5" />
               <h3 className="font-semibold text-lg">Identity Details</h3>
@@ -487,7 +487,7 @@ const MediatorModal: React.FC<MediatorModalProps> = ({
               <Input label="Aadhaar Number" name="aadhaarNumber" value={formData.aadhaarNumber} onChange={handleChange} placeholder="12-digit Aadhaar" />
               <Input label="PAN Number" name="panNumber" value={formData.panNumber} onChange={handleChange} placeholder="PAN Number" />
             </div>
-            {/* If checking an existing mediator with an image, you might want to show a link here */}
+            {/* If checking an existing mediator with an image, you might want to show a link here 
             {mediator?.aadhaarImageUrl && (
               <div className="text-sm text-blue-600 underline">
                  <a href={mediator.aadhaarImageUrl} target="_blank" rel="noreferrer">View Uploaded Aadhaar Card</a>
@@ -495,7 +495,7 @@ const MediatorModal: React.FC<MediatorModalProps> = ({
             )}
           </div>
 
-          {/* Section 3: Bank Details */}
+          {/* Section 3: Bank Details 
           <div className="space-y-4">
             <div className="flex items-center space-x-2 text-blue-600 border-b pb-2">
               <CreditCard className="w-5 h-5" />
@@ -511,7 +511,7 @@ const MediatorModal: React.FC<MediatorModalProps> = ({
             </div>
           </div>
 
-          {/* Section 4: Community */}
+          {/* Section 4: Community 
           <div className="space-y-4">
             <div className="flex items-center space-x-2 text-blue-600 border-b pb-2">
               <Users className="w-5 h-5" />
@@ -520,7 +520,9 @@ const MediatorModal: React.FC<MediatorModalProps> = ({
             <div className="grid grid-cols-1">
               <Input label="Group/Community Link" name="communityLink" value={formData.communityLink} onChange={handleChange} placeholder="WhatsApp/Telegram Group Link" />
             </div>
-          </div>
+          </div> 
+          */}
+
 
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <Button type="button" variant="outline" onClick={onClose}>
