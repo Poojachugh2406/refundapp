@@ -22,7 +22,7 @@ const Home: React.FC = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
             {[
-//pooja
+
               // {
               //   title: "Active Deals",
               //   desc: "Explore current active deals and special offers. Find the best opportunities.",
