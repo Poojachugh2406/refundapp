@@ -1161,10 +1161,8 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
             Close
           </Button>
 
-          { data.orderStatus !== 'payment_done' || data.orderStatus !== 'accepted' && (
-          { data.orderStatus !== 'accepted' && (
-
-           <Button
+          { data.orderStatus !== 'payment_done' && data.orderStatus !== 'accepted' && (
+            <Button
               onClick={handleAccepted}
               isLoading={acceptOrderMutation.isPending}
               className="flex items-center justify-center gap-1 text-xs sm:text-sm py-1.5 sm:py-2"
