@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Package, RefreshCw, Search, ArrowRight, Tag, User } from 'lucide-react';
+import { Package, RefreshCw, Search, ArrowRight, Tag, User, ShieldCheck, Users } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 
 const Home: React.FC = () => {
@@ -12,7 +12,7 @@ const Home: React.FC = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Welcome to{' '}
-              <span className="text-orange-700">Hawk Agency</span>
+              <span className="text-blue-600">Hawk Agency</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Streamline your order and refund process with our comprehensive management system.
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Secondary Links (Mediator/Admin)
+                {/* Secondary Links (Mediator/Admin) */}
                 <div className="mt-6 flex justify-center space-x-6">
                   <Link to="/mediator" className="flex items-center text-sm text-gray-500 hover:text-blue-600 transition-colors">
                     <Users className="h-4 w-4 mr-1" />
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
                     <ShieldCheck className="h-4 w-4 mr-1" />
                     Admin Access
                   </Link>
-                </div> */}
+                </div>
 
               </div>
             </div>
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
                   <Package className="h-6 w-6 text-blue-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Easy Order Submission</h3>
-                <p className="text-orange-600">Simple form with file upload support</p>
+                <p className="text-gray-600">Simple form with file upload support</p>
               </div>
 
               <div className="text-center">
