@@ -166,18 +166,7 @@ export const register = async (req, res) => {
       phone: phone.trim(),
       password: password,
       role: role,
-      nickName: nickName?.trim() || '',
-      aadhaarNumber: aadhaarNumber,
-      aadhaarImageUrl: aadhaarImageUrl, // Save the URL
-      panNumber: panNumber,
-      upiId: upiId,
-      
-      bankName: bankName, 
-     
-      ifscCode: ifscCode, 
-      accountNumber: accountNumber ,
-      communityLink: communityLink
-
+      nickName: nickName?.trim() || ''
     };
 
     const newUser = new User(userData);
