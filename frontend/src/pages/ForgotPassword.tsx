@@ -56,7 +56,7 @@ const ForgotPassword: React.FC = () => {
 
   // Branding Panel Component (same as register/login)
   const BrandingPanel: React.FC = () => (
-    <div className="relative hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-sky-500 to-indigo-600 text-white">
+    <div className="relative hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-orange-700 to-indigo-600 text-white">
       <div className="flex items-center space-x-3 z-10">
         <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
           {/* <Package className="h-7 w-7 text-white" /> */}

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import {  Lock, Mail, ArrowRight } from 'lucide-react';
-import bblogo from "../../assets/bblogog.png"
+import { toast, Toaster } from 'react-hot-toast';
+import { Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
+import bblogo from "../../assets/bblogog.png"; // Keep your logo import
 import { useAuth } from '@/contexts/AuthContext';
 import Alert from '@/components/UI/Alert';
 import Input from '@/components/UI/Input';
@@ -18,6 +18,9 @@ type LoginCredentials = {
 const MediatorLogin: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  
+  // State for animation toggle (false = Login, true = Apply Info)
+  const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,21 +41,18 @@ const MediatorLogin: React.FC = () => {
     } catch (error: any) {
       console.error('Login error:', error);
       let errorMessage = 'Login failed. Please check your credentials.';
-      console.log(error);
       
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.message) {
         errorMessage = error.message;
       }
-         
+          
       if (errorMessage.toLowerCase().includes('not verified') || 
       errorMessage.toLowerCase().includes('account is not verified')) {
-        
         toast.error("Please Wait For Admin to Approve Your Account");
         setError("Please Wait For Admin to Approve Your Account");
-
-      }else{
+      } else {
         toast.error(errorMessage);
         setError(errorMessage);
       }
@@ -61,131 +61,379 @@ const MediatorLogin: React.FC = () => {
     }
   };
 
+  const handleApplyClick = () => {
+    setIsActive(true); // Slide to the "Apply" info panel
+  };
+
+  const handleBackToLogin = () => {
+    setIsActive(false); // Slide back to Login form
+  };
+
+  const handleGoToApplication = () => {
+      navigate('/mediator/register');
+  }
+
   return (
-    <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">
+    <div className="auth-body">
+      <Toaster />
       
-      {/* --- Branding Panel (Left Side) - Mediator Theme --- */}
-      <div className="relative hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
-        {/* Logo */}
-        <div className="flex items-center space-x-3 z-10">
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
-          {/* <Package className="h-7 w-7 text-white" /> */}
-          <img width="70" src = {bblogo} alt = "Logo"/>
-          </div>
-          <h1 className="text-3xl font-bold">Hawk Agency</h1>
-        </div>
+      <div className={`container ${isActive ? 'active' : ''}`}>
         
-        {/* Welcome Message */}
-        <div className="z-10 max-w-lg">
-          <h2 className="text-5xl font-bold leading-tight mb-4">
-            Welcome to Mediator Portal
-          </h2>
-          <p className="text-lg text-teal-100 font-light">
-            Access your mediator dashboard to manage Orders and Refunds .
-          </p>
-        </div>
+        {/* Animated Shapes - Emerald Theme */}
+        <div className="curved-shape"></div>
+        <div className="curved-shape2"></div>
 
-       
-
-        {/* Footer Text */}
-        <div className="z-10 text-sm text-teal-200">
-          &copy; {new Date().getFullYear()} Hawk Agency. All rights reserved.
-        </div>
-
-        {/* Abstract background shapes - Mediator Theme */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 overflow-hidden">
-          {/* Circular shapes */}
-          <svg className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] text-emerald-300" fill="currentColor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" d="M100 0C44.77 0 0 44.77 0 100s44.77 100 100 100c55.23 0 100-44.77 100-100S155.23 0 100 0z" clipRule="evenodd"/>
-          </svg>
-          <svg className="absolute -top-1/4 -right-1/4 w-[700px] h-[700px] text-teal-300" fill="currentColor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" d="M170.7 50c9.4 12.5 14.3 28.3 14.3 45 0 16.7-4.9 32.5-14.3 45s-23.3 20-38.2 20c-14.9 0-28.8-7.5-38.2-20s-14.3-28.3-14.3-45 4.9-32.5 14.3-45 23.3-20 38.2-20c14.9 0 28.8 7.5 38.2 20z" clipRule="evenodd"/>
-          </svg>
-        </div>
-      </div>
-      {/* --- Form Panel (Right Side) --- */}
-      <div className="flex flex-col justify-center py-12 px-6 sm:px-10 lg:px-16">
-        <div className="w-full max-w-md mx-auto">
-          {/* Mobile Logo (visible on small screens) */}
-          <div className="flex items-center space-x-3 mb-8 lg:hidden">
-            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-              {/* <Package className="h-6 w-6 text-white" /> */}
-              <img width="70" src = {bblogo} alt = "Logo"/>
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">Hawk Agency</h1>
+        {/* --- PANEL 1: LOGIN FORM (Visible by default) --- */}
+        <div className="form-box Login">
+          <div className="logo-container animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>
+             <img src={bblogo} alt="Logo" className="w-16 mx-auto mb-2" />
           </div>
-
-          {/* Form Header */}
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900">
-              Mediator Login
-            </h2>
-            <p className="mt-2 text-gray-600">
-              Mediator access only.{' '}
-              <Link to="/mediator/register" className="font-semibold text-emerald-600 hover:text-emerald-700">
-                Apply for mediator account
-              </Link>
-            </p>
-          </div>
-
-          {/* Form */}
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            {error && <Alert type="error" message={error} />}
+          <h2 className="animation" style={{ '--D': 0, '--S': 21 } as React.CSSProperties}>Mediator Login</h2>
+          
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full px-4">
+            {error && !isActive && <Alert type="error" message={error} />}
             
-            <Input
-              label="Email Address"
-              type="email"
-              icon={<Mail className="h-5 w-5" />}
-              placeholder="mediator@example.com"
-              required
-              {...register('email', {
-                required: 'Email is required',
-                pattern: { value:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Invalid email address' }
-              })}
-              error={errors.email?.message}
-            />
+            <div className="input-box animation" style={{ '--D': 1, '--S': 22 } as React.CSSProperties}>
+              <Input
+                label="Email Address"
+                type="email"
+                icon={<Mail className="h-5 w-5" />}
+                placeholder="mediator@example.com"
+                required
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: { value:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Invalid email address' }
+                })}
+                error={errors.email?.message}
+              />
+            </div>
 
-            <Input
-              label="Password"
-              type={'password'}
-              icon={<Lock className="h-5 w-5" />}
-              placeholder="••••••••"
-              required
-              {...register('password', {
-                required: 'Password is required',
-                minLength: { value: 6, message: 'Password must be at least 6 characters' }
-              })}
-              error={errors.password?.message}
-            />
+            <div className="input-box animation" style={{ '--D': 2, '--S': 23 } as React.CSSProperties}>
+              <Input
+                label="Password"
+                type={'password'}
+                icon={<Lock className="h-5 w-5" />}
+                placeholder="••••••••"
+                required
+                {...register('password', {
+                  required: 'Password is required',
+                  minLength: { value: 6, message: 'Password must be at least 6 characters' }
+                })}
+                error={errors.password?.message}
+              />
+            </div>
 
-            <div className="flex items-center justify-end">
-              <Link
+            <div className="animation flex justify-end mb-4" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
+               <Link
                 to={'/mediator/forgot-password'}
-                className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                className="text-sm text-[#059669] hover:text-[#047857] font-medium"
               >
                 Forgot password?
               </Link>
             </div>
 
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-              style={{ backgroundColor: '#059669', color: 'white' }} // Emerald-600
-              isLoading={isLoading}
-            >
-              {isLoading ? 'Accessing Portal...' : (
-                <>
-                  Access Mediator Portal
-                  <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
-                </>
-              )}
-            </Button>
+            <div className="input-box animation" style={{ '--D': 4, '--S': 25 } as React.CSSProperties}>
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#059669] text-white hover:bg-[#047857]"
+                isLoading={isLoading}
+              >
+                {isLoading ? 'Accessing...' : (
+                  <>
+                    Access Portal
+                    <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
+              </Button>
+            </div>
 
-            
+            <div className="regi-link animation" style={{ '--D': 5, '--S': 26 } as React.CSSProperties}>
+              <p>
+                New Mediator? <br />
+                <span className="SignUpLink text-[#059669] font-bold hover:underline cursor-pointer" onClick={handleApplyClick}>Apply for Account</span>
+              </p>
+            </div>
           </form>
         </div>
+
+        {/* --- INFO PANEL 1: WELCOME (Visible on right when Login is active) --- */}
+        <div className="info-content Login">
+          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>HAWK AGENCY</h2>
+          <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
+            Welcome to the Mediator Portal. Manage your orders and refunds efficiently.
+          </p>
+        </div>
+
+        {/* --- PANEL 2: APPLY INFO (Hidden until active - Right Side) --- */}
+        <div className="form-box Register"> 
+          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Join Us</h2>
+          
+          <div className="w-full px-8 text-center">
+             <p className="animation mb-6 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
+               To become a mediator with Hawk Agency, you need to submit an application. Our team will review your details and approve your account.
+             </p>
+
+             <div className="input-box animation" style={{ '--li': 19, '--S': 2 } as React.CSSProperties}>
+                <Button 
+                    onClick={handleGoToApplication}
+                    className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#059669] text-white hover:bg-[#047857]"
+                >
+                    Go to Application Form
+                    <ArrowRight className="h-5 w-5 ml-2" />
+                </Button>
+             </div>
+
+             <div className="regi-link animation mt-6" style={{ '--li': 20, '--S': 3 } as React.CSSProperties}>
+                <p>
+                  Already have an account? <br />
+                  <span className="SignInLink text-[#059669] font-bold hover:underline cursor-pointer flex items-center justify-center gap-1" onClick={handleBackToLogin}>
+                    <ArrowLeft size={16}/> Sign In
+                  </span>
+                </p>
+             </div>
+          </div>
+        </div>
+
+        {/* --- INFO PANEL 2: APPLY (Visible on left when Apply is active) --- */}
+        <div className="info-content Register">
+          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>APPLY NOW!</h2>
+          <p className="animation" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
+            Ready to join our network? Click the button to start your mediator application process.
+          </p>
+        </div>
+
       </div>
+
+      {/* --- CSS STYLES (Emerald/Teal Theme) --- */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        .auth-body {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Poppins', sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          background: #fff; /* White background for page */
+        }
+
+        .container {
+          position: relative;
+          width: 850px;
+          height: 550px;
+          background: #1f2937; /* Dark gray container bg */
+          border: 2px solid #059669; /* Emerald border */
+          box-shadow: 0 0 25px #059669;
+          overflow: hidden;
+          border-radius: 20px;
+        }
+
+        .container .form-box {
+          position: absolute;
+          top: 0;
+          width: 50%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .form-box.Login {
+          left: 0;
+          padding: 0 40px;
+        }
+
+        /* Animation Logic */
+        .form-box.Login .animation {
+          transform: translateX(0%);
+          transition: .7s;
+          opacity: 1;
+          transition-delay: calc(.1s * var(--S));
+        }
+
+        .container.active .form-box.Login .animation {
+          transform: translateX(-120%);
+          opacity: 0;
+          transition-delay: calc(.1s * var(--D));
+        }
+
+        .form-box.Register {
+          right: 0;
+          padding: 0 60px;
+        }
+
+        .form-box.Register .animation {
+          transform: translateX(120%);
+          transition: .7s ease;
+          opacity: 0;
+          filter: blur(10px);
+          transition-delay: calc(.1s * var(--S));
+        }
+
+        .container.active .form-box.Register .animation {
+          transform: translateX(0%);
+          opacity: 1;
+          filter: blur(0);
+          transition-delay: calc(.1s * var(--li));
+        }
+
+        .form-box h2 {
+          font-size: 32px;
+          text-align: center;
+          margin-bottom: 20px;
+          color: white;
+        }
+
+        .form-box .input-box {
+          position: relative;
+          width: 100%;
+          margin-bottom: 20px;
+        }
+        
+        /* Overriding input styles for this theme */
+        .input-box input {
+            color: white !important;
+            border-bottom: 1px solid #4b5563 !important;
+        }
+        .input-box input:focus {
+            border-bottom: 2px solid #059669 !important;
+        }
+        .input-box label {
+            color: #9ca3af !important;
+        }
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label {
+            color: #059669 !important;
+        }
+
+        .regi-link {
+          font-size: 14px;
+          text-align: center;
+          margin-top: 20px;
+          color: #d1d5db;
+        }
+
+        .regi-link a, .regi-link span {
+          text-decoration: none;
+          color: #059669;
+          font-weight: 600;
+          cursor: pointer;
+        }
+
+        .regi-link a:hover, .regi-link span:hover {
+          text-decoration: underline;
+        }
+
+        /* Info Content Styles */
+        .info-content {
+          position: absolute;
+          top: 0;
+          height: 100%;
+          width: 50%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          color: white;
+        }
+
+        .info-content.Login {
+          right: 0;
+          text-align: right;
+          padding: 0 40px 60px 150px;
+        }
+
+        .info-content.Login .animation {
+          transform: translateX(0);
+          transition: .7s ease;
+          transition-delay: calc(.1s * var(--S));
+          opacity: 1;
+          filter: blur(0px);
+        }
+
+        .container.active .info-content.Login .animation {
+          transform: translateX(120%);
+          opacity: 0;
+          filter: blur(10px);
+          transition-delay: calc(.1s * var(--D));
+        }
+
+        .info-content.Register {
+          left: 0;
+          text-align: left;
+          padding: 0 150px 60px 38px;
+          pointer-events: none;
+        }
+
+        .info-content.Register .animation {
+          transform: translateX(-120%);
+          transition: .7s ease;
+          opacity: 0;
+          filter: blur(10px);
+          transition-delay: calc(.1s * var(--S));
+        }
+
+        .container.active .info-content.Register .animation {
+          transform: translateX(0%);
+          opacity: 1;
+          filter: blur(0);
+          transition-delay: calc(.1s * var(--li));
+        }
+
+        .info-content h2 {
+          text-transform: uppercase;
+          font-size: 36px;
+          line-height: 1.3;
+          font-weight: 700;
+        }
+
+        .info-content p {
+          font-size: 16px;
+          margin-top: 10px;
+        }
+
+        /* Curved Shapes - Emerald Theme */
+        .container .curved-shape {
+          position: absolute;
+          right: 0;
+          top: -5px;
+          height: 600px;
+          width: 850px;
+          background: linear-gradient(45deg, #111827, #059669); /* Dark to Emerald */
+          transform: rotate(10deg) skewY(40deg);
+          transform-origin: bottom right;
+          transition: 1.5s ease;
+          transition-delay: 1.6s;
+        }
+
+        .container.active .curved-shape {
+          transform: rotate(0deg) skewY(0deg);
+          transition-delay: .5s;
+        }
+
+        .container .curved-shape2 {
+          position: absolute;
+          left: 250px;
+          top: 100%;
+          height: 700px;
+          width: 850px;
+          background: #1f2937;
+          border-top: 3px solid #059669;
+          transform: rotate(0deg) skewY(0deg);
+          transform-origin: bottom left;
+          transition: 1.5s ease;
+          transition-delay: .5s;
+        }
+
+        .container.active .curved-shape2 {
+          transform: rotate(-11deg) skewY(-41deg);
+          transition-delay: 1.2s;
+        }
+      `}</style>
     </div>
   );
 };

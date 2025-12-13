@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Package, RefreshCw, Search, ArrowRight, Tag, User, ShieldCheck, Users } from 'lucide-react';
+import { Package, RefreshCw, Search, ArrowRight, Tag } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 
 const Home: React.FC = () => {
@@ -12,66 +12,98 @@ const Home: React.FC = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Welcome to{' '}
-              <span className="text-blue-600">Hawk Agency</span>
+              <span className="text-orange-700">Hawk Agency</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Streamline your order and refund process with our comprehensive management system.
-              Check Active Deals, Submit orders, request refunds, and track your submissions all in one place.
+              Streamline your E-commerce shopping experience with our comprehensive management system.
+              Check current offers and coupons , track best available deals across all platforms, and track things all in one place.
             </p>
           </div>
 
-          {/* SINGLE BIG USER CARD SECTION */}
-          <div className="mt-12 max-w-lg mx-auto">
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-blue-100 transform transition-all hover:shadow-2xl">
-              <div className="p-10">
-                {/* Icon */}
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <User className="h-10 w-10 text-blue-600" />
-                </div>
+          {/* <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-8 mt-1">
+            {[
+
+              // {
+              //   title: "Active Deals",
+              //   desc: "Explore current active deals and special offers. Find the best opportunities.",
+              //   iconBg: "bg-orange-100",
+              //   iconColor: "text-orange-600",
+              //   icon: Tag,
+              //   btnColor: "bg-orange-500 hover:bg-orange-600",
+              //   link: "/activedeals",
+              //   btnText: "View Deals",
+              // },
+              
+              {
+                title: "Login To Track Order",
                 
-                {/* Content */}
-                <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                  User Portal
-                </h2>
-                <p className="text-gray-600 text-center mb-8 text-lg">
-                  Log in to submit new orders, upload proof of purchase, request refunds, and track your personal status in real-time.
-                </p>
-
-                {/* Primary Action Button */}
+                desc: "Track the status of your order or refund request. View timeline and get real-time updates.",
+                iconBg: "bg-purple-100",
+                iconColor: "text-purple-600",
+                icon: Search,
+                btnColor: "bg-orange-700 hover:bg-blue-700",
+                link: "/login",
+                btnText: "LOGIN",
+              },
+            ].map((card, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col justify-between"
+              >
+                <div>
+                  <div
+                    className={`flex items-center justify-center w-4 h-4 ${card.iconBg} rounded-full mb-6 mx-auto`}
+                  >
+                    <card.icon className={`h-8 w-8 ${card.iconColor}`} />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
+                    {card.title}
+                  </h3>
+                  <p className="text-gray-600 text-center mb-6">{card.desc}</p>
+                </div>
                 <Link
-                  to="/user"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-2 shadow-lg hover:shadow-blue-500/30"
+                  to={card.link}
+                  className={`w-full ${card.btnColor} text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2`}
                 >
-                  <span>Login to Dashboard</span>
-                  <ArrowRight className="h-5 w-5" />
+                  <span>{card.btnText}</span>
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
-
-                {/* Divider for Secondary Logins */}
-                <div className="relative mt-8">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Staff & Partners</span>
-                  </div>
-                </div>
-
-                {/* Secondary Links (Mediator/Admin) */}
-                <div className="mt-6 flex justify-center space-x-6">
-                  <Link to="/mediator" className="flex items-center text-sm text-gray-500 hover:text-blue-600 transition-colors">
-                    <Users className="h-4 w-4 mr-1" />
-                    Mediator Access
-                  </Link>
-                  <Link to="/seller" className="flex items-center text-sm text-gray-500 hover:text-purple-600 transition-colors">
-                    <ShieldCheck className="h-4 w-4 mr-1" />
-                    Admin Access
-                  </Link>
-                </div>
-
               </div>
-            </div>
-          </div>
+            ))}
+          </div> */}
 
+{/* Parent Container: Centers the card */}
+<div className="flex justify-center items-center w-full mt- px-4">
+  
+  {/* The Card Itself */}
+  <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col justify-between w-full max-w-md min-h-[400px]">
+    
+    {/* Card Content (Top) */}
+    <div>
+      <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6 mx-auto">
+        <Search className="h-8 w-8 text-purple-600" />
+      </div>
+      
+      <h3 className="text-3xl font-semibold text-gray-900 mb-6 text-center">
+        Login To Track Order
+      </h3>
+      
+      <p className="text-gray-600-3xl text-center mb-3">
+        Track the status of your tickets. View timeline and get real-time updates.
+      </p>
+    </div>
+
+    {/* Card Button (Bottom) */}
+    <Link
+      to="/login"
+      className="w-full bg-orange-700 hover:bg-orange-500 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+    >
+      <span>LOGIN</span>
+      <ArrowRight className="h-4 w-4" />
+    </Link>
+
+  </div>
+</div>
           {/* Features Section */}
           <div className="mt-20">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
@@ -83,29 +115,30 @@ const Home: React.FC = () => {
                   <Tag className="h-6 w-6 text-orange-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Exclusive Deals</h3>
-                <p className="text-gray-600">Access to special offers and promotions</p>
+                <p className="text-gray-600">Access to special offers</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Package className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Easy Order Submission</h3>
-                <p className="text-gray-600">Simple form with file upload support</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Easy Process</h3>
+                <p className="text-gray-600">Guaranteed working coupons</p>
               </div>
 
               <div className="text-center">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <RefreshCw className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Quick Refund Process</h3>
-                <p className="text-gray-600">Streamlined refund request workflow</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Verified Deals</h3>
+                <p className="text-gray-600">Trusted Deals and offers</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Search className="h-6 w-6 text-purple-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Real-time Tracking</h3>
-                <p className="text-gray-600">Track your orders with detailed timeline</p>
+
+                <p className="text-gray-600">Track Best Coupons and deals  </p>
               </div>
             </div>
           </div>
@@ -115,11 +148,12 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
-                <div className="text-gray-600">Orders Processed</div>
+               
+                <div className="text-gray-600">Coupons</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-orange-600 mb-2">50+</div>
-                <div className="text-gray-600">Active Deals</div>
+                <div className="text-gray-600"> Deals</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-green-600 mb-2">98%</div>
