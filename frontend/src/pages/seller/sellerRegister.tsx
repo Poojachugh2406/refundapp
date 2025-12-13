@@ -89,7 +89,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) => {
             onClick={onClose}
             variant="primary"
             className="w-full py-3 font-semibold"
-            style={{ backgroundColor: '#059669', color: 'white' }}
+            style={{ backgroundColor: '#e46033', color: 'white' }}
           >
             Go to Login Now
           </Button>
@@ -260,7 +260,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           type="submit"
           variant="primary"
           className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-          style={{ backgroundColor: '#059669', color: 'white' }} // Emerald-600
+          style={{ backgroundColor: '#e46033', color: 'white' }} // Emerald-600
           isLoading={isLoading}
         >
           {isLoading ? 'Creating Seller Account...' : (

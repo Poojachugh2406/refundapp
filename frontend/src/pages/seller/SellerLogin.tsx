@@ -171,7 +171,7 @@ const SellerLogin: React.FC = () => {
               type="submit"
               variant="primary"
               className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-              style={{ backgroundColor: '#059669', color: 'white' }} // Emerald-600
+              style={{ backgroundColor: '#e46033', color: 'white' }} // Emerald-600
               isLoading={isLoading}
             >
               {isLoading ? 'Accessing Portal...' : (

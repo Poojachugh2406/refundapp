@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import { Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
-import bblogo from "../../assets/bblogog.png"; // Keep your logo import
+import bblogo from "../../assets/bblogog.png"; 
 import { useAuth } from '@/contexts/AuthContext';
 import Alert from '@/components/UI/Alert';
 import Input from '@/components/UI/Input';
@@ -19,7 +19,7 @@ const MediatorLogin: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   
-  // State for animation toggle (false = Login, true = Apply Info)
+  // State for animation toggle
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,17 +61,21 @@ const MediatorLogin: React.FC = () => {
     }
   };
 
+  // --- MODIFIED FUNCTION ---
   const handleApplyClick = () => {
-    setIsActive(true); // Slide to the "Apply" info panel
+    // 1. Trigger the sliding animation
+    setIsActive(true); 
+
+    // 2. Wait for the animation to finish (700ms matches the .7s CSS transition)
+    // Then navigate to the register page automatically
+    setTimeout(() => {
+        navigate('/mediator/register');
+    }, 1800);
   };
 
   const handleBackToLogin = () => {
-    setIsActive(false); // Slide back to Login form
+    setIsActive(false); 
   };
-
-  const handleGoToApplication = () => {
-      navigate('/mediator/register');
-  }
 
   return (
     <div className="auth-body">
@@ -104,6 +108,7 @@ const MediatorLogin: React.FC = () => {
                   required: 'Email is required',
                   pattern: { value:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Invalid email address' }
                 })}
+                
                 error={errors.email?.message}
               />
             </div>
@@ -126,7 +131,7 @@ const MediatorLogin: React.FC = () => {
             <div className="animation flex justify-end mb-4" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
                <Link
                 to={'/mediator/forgot-password'}
-                className="text-sm text-[#059669] hover:text-[#047857] font-medium"
+                className="text-sm text-[#e46033] hover:text-[#047857] font-medium"
               >
                 Forgot password?
               </Link>
@@ -136,12 +141,13 @@ const MediatorLogin: React.FC = () => {
               <Button
                 type="submit"
                 variant="primary"
-                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#059669] text-white hover:bg-[#047857]"
+                style={{ backgroundColor: '#e46033', color: 'white' }}
+                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#e46033]"
                 isLoading={isLoading}
               >
                 {isLoading ? 'Accessing...' : (
                   <>
-                    Access Portal
+                    Login
                     <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
                   </>
                 )}
@@ -151,7 +157,8 @@ const MediatorLogin: React.FC = () => {
             <div className="regi-link animation" style={{ '--D': 5, '--S': 26 } as React.CSSProperties}>
               <p>
                 New Mediator? <br />
-                <span className="SignUpLink text-[#059669] font-bold hover:underline cursor-pointer" onClick={handleApplyClick}>Apply for Account</span>
+                {/* Clicking this triggers handleApplyClick which animates then navigates */}
+                <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleApplyClick}>Apply for Account</span>
               </p>
             </div>
           </form>
@@ -165,33 +172,15 @@ const MediatorLogin: React.FC = () => {
           </p>
         </div>
 
-        {/* --- PANEL 2: APPLY INFO (Hidden until active - Right Side) --- */}
+        {/* --- PANEL 2: REDIRECTING MESSAGE (Hidden until active) --- */}
         <div className="form-box Register"> 
-          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Join Us</h2>
+          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Redirecting...</h2>
           
           <div className="w-full px-8 text-center">
              <p className="animation mb-6 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
-               To become a mediator with Hawk Agency, you need to submit an application. Our team will review your details and approve your account.
+               Please wait while we take you to the registration page.
              </p>
-
-             <div className="input-box animation" style={{ '--li': 19, '--S': 2 } as React.CSSProperties}>
-                <Button 
-                    onClick={handleGoToApplication}
-                    className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#059669] text-white hover:bg-[#047857]"
-                >
-                    Go to Application Form
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-             </div>
-
-             <div className="regi-link animation mt-6" style={{ '--li': 20, '--S': 3 } as React.CSSProperties}>
-                <p>
-                  Already have an account? <br />
-                  <span className="SignInLink text-[#059669] font-bold hover:underline cursor-pointer flex items-center justify-center gap-1" onClick={handleBackToLogin}>
-                    <ArrowLeft size={16}/> Sign In
-                  </span>
-                </p>
-             </div>
+             {/* Note: I removed the extra button here since navigation is now automatic */}
           </div>
         </div>
 
@@ -199,17 +188,16 @@ const MediatorLogin: React.FC = () => {
         <div className="info-content Register">
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>APPLY NOW!</h2>
           <p className="animation" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
-            Ready to join our network? Click the button to start your mediator application process.
+            Ready to join our network? We are redirecting you to the application form.
           </p>
         </div>
 
       </div>
 
-      {/* --- CSS STYLES (Emerald/Teal Theme) --- */}
+      {/* --- CSS STYLES (Kept identical for animation) --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
-        .auth-body {
+.auth-body {
           margin: 0;
           padding: 0;
           box-sizing: border-box;
@@ -218,20 +206,21 @@ const MediatorLogin: React.FC = () => {
           justify-content: center;
           align-items: center;
           min-height: 100vh;
-          background: #fff; /* White background for page */
+          background: #25252b;
+          color: #fff;
         }
 
         .container {
           position: relative;
-          width: 850px;
-          height: 550px;
-          background: #1f2937; /* Dark gray container bg */
-          border: 2px solid #059669; /* Emerald border */
-          box-shadow: 0 0 25px #059669;
+          width: 750px;
+          height: 450px;
+          border: 2px solid #e46033;
+          box-shadow: 0 0 25px #e46033;
           overflow: hidden;
-          border-radius: 20px;
         }
 
+       
+        
         .container .form-box {
           position: absolute;
           top: 0;
@@ -295,20 +284,29 @@ const MediatorLogin: React.FC = () => {
           margin-bottom: 20px;
         }
         
-        /* Overriding input styles for this theme */
         .input-box input {
-            color: white !important;
-            border-bottom: 1px solid #4b5563 !important;
+          width: 100%;
+          height: 100%;
+          background: transparent;
+          border: none;
+          outline: none;
+          font-size: 16px;
+          color: #f4f4f4ff;
+          font-weight: 600;
+          border-bottom: 2px solid #fff;
+          padding-right: 23px;
+          transition: .5s;
         }
+
         .input-box input:focus {
-            border-bottom: 2px solid #059669 !important;
+            border-bottom: 2px solid #e46033 !important;
         }
         .input-box label {
             color: #9ca3af !important;
         }
         .input-box input:focus ~ label,
         .input-box input:valid ~ label {
-            color: #059669 !important;
+            color: #e46033 !important;
         }
 
         .regi-link {
@@ -320,7 +318,7 @@ const MediatorLogin: React.FC = () => {
 
         .regi-link a, .regi-link span {
           text-decoration: none;
-          color: #059669;
+          color: #e46033;
           font-weight: 600;
           cursor: pointer;
         }
@@ -329,7 +327,6 @@ const MediatorLogin: React.FC = () => {
           text-decoration: underline;
         }
 
-        /* Info Content Styles */
         .info-content {
           position: absolute;
           top: 0;
@@ -396,14 +393,13 @@ const MediatorLogin: React.FC = () => {
           margin-top: 10px;
         }
 
-        /* Curved Shapes - Emerald Theme */
         .container .curved-shape {
           position: absolute;
           right: 0;
           top: -5px;
           height: 600px;
           width: 850px;
-          background: linear-gradient(45deg, #111827, #059669); /* Dark to Emerald */
+          background: linear-gradient(45deg, #25252b, #e46033);
           transform: rotate(10deg) skewY(40deg);
           transform-origin: bottom right;
           transition: 1.5s ease;
@@ -421,8 +417,8 @@ const MediatorLogin: React.FC = () => {
           top: 100%;
           height: 700px;
           width: 850px;
-          background: #1f2937;
-          border-top: 3px solid #059669;
+          background: #25252b;
+          border-top: 3px solid #e46033;
           transform: rotate(0deg) skewY(0deg);
           transform-origin: bottom left;
           transition: 1.5s ease;

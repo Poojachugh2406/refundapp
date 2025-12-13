@@ -2,47 +2,12 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
-import { User, Lock, ArrowRight, ArrowLeft } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext'; // Uncomment in your real project
-// import bblogo from "../assets/bblogog.png"; // Uncomment in your real project
+import { User, Lock } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext'; 
+// import bblogo from "../assets/bblogog.png"; 
 // import Alert from '@/components/UI/Alert';
 // import Input from '@/components/UI/Input';
 import Button from '@/components/UI/Button';
-// // --- Mock Auth Hook (Delete this and uncomment the import above in your real project) ---
-// const useAuth = () => ({
-//   login: async (data: any) => {
-//     console.log("Mock login with:", data);
-//     return new Promise(resolve => setTimeout(resolve, 1000));
-//   }
-// });
-
-// // Mock Components
-// const Button = ({ children, isLoading, disabled, className, style, ...props }: any) => (
-//   <button
-//     disabled={isLoading || disabled}
-//     className={`btn w-full p-3 border-none rounded-full text-base font-semibold cursor-pointer bg-gradient-to-r from-[#e46033] to-[#ff8c61] text-white transition-transform duration-200 active:scale-95 disabled:opacity-50 ${className}`}
-//     style={style}
-//     {...props}
-//   >
-//     {isLoading ? 'Loading...' : children}
-//   </button>
-// );
-
-// const Input = ({ label, type, icon, error, ...props }: any) => (
-//   <div className="input-box relative w-full mb-6">
-//     <div className="relative mt-1">
-//       <input
-//         type={type}
-//         required
-//         {...props}
-//       />
-//       <label>{label}</label>
-//       <span className="icon-wrapper absolute top-1/2 right-0 -translate-y-1/2">{icon}</span>
-//     </div>
-//     {error && <span className="text-red-400 text-xs pt-1 absolute -bottom-5 left-0">{error}</span>}
-//   </div>
-// );
-// // ---------------------------------------------------------------------------------------
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -69,10 +34,16 @@ const AuthPage = () => {
     }
   };
 
-  // Animation Handlers
-  const handleSignUpClick = () => setIsActive(true); // Slide to "Create Account" info
-  const handleBackToLogin = () => setIsActive(false); // Slide back to Login
-  const handleGoToRegister = () => navigate('/register'); // Actual Redirect
+  // --- MODIFIED HANDLER ---
+  const handleSignUpClick = () => {
+    // 1. Trigger the slide animation
+    setIsActive(true); 
+    
+    // 2. Wait for animation (700ms) then redirect to Register page
+    setTimeout(() => {
+        navigate('/register');
+    }, 1800);
+  };
 
   return (
     <div className="auth-body">
@@ -81,6 +52,11 @@ const AuthPage = () => {
       <div className={`container ${isActive ? 'active' : ''}`}>
         
         {/* The Animated Shapes (Orange Theme) */}
+        
+        
+        
+        
+        
         <div className="curved-shape"></div>
         <div className="curved-shape2"></div>
 
@@ -110,6 +86,7 @@ const AuthPage = () => {
             <div className="regi-link animation" style={{ '--D': 4, '--S': 25 } as React.CSSProperties}>
               <p>
                 Don't have an account? <br />
+                {/* Clicking this triggers the animation + redirect */}
                 <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleSignUpClick}>Sign Up</span>
               </p>
             </div>
@@ -124,33 +101,16 @@ const AuthPage = () => {
           </p>
         </div>
 
-        {/* --- PANEL 2: CREATE ACCOUNT INFO (Hidden until active - Right Side) --- */}
+        {/* --- PANEL 2: REDIRECT MESSAGE (Hidden until active - Right Side) --- */}
+        {/* This is the "Extra Content" you wanted hidden/simplified. It now just says Redirecting. */}
         <div className="form-box Register"> 
-          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>New Here?</h2>
+          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Redirecting...</h2>
           
           <div className="w-full px-8 text-center flex flex-col items-center">
              <p className="animation mb-8 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
-               Join Hawk Agency today! Create an account to start managing your orders and refunds seamlessly.
+               Please wait while we take you to the registration page.
              </p>
-
-             <div className="input-box animation w-full" style={{ '--li': 19, '--S': 2 } as React.CSSProperties}>
-                <Button 
-                    onClick={handleGoToRegister}
-                    className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-                >
-                    Create Account
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-             </div>
-
-             <div className="regi-link animation mt-6" style={{ '--li': 20, '--S': 3 } as React.CSSProperties}>
-                <p>
-                  Already have an account? <br />
-                  <span className="SignInLink text-[#e46033] font-bold hover:underline cursor-pointer flex items-center justify-center gap-1" onClick={handleBackToLogin}>
-                    <ArrowLeft size={16}/> Sign In
-                  </span>
-                </p>
-             </div>
+             {/* Removed Buttons and Links here for a cleaner transition */}
           </div>
         </div>
 
@@ -158,13 +118,13 @@ const AuthPage = () => {
         <div className="info-content Register">
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>JOIN US!</h2>
           <p className="animation" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
-            Sign up to get access to your dashboard. It takes less than a minute.
+            We are redirecting you to the account creation form.
           </p>
         </div>
 
       </div>
 
-      {/* --- CSS STYLES (Original Dark/Orange Theme) --- */}
+      {/* --- CSS STYLES (Unchanged) --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 

@@ -165,7 +165,7 @@ const SellerResetPassword: React.FC = () => {
                                 onClick={() => navigate('/seller/login')}
                                 variant="primary"
                                 className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-                                style={{ backgroundColor: '#059669', color: 'white' }}
+                                style={{ backgroundColor: '#e46033', color: 'white' }}
                             >
                                 Go to Seller Login
                                 <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
@@ -270,7 +270,7 @@ const SellerResetPassword: React.FC = () => {
                                         type="submit"
                                         variant="primary"
                                         className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-                                        style={{ backgroundColor: '#059669', color: 'white' }}
+                                        style={{ backgroundColor: '#e46033', color: 'white' }}
                                         isLoading={isLoading}
                                     >
                                         {isLoading ? 'Resetting Password...' : (
