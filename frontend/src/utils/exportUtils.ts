@@ -15,7 +15,7 @@ export const formatOrdersForExport = (orders: any[]) => {
     'Product Name': order.productName,
     'Product Brand Name': order.productBrand,
     'Product Code': order.productCode,
-    'Product Brand Code': order.brandCode,
+    'Product ASIN Code': order.brandCode,
     'Platform': order.platform,
     'Mediator Name': order.mediatorName,
     'Mediator Phone': order.mediatorPhone,

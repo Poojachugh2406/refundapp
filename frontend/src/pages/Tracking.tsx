@@ -464,7 +464,7 @@ const TrackOrderPage: React.FC = () => {
                       <p className="text-lg text-gray-900">{trackingData.product.productCode}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Brand Code</label>
+                      <label className="text-sm font-medium text-gray-700">ASIN Code</label>
                       <p className="text-lg text-gray-900">{trackingData.product.brandCode}</p>
                     </div>
                   </div>

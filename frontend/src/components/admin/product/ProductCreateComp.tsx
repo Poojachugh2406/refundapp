@@ -111,10 +111,10 @@
 //                             placeholder="Enter brand name"
 //                         />
 //                         <Input
-//                             label="Brand Code"
+//                             label="ASIN Code"
 //                             {...register('brandCode', {
-//                                 required: 'Brand Code is required',
-//                                 minLength: { value: 2, message: ' Brand Code must be at least 2 characters' }
+//                                 required: 'ASIN Code is required',
+//                                 minLength: { value: 2, message: ' ASIN Code must be at least 2 characters' }
 //                             })}
 //                             required
 //                             error={errors.brandCode?.message}
@@ -333,10 +333,10 @@ const ProductCreateComp = ({ onClose, sellers }: { onClose: () => void, sellers:
                             placeholder="Enter brand name"
                         />
                         <Input
-                            label="Brand Code"
+                            label="ASIN Code"
                             {...register('brandCode', {
-                                required: 'Brand Code is required',
-                                minLength: { value: 2, message: ' Brand Code must be at least 2 characters' }
+                                required: 'ASIN Code is required',
+                                minLength: { value: 2, message: ' ASIN Code must be at least 2 characters' }
                             })}
                             required
                             error={errors.brandCode?.message}

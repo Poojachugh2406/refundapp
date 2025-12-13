@@ -374,7 +374,7 @@ const RefundFormPage: React.FC = () => {
                   </div>
                   
                    <div className="flex justify-between border-b pb-2">
-                    <span className="text-gray-500">Brand Code:</span>
+                    <span className="text-gray-500">ASIN Code:</span>
                     <span className="font-medium text-gray-800">{verifiedOrder.brandCode}</span>
                   </div>
                    <div className="flex justify-between border-b pb-2">

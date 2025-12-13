@@ -268,7 +268,7 @@
 //                   <p><span className="font-medium text-gray-800">Product Name:</span> {data.order.product.name ?? "N/A"}</p>
 //                   <p><span className="font-medium text-gray-800">Product Code:</span> {data.order.product.productCode ?? "N/A"}</p>
 //                   <p><span className="font-medium text-gray-800">Brand Name:</span> {data.order.product.brand ?? "N/A"}</p>
-//                   <p><span className="font-medium text-gray-800">Brand Code:</span> {data.order.product.brandCode ?? "N/A"}</p>
+//                   <p><span className="font-medium text-gray-800">ASIN Code:</span> {data.order.product.brandCode ?? "N/A"}</p>
 //                   <p><span className="font-medium text-gray-800">Platform:</span> {data.order.product.productPlatform ?? "N/A"}</p>
 //                   <p><span className="font-medium">Product Link:</span> <a href={data.order.product.productLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{data.order.product.productLink ?? "N/A"}</a></p>
 //                   <p><span className="font-medium text-gray-800">Deal Type:</span> {data.order.dealType ?? "N/A"}</p>
@@ -802,7 +802,7 @@ const RefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refundId }) 
     //                                 <p><span className="font-medium text-gray-800">Product Name:</span> {data.order.product.name ?? "N/A"}</p>
     //                                 <p><span className="font-medium text-gray-800">Product Code:</span> {data.order.product.productCode ?? "N/A"}</p>
     //                                 <p><span className="font-medium text-gray-800">Brand Name:</span> {data.order.product.brand ?? "N/A"}</p>
-    //                                 <p><span className="font-medium text-gray-800">Brand Code:</span> {data.order.product.brandCode ?? "N/A"}</p>
+    //                                 <p><span className="font-medium text-gray-800">ASIN Code:</span> {data.order.product.brandCode ?? "N/A"}</p>
     //                                 <p><span className="font-medium text-gray-800">Platform:</span> {data.order.product.productPlatform ?? "N/A"}</p>
     //                                 <p><span className="font-medium">Product Link:</span> <a href={data.order.product.productLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{data.order.product.productLink ?? "N/A"}</a></p>
     //                                 <p><span className="font-medium text-gray-800">Deal Type:</span> {data.order.dealType ?? "N/A"}</p>
@@ -1254,7 +1254,7 @@ const RefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refundId }) 
                                     <p><span className="font-medium text-gray-800">Product Name:</span> {data?.order?.product?.name ?? "N/A"}</p>
                                     <p><span className="font-medium text-gray-800">Product Code:</span> {data?.order?.product?.productCode ?? "N/A"}</p>
                                     <p><span className="font-medium text-gray-800">Brand Name:</span> {data?.order?.product?.brand ?? "N/A"}</p>
-                                    <p><span className="font-medium text-gray-800">Brand Code:</span> {data?.order?.product?.brandCode ?? "N/A"}</p>
+                                    <p><span className="font-medium text-gray-800">ASIN Code:</span> {data?.order?.product?.brandCode ?? "N/A"}</p>
                                     <p><span className="font-medium text-gray-800">Platform:</span> {data?.order?.product?.productPlatform ?? "N/A"}</p>
                                     <p className="xs:col-span-2"><span className="font-medium">Product Link:</span> <a href={data?.order?.product?.productLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline break-all">{data?.order?.product?.productLink ?? "N/A"}</a></p>
                                     <p><span className="font-medium text-gray-800">Deal Type:</span> {data?.order.dealType ?? "N/A"}</p>

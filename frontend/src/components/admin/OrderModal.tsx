@@ -250,7 +250,7 @@
 //                   <p><span className="font-medium">Product Name:</span> {data.product?.name ?? "N/A"}</p>
 //                   <p><span className="font-medium">Product Code:</span> {data.product?.productCode ?? "N/A"}</p>
 //                   <p><span className="font-medium">Brand Name:</span> {data.product?.brand ?? "N/A"}</p>
-//                   <p><span className="font-medium">Brand Code:</span> {data.product?.brandCode ?? "N/A"}</p>
+//                   <p><span className="font-medium">ASIN Code:</span> {data.product?.brandCode ?? "N/A"}</p>
 //                   <p><span className="font-medium">Product Platform:</span> {data.product?.productPlatform ?? "N/A"}</p>
 //                   <p><span className="font-medium ">Product Link:</span> <a target="_blank" className="text-blue-600" href={data.product?.productLink ?? "N/A"}>{data.product?.productLink ?? "N/A"}</a></p>
 //                   <p><span className="font-medium">Order Amount:</span> {data.orderAmount}</p>
@@ -712,7 +712,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //                             <p><span className="font-medium">Product Name:</span> {data.product?.name ?? "N/A"}</p>
         //                             <p><span className="font-medium">Product Code:</span> {data.product?.productCode ?? "N/A"}</p>
         //                             <p><span className="font-medium">Brand Name:</span> {data.product?.brand ?? "N/A"}</p>
-        //                             <p><span className="font-medium">Brand Code:</span> {data.product?.brandCode ?? "N/A"}</p>
+        //                             <p><span className="font-medium">ASIN Code:</span> {data.product?.brandCode ?? "N/A"}</p>
         //                             <p><span className="font-medium">Product Platform:</span> {data.product?.productPlatform ?? "N/A"}</p>
         //                             <p><span className="font-medium ">Product Link:</span> <a target="_blank" className="text-blue-600" href={data.product?.productLink ?? "N/A"}>{data.product?.productLink ?? "N/A"}</a></p>
         //                             <p><span className="font-medium">Order Amount:</span> {data.orderAmount}</p>
@@ -1114,7 +1114,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
               <p><span className="font-medium">Product Name:</span> {data.product?.name ?? "N/A"}</p>
               <p><span className="font-medium">Product Code:</span> {data.product?.productCode ?? "N/A"}</p>
               <p><span className="font-medium">Brand Name:</span> {data.product?.brand ?? "N/A"}</p>
-              <p><span className="font-medium">Brand Code:</span> {data.product?.brandCode ?? "N/A"}</p>
+              <p><span className="font-medium">ASIN Code:</span> {data.product?.brandCode ?? "N/A"}</p>
               <p><span className="font-medium">Product Platform:</span> {data.product?.productPlatform ?? "N/A"}</p>
               <p><span className="font-medium">Product Link:</span> <a target="_blank" className="text-blue-600 text-xs sm:text-sm break-all" href={data.product?.productLink ?? "N/A"}>{data.product?.productLink ?? "N/A"}</a></p>
               <p><span className="font-medium">Order Amount:</span> {data.orderAmount}</p>

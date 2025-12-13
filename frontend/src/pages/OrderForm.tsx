@@ -300,7 +300,7 @@ const OrderFormPage: React.FC = () => {
                                     className={selectedProduct?.brandCode ? "cursor-pointer hover:bg-gray-50" : ""}
                                 />
                                 <Input
-                                    label="Brand Code"
+                                    label="ASIN Code"
                                     required
                                     value={selectedProduct?.brandCode || ""}
                                     placeholder="Product Platform"
