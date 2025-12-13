@@ -35,7 +35,7 @@ import MediatorDashboard from './pages/mediator/MediatorDashboard';
 import MediatorOrders from './pages/mediator/MediatorOrders';
 // import MediatorActiveDeals from './pages/Mediator/MediatorActiveDeals'; // <-- Check this path!
 import MediatorProfile from './pages/mediator/MediatorProfile';
-import Home from './pages/Home';
+//import Home from './pages/Home';
 import MediatorRefund from './pages/mediator/MediatorRefund';
 import UserActiveDeals from './pages/user/UserActiveDeals';
 import UserProfile from './pages/user/UserProfile';

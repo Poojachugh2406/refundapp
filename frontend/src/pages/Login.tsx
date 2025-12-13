@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 // import bblogo from "../assets/bblogog.png"; 
 // import Alert from '@/components/UI/Alert';
 // import Input from '@/components/UI/Input';
-import Button from '@/components/UI/Button';
+//import Button from '@/components/UI/Button';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -255,6 +255,9 @@ const AuthPage = () => {
           top: 50%;
           right: 0;
           transform: translateY(-50%);
+
+          color: transparent
+
         }
 
         .btn {

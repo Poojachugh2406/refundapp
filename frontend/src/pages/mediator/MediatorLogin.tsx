@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
-import { Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, ArrowRight } from 'lucide-react';
 import bblogo from "../../assets/bblogog.png"; 
 import { useAuth } from '@/contexts/AuthContext';
 import Alert from '@/components/UI/Alert';
@@ -73,9 +73,9 @@ const MediatorLogin: React.FC = () => {
     }, 1800);
   };
 
-  const handleBackToLogin = () => {
-    setIsActive(false); 
-  };
+  // const handleBackToLogin = () => {
+  //   setIsActive(false); 
+  // };
 
   return (
     <div className="auth-body">
