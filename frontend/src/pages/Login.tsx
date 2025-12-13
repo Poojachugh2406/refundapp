@@ -68,13 +68,13 @@ const AuthPage = () => {
             <div className="input-box animation" style={{ '--D': 1, '--S': 22 } as React.CSSProperties}>
               <input type="text" required {...registerLogin('email')} />
               <label>Username / Email</label>
-              <User className="icon" size={20} color="white" />
+              <User className="icon" size={20} color="transparent" />
             </div>
 
             <div className="input-box animation" style={{ '--D': 2, '--S': 23 } as React.CSSProperties}>
               <input type="password" required {...registerLogin('password')} />
               <label>Password</label>
-              <Lock className="icon" size={20} color="white" />
+              <Lock className="icon" size={20} color="transparent" />
             </div>
 
             <div className="input-box animation" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
@@ -138,7 +138,7 @@ const AuthPage = () => {
           align-items: center;
           min-height: 100vh;
           background: #25252b;
-          color: #fff;
+        
         }
 
         .container {

@@ -145,7 +145,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Home/>} />
+            <Route path="/" element={<Login/>} />
             <Route path="/order" element={<OrderForm/>} />
             <Route path="/refund" element={<RefundForm/>} />
             <Route path="/track" element={<Tracking/>} />
