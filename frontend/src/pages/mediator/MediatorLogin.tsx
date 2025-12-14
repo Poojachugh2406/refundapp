@@ -7,7 +7,7 @@ import {  ArrowRight } from 'lucide-react';
 import bblogo from "../../assets/bblogog.png"; 
 import { useAuth } from '@/contexts/AuthContext';
 import Alert from '@/components/UI/Alert';
-import Input from '@/components/UI/Input';
+// import Input from '@/components/UI/Input';
 import Button from '@/components/UI/Button';
 import '@/components/UI/animation.css';
 
@@ -29,7 +29,7 @@ const MediatorLogin: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<LoginCredentials>();
 
   const onSubmit = async (data: LoginCredentials) => {
