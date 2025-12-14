@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {  Mail, ArrowLeft,  ArrowRight } from 'lucide-react';
+import '@/components/UI/animation.css';
 import { authAPI } from '@/utils/api';
 import Input from '@/components/UI/Input';
 import Button from '@/components/UI/Button';

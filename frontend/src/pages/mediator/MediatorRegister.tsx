@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
+import '@/components/UI/animation.css';
 import { 
-  Lock, 
-  Mail, 
+  // Lock, 
+  // Mail, 
   ArrowRight, 
-  User, 
-  Phone,
+  // User, 
+  // Phone,
   CheckCircle,
   Clock
 } from 'lucide-react';
@@ -156,7 +157,7 @@ const MediatorRegister: React.FC = () => {
         {/* --- PANEL 1: REGISTER FORM (Visible by default on Left) --- */}
         <div className="form-box Login">
           <div className="logo-container animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>
-             <img src={bblogo} alt="Logo" className="w-16 mx-auto mb-2" />
+             <img src={bblogo} alt="Logo" className="w-40 mx-auto mb-2" />
           </div>
           <h2 className="animation" style={{ '--D': 0, '--S': 21 } as React.CSSProperties}>Create Account</h2>
           
@@ -164,76 +165,84 @@ const MediatorRegister: React.FC = () => {
             {error && !isActive && <Alert type="error" message={error} />}
             
             <div className="flex gap-4 animation" style={{ '--D': 1, '--S': 22 } as React.CSSProperties}>
-                <div className="input-box flex-1">
-                    <Input
-                        label="Full Name"
+                <div className="input-box animation">
+                    <input
+                        // label="Full Name"
                         type="text"
-                        icon={<User className="h-5 w-5" />}
-                        placeholder="John Doe"
+                        //  icon={<User className="h-5 w-5" />}
+                        //placeholder="John Doe"
                         required
                         {...registerForm.register('name', { required: 'Required', minLength: { value: 2, message: 'Min 2 chars' } })}
-                        error={registerForm.formState.errors.name?.message}
-                    />
+                        // error={registerForm.formState.errors.name?.message}
+                        
+                   />
+                   <label >Full Name</label>
                 </div>
-                <div className="input-box flex-1">
-                    <Input
-                        label="Nick Name"
+                <div className="input-box animation">
+                    <input
+                        // label="Nick Name"
                         required
                         type="text"
-                        icon={<User className="h-5 w-5" />}
-                        placeholder="Johnny"
+                        // icon={<User className="h-5 w-5" />}
+                        //placeholder="Johnny"
                         {...registerForm.register('nickName')}
-                        error={registerForm.formState.errors.nickName?.message}
+                        // error={registerForm.formState.errors.nickName?.message}
                     />
+                    <label>Nick Name</label>
                 </div>
             </div>
 
             <div className="input-box animation" style={{ '--D': 2, '--S': 23 } as React.CSSProperties}>
-              <Input
-                label="Email Address"
+              <input
+                // label="Email Address"
                 type="email"
-                icon={<Mail className="h-5 w-5" />}
-                placeholder="mediator@example.com"
+                // icon={<Mail className="h-5 w-5" />}
+                //placeholder="mediator@example.com"
                 required
                 {...registerForm.register('email', { required: 'Email is required', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i , message: 'Invalid email' } })}
-                error={registerForm.formState.errors.email?.message}
+                // error={registerForm.formState.errors.email?.message}
               />
+              <label >Email address</label>
             </div>
 
             <div className="input-box animation" style={{ '--D': 2, '--S': 23 } as React.CSSProperties}>
-                <Input
-                    label="Phone"
+                <input
+                    // label="Phone"
                     type="tel"
-                    icon={<Phone className="h-5 w-5" />}
-                    placeholder="9876543210"
+                    // icon={<Phone className="h-5 w-5" />}
+                   // placeholder="9876543210"
                     required
                     {...registerForm.register('phone', { required: 'Phone is required', pattern: { value: /^[0-9]{10}$/, message: '10 digits' } })}
-                    error={registerForm.formState.errors.phone?.message}
+                    // error={registerForm.formState.errors.phone?.message}
                 />
+                <label >Phone number</label>
             </div>
 
-            <div className="flex gap-4 animation" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
+            <div className="input-box animation" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
                 <div className="input-box flex-1">
-                    <Input
-                        label="Password"
+                    <input
+                        // label="Password"
                         type={'password'}
-                        icon={<Lock className="h-5 w-5" />}
-                        placeholder="••••••"
+                        // icon={<Lock className="h-5 w-5" />}
+                       // placeholder="••••••"
                         required
                         {...registerForm.register('password', { required: 'Required', minLength: { value: 6, message: 'Min 6 chars' } })}
-                        error={registerForm.formState.errors.password?.message}
+                        // error={registerForm.formState.errors.password?.message}
                     />
+                    <label >Password</label>
+
                 </div>
-                <div className="input-box flex-1">
-                    <Input
-                        label="Confirm"
+                <div className="input-box animation">
+                    <input
+                        // label="Confirm"
                         type={'password'}
-                        icon={<Lock className="h-5 w-5" />}
-                        placeholder="••••••"
+                        // icon={<Lock className="h-5 w-5" />}
+                        //placeholder="••••••"
                         required
                         {...registerForm.register('confirmPassword', { required: 'Required' })}
-                        error={registerForm.formState.errors.confirmPassword?.message}
+                        // error={registerForm.formState.errors.confirmPassword?.message}
                     />
+                    <label >Confirm Password</label>
                 </div>
             </div>
 
@@ -297,297 +306,8 @@ const MediatorRegister: React.FC = () => {
         onClose={handleModalClose} 
       />
 
-      {/* --- CSS STYLES --- */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
-        .auth-body {
-          margin: 0;
-          padding: 20px;
-          box-sizing: border-box;
-          font-family: 'Poppins', sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 100vh;
-          background: #25252b; 
-          color: #fff;
-          overflow-x: hidden;
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Container - Responsive Width */
-        .container {
-          position: relative;
-          width: 100%;
-          max-width: 750px;
-          height: 750px; 
-          border: 2px solid #e46033;
-          box-shadow: 0 0 25px #e46033;
-          overflow: hidden;
-          background: #1f2937; 
-          border-radius: 20px;
-        }
-
-        .container .form-box {
-          position: absolute;
-          top: 0;
-          width: 50%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          align-items: center;
-          z-index: 10;
-        }
-
-        .form-box.Login {
-          left: 0;
-          padding: 0 40px;
-        }
-
-        .form-box.Login .animation {
-          transform: translateX(0%);
-          transition: .7s;
-          opacity: 1;
-          transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .form-box.Login .animation {
-          transform: translateX(-120%);
-          opacity: 0;
-          transition-delay: calc(.1s * var(--D));
-        }
-
-        .form-box.Register {
-          right: 0;
-          padding: 0 60px;
-        }
-
-        .form-box.Register .animation {
-          transform: translateX(120%);
-          transition: .7s ease;
-          opacity: 0;
-          filter: blur(10px);
-          transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .form-box.Register .animation {
-          transform: translateX(0%);
-          opacity: 1;
-          filter: blur(0);
-          transition-delay: calc(.1s * var(--li));
-        }
-
-        .form-box h2 {
-          font-size: 32px;
-          text-align: center;
-          margin-bottom: 20px;
-          color: white;
-        }
-
-        .form-box .input-box {
-          position: relative;
-          width: 100%;
-          margin-bottom: 20px;
-        }
-        
-        /* Input Styles */
-        .input-box input {
-          width: 100%;
-          height: 100%;
-          background: transparent;
-          border: none;
-          outline: none;
-          font-size: 16px;
-          color: #f4f4f4;
-          font-weight: 600;
-          border-bottom: 2px solid #fff;
-          padding-right: 23px;
-          transition: .5s;
-        }
-
-        .input-box input:focus {
-            border-bottom: 2px solid #e46033 !important;
-        }
-        .input-box label {
-            color: #9ca3af !important;
-        }
-        .input-box input:focus ~ label,
-        .input-box input:valid ~ label {
-            color: #e46033 !important;
-        }
-
-        .regi-link {
-          font-size: 14px;
-          text-align: center;
-          margin-top: 10px;
-          color: #d1d5db;
-        }
-
-        .regi-link a, .regi-link span {
-          text-decoration: none;
-          color: #e46033;
-          font-weight: 600;
-          cursor: pointer;
-        }
-
-        .regi-link a:hover, .regi-link span:hover {
-          text-decoration: underline;
-        }
-
-        /* Info Content Styles */
-        .info-content {
-          position: absolute;
-          top: 0;
-          height: 100%;
-          width: 50%;
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          color: white;
-        }
-
-        .info-content.Login {
-          right: 0;
-          text-align: right;
-          padding: 0 40px 60px 150px;
-        }
-
-        .info-content.Login .animation {
-          transform: translateX(0);
-          transition: .7s ease;
-          transition-delay: calc(.1s * var(--S));
-          opacity: 1;
-          filter: blur(0px);
-        }
-
-        .container.active .info-content.Login .animation {
-          transform: translateX(120%);
-          opacity: 0;
-          filter: blur(10px);
-          transition-delay: calc(.1s * var(--D));
-        }
-
-        .info-content.Register {
-          left: 0;
-          text-align: left;
-          padding: 0 150px 60px 38px;
-          pointer-events: none;
-        }
-
-        .info-content.Register .animation {
-          transform: translateX(-120%);
-          transition: .7s ease;
-          opacity: 0;
-          filter: blur(10px);
-          transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .info-content.Register .animation {
-          transform: translateX(0%);
-          opacity: 1;
-          filter: blur(0);
-          transition-delay: calc(.1s * var(--li));
-        }
-
-        .info-content h2 {
-          text-transform: uppercase;
-          font-size: 36px;
-          line-height: 1.3;
-          font-weight: 700;
-        }
-
-        .info-content p {
-          font-size: 16px;
-          margin-top: 10px;
-        }
-
-        .container .curved-shape {
-          position: absolute;
-          right: 0;
-          top: -5px;
-          height: 800px;
-          width: 850px;
-          background: linear-gradient(45deg, #111827, #e46033);
-          transform: rotate(10deg) skewY(40deg);
-          transform-origin: bottom right;
-          transition: 1.5s ease;
-          transition-delay: 1.6s;
-        }
-
-        .container.active .curved-shape {
-          transform: rotate(0deg) skewY(0deg);
-          transition-delay: .5s;
-        }
-        
-        .container .curved-shape2 {
-          position: absolute;
-          left: 250px;
-          top: 100%;
-          height: 900px;
-          width: 850px;
-          background: #25252b;
-          border-top: 3px solid #e46033;
-          transform: rotate(0deg) skewY(0deg);
-          transform-origin: bottom left;
-          transition: 1.5s ease;
-          transition-delay: .5s;
-        }
-
-        .container.active .curved-shape2 {
-          transform: rotate(-11deg) skewY(-41deg);
-          transition-delay: 1.2s;
-        }
-
-        /* --- MOBILE RESPONSIVENESS START --- */
-        @media (max-width: 768px) {
-            .container {
-                height: 650px; 
-            }
-
-            /* Hide Info Content panels on mobile to save space */
-            .info-content {
-                display: none;
-            }
-
-            /* Make Forms take full width */
-            .container .form-box {
-                width: 100%;
-                padding: 0 20px;
-            }
-
-            /* Adjust background shapes */
-            .container .curved-shape {
-                 width: 150%;
-                 height: 400px;
-                 top: -50px;
-                 right: -25%;
-                 transform: rotate(10deg) skewY(10deg);
-                 opacity: 0.5;
-            }
-            .container .curved-shape2 {
-                 display: none;
-            }
-
-            /* Adjust redirect panel position */
-            .form-box.Register {
-                right: -100%; 
-            }
-            .container.active .form-box.Register {
-                right: 0;
-            }
-        }
-        /* --- MOBILE RESPONSIVENESS END --- */
-
-      `}</style>
+   
+      
     </div>
   );
 };

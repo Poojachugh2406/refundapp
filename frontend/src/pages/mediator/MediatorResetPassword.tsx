@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import {  Lock, Mail,Eye, EyeOff, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import {  Lock, Mail, Eye, EyeOff, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { authAPI } from '@/utils/api';
 import Input from '@/components/UI/Input';
 import Button from '@/components/UI/Button';
@@ -164,7 +164,7 @@ const MediatorResetPassword: React.FC = () => {
                                 onClick={() => navigate('/mediator/login')}
                                 variant="primary"
                                 className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-                                style={{ backgroundColor: '#e46033', color: 'white' }}
+                                style={{ backgroundColor: '#059669', color: 'white' }}
                             >
                                 Go to Mediator Login
                                 <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
@@ -269,7 +269,7 @@ const MediatorResetPassword: React.FC = () => {
                                         type="submit"
                                         variant="primary"
                                         className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-                                        style={{ backgroundColor: '#e46033', color: 'white' }}
+                                        style={{ backgroundColor: '#059669', color: 'white' }}
                                         isLoading={isLoading}
                                     >
                                         {isLoading ? 'Resetting Password...' : (

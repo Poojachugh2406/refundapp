@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Link} from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
+
 import { User, Lock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext'; 
 import bblogo from "../assets/bblogog.png"; 
-
+import '@/components/UI/animation.css';
 const AuthPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth(); 
@@ -48,7 +49,7 @@ const AuthPage = () => {
         {/* --- PANEL 1: LOGIN FORM --- */}
         <div className="form-box Login">
           <div className="logo-container animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>
-             <img src={bblogo} alt="Logo" className="w-16 mx-auto mb-2" />
+             <img src={bblogo} alt="Logo" className="w-40 mx-auto mb- 0" />
           </div>
           <h2 className="animation" style={{ '--D': 0, '--S': 21 } as React.CSSProperties}>Login</h2>
           <form onSubmit={handleSubmitLogin(onLogin)}>
@@ -64,16 +65,30 @@ const AuthPage = () => {
               <label>Password</label>
               <Lock className="icon" size={20} color="transparent" />
             </div>
+<div className="animation flex justify-end mb-4" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
+               <Link
+                to={'/forgot-password'}
+                className="text-sm text-[#e46033] hover:text-[#c9522b] font-medium"
+              >
+                Forgot password?
+              </Link>
+            </div>
 
             <div className="input-box animation" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
-              <button className="btn" type="submit" disabled={isLoading}>
+              <button  type="submit"
+              style={{ backgroundColor: '#e46033', color: 'white' }}
+                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#c9522b]"
+                
+                disabled={isLoading}>
                 {isLoading ? 'Loading...' : 'Login'}
               </button>
             </div>
+ 
+
 
             <div className="regi-link animation" style={{ '--D': 4, '--S': 25 } as React.CSSProperties}>
               <p>
-                <span className='msg text-[#e46033]'>Don't have an account?</span> <br />
+                {/* <span className='msg text-[#e46033]'>Don't have an account?</span> <br /> */}
                 <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleSignUpClick}>Sign Up</span>
               </p>
             </div>
@@ -83,9 +98,9 @@ const AuthPage = () => {
         {/* --- INFO PANEL 1 (Welcome Back) --- */}
         {/* Hidden on Mobile via CSS */}
         <div className="info-content Login">
-          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>WELCOME BACK!</h2>
+          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>Hawk Agency</h2>
           <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
-            We are happy to have you with us again. If you need anything, we are here to help.
+            We welcome you at Hawk agency and are happy to have you with us again. If you need anything, we are here to help.
           </p>
         </div>
 
@@ -112,333 +127,7 @@ const AuthPage = () => {
       </div>
 
       {/* --- CSS STYLES --- */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
-        .auth-body {
-          margin: 0;
-          padding: 20px; /* Added padding for mobile edges */
-          box-sizing: border-box;
-          font-family: 'Poppins', sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 100vh;
-          background: #25252b;
-          overflow-x: hidden;
-        }
-
-        .container {
-          position: relative;
-          width: 100%;
-          max-width: 750px; /* Changed from fixed width to max-width */
-          height: 500px; /* Increased slightly for better mobile spacing */
-          border: 2px solid #e46033;
-          box-shadow: 0 0 25px #e46033;
-          overflow: hidden;
-          background: #1f2937; /* Ensure background is set */
-          border-radius: 20px; /* Added rounded corners */
-        }
-
-        .container .form-box {
-          position: absolute;
-          top: 0;
-          width: 50%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          align-items: center;
-          z-index: 10; /* Ensure forms are above background */
-        }
-
-        .form-box.Login {
-          left: 0;
-          padding: 0 40px;
-        }
-
-        .form-box.Login .animation {
-          transform: translateX(0%);
-          transition: .7s;
-          opacity: 1;
-          transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .form-box.Login .animation {
-          transform: translateX(-120%);
-          opacity: 0;
-          transition-delay: calc(.1s * var(--D));
-        }
-
-        .form-box.Register {
-          right: 0;
-          padding: 0 40px;
-        }
-
-        .form-box.Register .animation {
-          transform: translateX(120%);
-          transition: .7s ease;
-          opacity: 0;
-          filter: blur(10px);
-          transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .form-box.Register .animation {
-          transform: translateX(0%);
-          opacity: 1;
-          filter: blur(0);
-          transition-delay: calc(.1s * var(--li));
-        }
-
-        .form-box h2 {
-          font-size: 32px;
-          text-align: center;
-          margin-bottom: 10px;
-          color: white;
-        }
-
-        .form-box .input-box {
-          position: relative;
-          width: 100%;
-          height: 50px;
-          margin-top: 25px;
-        }
-
-        .input-box input {
-          width: 100%;
-          height: 100%;
-          background: transparent;
-          border: none;
-          outline: none;
-          font-size: 16px;
-          color: #fff;
-          font-weight: 600;
-          border-bottom: 2px solid #fff;
-          padding-right: 23px;
-          transition: .5s;
-        }
-
-        .input-box input:focus,
-        .input-box input:valid {
-          border-bottom: 2px solid #e46033;
-        }
-
-        .input-box label {
-          position: absolute;
-          top: 50%;
-          left: 0;
-          transform: translateY(-50%);
-          font-size: 16px;
-          color: #fff;
-          transition: .5s;
-          pointer-events: none;
-        }
-
-        .input-box input:focus ~ label,
-        .input-box input:valid ~ label {
-          top: -5px;
-          color: #e46033;
-          font-size: 12px;
-        }
-
-        .input-box .icon {
-          position: absolute;
-          top: 50%;
-          right: 0;
-          transform: translateY(-50%);
-          color: transparent; /* Kept transparent as per your code */
-        }
-
-        .btn {
-          position: relative;
-          width: 100%;
-          height: 45px;
-          background: transparent;
-          border-radius: 40px;
-          cursor: pointer;
-          font-size: 16px;
-          font-weight: 600;
-          border: 2px solid #e46033;
-          overflow: hidden;
-          z-index: 1;
-          color: #fff;
-          margin-top: 10px;
-        }
-
-        .btn::before {
-          content: "";
-          position: absolute;
-          height: 300%;
-          width: 100%;
-          background: linear-gradient(#25252b, #e46033, #25252b, #e46033);
-          top: -100%;
-          left: 0;
-          z-index: -1;
-          transition: .5s;
-        }
-
-        .btn:hover::before {
-          top: 0;
-        }
-
-        .regi-link {
-          font-size: 14px;
-          text-align: center;
-          margin: 20px 0 10px;
-        }
-
-        /* INFO CONTENT Styles */
-        .info-content {
-          position: absolute;
-          top: 0;
-          height: 100%;
-          width: 50%;
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-        }
-
-        .info-content.Login {
-          right: 0;
-          text-align: right;
-          padding: 0 40px 60px 150px;
-        }
-
-        .info-content.Login .animation {
-          transform: translateX(0);
-          transition: .7s ease;
-          transition-delay: calc(.1s * var(--S));
-          opacity: 1;
-          filter: blur(0px);
-        }
-
-        .container.active .info-content.Login .animation {
-          transform: translateX(120%);
-          opacity: 0;
-          filter: blur(10px);
-          transition-delay: calc(.1s * var(--D));
-        }
-
-        .info-content.Register {
-          left: 0;
-          text-align: left;
-          padding: 0 150px 60px 38px;
-          pointer-events: none;
-        }
-
-        .info-content.Register .animation {
-          transform: translateX(-120%);
-          transition: .7s ease;
-          opacity: 0;
-          filter: blur(10px);
-          transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .info-content.Register .animation {
-          transform: translateX(0%);
-          opacity: 1;
-          filter: blur(0);
-          transition-delay: calc(.1s * var(--li));
-        }
-
-        .info-content h2 {
-          text-transform: uppercase;
-          font-size: 36px;
-          line-height: 1.3;
-        }
-
-        .info-content p {
-          font-size: 16px;
-        }
-
-        /* CURVED SHAPES */
-        .container .curved-shape {
-          position: absolute;
-          right: 0;
-          top: -5px;
-          height: 600px;
-          width: 850px;
-          background: linear-gradient(45deg, #25252b, #e46033);
-          transform: rotate(10deg) skewY(40deg);
-          transform-origin: bottom right;
-          transition: 1.5s ease;
-          transition-delay: 1.6s;
-        }
-
-        .container.active .curved-shape {
-          transform: rotate(0deg) skewY(0deg);
-          transition-delay: .5s;
-        }
-
-        .container .curved-shape2 {
-          position: absolute;
-          left: 250px;
-          top: 100%;
-          height: 700px;
-          width: 850px;
-          background: #25252b;
-          border-top: 3px solid #e46033;
-          transform: rotate(0deg) skewY(0deg);
-          transform-origin: bottom left;
-          transition: 1.5s ease;
-          transition-delay: .5s;
-        }
-
-        .container.active .curved-shape2 {
-          transform: rotate(-11deg) skewY(-41deg);
-          transition-delay: 1.2s;
-        }
-
-        /* --- MOBILE RESPONSIVENESS START --- */
-        @media (max-width: 768px) {
-            .container {
-                height: auto;
-                min-height: 650px;
-            }
-
-            /* Hide Info Content panels on mobile to save space */
-            .info-content {
-                display: none;
-            }
-
-            /* Make Forms take full width */
-            .container .form-box {
-                width: 100%;
-                padding: 0 20px;
-            }
-
-            /* Adjust animations for single column view */
-            /* Even though we move -120% or 120%, because width is 100%, 
-               it correctly slides the full screen */
-            
-            /* Tweak Shape Backgrounds for Mobile */
-            .container .curved-shape {
-                width: 150%;
-                height: 400px;
-                top: -50px;
-                right: -25%;
-                transform: rotate(10deg) skewY(10deg);
-            }
-            
-            .container .curved-shape2 {
-                display: none; /* Simplify background on mobile */
-            }
-
-            .form-box h2 {
-                font-size: 28px;
-            }
-            
-            /* Ensure the Redirect panel is centered properly */
-            .form-box.Register {
-                right: -100%; /* Initially pushed further out */
-            }
-            .container.active .form-box.Register {
-                right: 0;
-            }
-        }
-        /* --- MOBILE RESPONSIVENESS END --- */
-
-      `}</style>
+      
     </div>
   );
 };
