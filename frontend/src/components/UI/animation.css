@@ -1,19 +1,23 @@
-/* src/styles/AuthStyles.css */
+/* frontend/src/components/UI/animation.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 /* --- MAIN LAYOUT --- */
 .auth-body {
   margin: 0;
-  padding: 20px;
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: #25252b; /* Dark Background */
+  /* Use dynamic viewport height for better mobile support */
+  min-height: 100dvh; 
+  background: #25252b; 
+  /* Allow scrolling on the body if content is tall */
+  overflow-y: auto; 
   overflow-x: hidden;
   color: #fff;
+  position: relative;
 }
 
 /* Hide scrollbar for form sections but allow scroll */
@@ -22,7 +26,7 @@
 }
 .scrollbar-hide {
     -ms-overflow-style: none;
-    
+    scrollbar-width: none;
 }
 
 /* --- CONTAINER --- */
@@ -30,12 +34,14 @@
   position: relative;
   width: 100%;
   max-width: 750px;
-  height: 500px; /* Standard height */
+  height: 600px;
   background: #1f2937; 
-  border: 2px solid #e46033; /* Orange Border */
+  border: 2px solid #e46033; 
   box-shadow: 0 0 25px #e46033;
   overflow: hidden;
   border-radius: 20px;
+  /* Ensure container is above particles/backgrounds if any */
+  z-index: 5; 
 }
 
 /* Entry Animation for Reset/Forgot Password Pages */
@@ -61,6 +67,8 @@
   flex-direction: column;
   align-items: center;
   z-index: 10;
+  /* CRITICAL FIX: Smooth transition for visibility */
+  transition: all 0.6s ease-in-out;
 }
 
 /* Left Side (Login / Register Form) */
@@ -73,37 +81,36 @@
 .form-box.Register {
   right: 0;
   padding: 0 60px;
+  /* Move it off-screen initially */
+  opacity: 0; 
+  pointer-events: none; /* Prevent clicks when hidden */
 }
 
-/* --- ANIMATION LOGIC (Sliding) --- */
-/* Default State */
-.form-box.Login .animation {
-  transform: translateX(0%);
-  transition: .7s;
-  opacity: 1;
-  transition-delay: calc(.1s * var(--S));
+/* --- ANIMATION STATES --- */
+
+/* 1. Default State (Login Visible) */
+.container:not(.active) .form-box.Login {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+.container:not(.active) .form-box.Register {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
 }
 
-.form-box.Register .animation {
-  transform: translateX(120%);
-  transition: .7s ease;
-  opacity: 0;
-  filter: blur(10px);
-  transition-delay: calc(.1s * var(--S));
+/* 2. Active State (Register/Redirect Visible) */
+.container.active .form-box.Login {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none; /* Prevent clicks when hidden */
 }
 
-/* Active State (Slid Over) */
-.container.active .form-box.Login .animation {
-  transform: translateX(-120%);
-  opacity: 0;
-  transition-delay: calc(.1s * var(--D));
-}
-
-.container.active .form-box.Register .animation {
-  transform: translateX(0%);
-  opacity: 1;
-  filter: blur(0);
-  transition-delay: calc(.1s * var(--li));
+.container.active .form-box.Register {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto; /* Enable clicks when visible */
 }
 
 /* --- TEXT STYLES --- */
@@ -117,8 +124,10 @@
 .regi-link {
   font-size: 14px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 15px;
   color: #d1d5db;
+  z-index: 20; /* Ensure links are clickable */
+  position: relative;
 }
 
 .regi-link a, .regi-link span {
@@ -132,7 +141,7 @@
   text-decoration: underline;
 }
 
-/* --- INFO CONTENT PANELS --- */
+/* --- INFO CONTENT PANELS (Text on the side) --- */
 .info-content {
   position: absolute;
   top: 0;
@@ -142,6 +151,8 @@
   justify-content: center;
   flex-direction: column;
   color: white;
+  transition: all 0.6s ease-in-out;
+  z-index: 10;
 }
 
 .info-content.Login {
@@ -154,38 +165,20 @@
   left: 0;
   text-align: left;
   padding: 0 150px 60px 38px;
-  pointer-events: auto;
-}
-
-/* Info Animations */
-.info-content.Login .animation {
-  transform: translateX(0);
-  transition: .7s ease;
-  transition-delay: calc(.1s * var(--S));
-  opacity: 1;
-  filter: blur(0px);
-}
-
-.container.active .info-content.Login .animation {
-  transform: translateX(120%);
+  pointer-events: none;
   opacity: 0;
-  filter: blur(10px);
-  transition-delay: calc(.1s * var(--D));
+  transform: translateX(-100%);
 }
 
-.info-content.Register .animation {
-  transform: translateX(-120%);
-  transition: .7s ease;
-  opacity: 0;
-  filter: blur(10px);
-  transition-delay: calc(.1s * var(--S));
+/* Info Animation Logic */
+.container.active .info-content.Login {
+    transform: translateX(100%);
+    opacity: 0;
 }
 
-.container.active .info-content.Register .animation {
-  transform: translateX(0%);
-  opacity: 1;
-  filter: blur(0);
-  transition-delay: calc(.1s * var(--li));
+.container.active .info-content.Register {
+    transform: translateX(0);
+    opacity: 1;
 }
 
 .info-content h2 {
@@ -200,11 +193,12 @@
   margin-top: 10px;
 }
 
-/* --- INPUT STYLES (Global Override) --- */
+/* --- INPUT STYLES --- */
 .input-box {
   position: relative;
   width: 100%;
   margin-bottom: 20px;
+  z-index: 15; /* Ensure inputs are above background shapes */
 }
 
 .input-box input {
@@ -219,32 +213,39 @@
   border-bottom: 2px solid #fff;
   padding-right: 23px;
   transition: .5s;
+  border-radius: 0; /* Fix for iOS input styles */
 }
 
 .input-box input:focus {
     border-bottom: 2px solid #e46033 !important;
 }
+
 .input-box label {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #9ca3af;
-            pointer-events: auto;
-            transition: .5s;
-        }
+    color: #9ca3af !important;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: .5s;
+    pointer-events: none; /* Crucial: lets clicks pass through label to input */
+    font-size: 16px;
+}
+
+/* Label Animation when focused or valid */
 .input-box input:focus ~ label,
-.input-box input:valid ~ label {
+.input-box input:valid ~ label,
+.input-box input:not(:placeholder-shown) ~ label {
     top: 0px;
     color: #e46033 !important;
     font-size: 12px;
 }
+
 .input-box .icon {
     position: absolute;
     top: 50%;
     right: 0;
     transform: translateY(-50%);
+    pointer-events: none;
 }
 
 /* OTP Dark Theme Override */
@@ -268,6 +269,11 @@
 .btn {
   position: relative;
   width: 100%;
+  z-index: 20; /* Ensure clickable */
+}
+
+button {
+    cursor: pointer;
 }
 
 /* --- BACKGROUND SHAPES --- */
@@ -283,6 +289,7 @@
   transition: 1.5s ease;
   transition-delay: 1.6s;
   opacity: 0.8;
+  pointer-events: none; /* Ensure shapes don't block clicks */
 }
 
 .container.active .curved-shape {
@@ -303,6 +310,7 @@
   transition: 1.5s ease;
   transition-delay: .5s;
   z-index: 1;
+  pointer-events: none;
 }
 
 .container.active .curved-shape2 {
@@ -310,62 +318,66 @@
   transition-delay: 1.2s;
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* --- MOBILE RESPONSIVENESS (Max Width 768px) --- */
 @media (max-width: 768px) {
+    .auth-body {
+        padding: 15px;
+        align-items: flex-start; /* Prevents top clipping on small screens */
+        padding-top: 40px; /* Safe space from top */
+    }
+
     .container {
         height: auto;
-        min-height: 650px;
+        min-height: 600px; /* Allow growth */
         max-width: 100%;
     }
 
-    /* Hide Info Content panels on mobile */
+    /* Hide Side Info Panels on Mobile */
     .info-content {
-        display: none;
+        display: none !important;
     }
 
-    /* Full width forms */
+    /* Full Width Forms */
     .container .form-box {
         width: 100%;
-        padding: 0 20px;
-        left: 0; 
-        right: 0;
+        padding: 20px;
+        left: 0 !important; 
+        right: 0 !important;
+        position: relative; /* Change from absolute to flow naturally */
     }
     
-    /* Center the forms vertically/horizontally */
+    /* Since we changed to relative, we need to handle the hidden state differently for mobile */
+    .container:not(.active) .form-box.Register {
+        display: none; /* Completely remove from flow */
+    }
+    .container.active .form-box.Login {
+        display: none; /* Completely remove from flow */
+    }
+    
+    /* Reset transforms for mobile flow */
     .form-box.Login, .form-box.Register {
-       position: relative;
-       left: 0;
-       right: 0;
-       padding: 40px 20px;
+        transform: none !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
     }
 
-    /* Adjust shapes */
+    /* Adjust Background Shapes for Mobile */
     .container .curved-shape {
          width: 150%;
-         height: 400px;
-         top: -50px;
-         right: -25%;
-         transform: rotate(10deg) skewY(10deg);
-         opacity: 0.5;
+         height: 300px;
+         top: -80px;
+         right: -20%;
+         transform: rotate(15deg);
+         opacity: 0.4;
     }
     
     .container .curved-shape2 {
-         display: none;
+         display: none; /* Remove bottom shape on mobile to save space */
     }
 
     .form-box h2 {
-        font-size: 28px;
-    }
-    
-    /* Handle redirect sliding on mobile (optional: usually we just fade out, 
-       but keeping slide logic works because width is 100%) */
-    .form-box.Register {
-        position: absolute;
-        top: 0;
-        right: -100%; 
-    }
-    .container.active .form-box.Register {
-        right: 0;
+        font-size: 26px;
+        margin-top: 10px;
     }
     
     /* OTP Mobile Adjustment */
@@ -374,5 +386,10 @@
         height: 45px !important;
         margin: 0 3px;
         font-size: 16px;
+    }
+    
+    /* Ensure links have enough touch area */
+    .regi-link {
+        padding: 10px 0;
     }
 }
