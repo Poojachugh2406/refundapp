@@ -206,7 +206,7 @@ const MediatorLogin: React.FC = () => {
           position: relative;
           width: 100%;
           max-width: 750px;
-          height: 550px;
+          height: 500px;
           border: 2px solid #e46033;
           box-shadow: 0 0 25px #e46033;
           overflow: hidden;

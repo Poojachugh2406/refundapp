@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import {  Mail, ArrowLeft,  ArrowRight } from 'lucide-react';
-import { authAPI } from '@/utils/api';
-import Input from '@/components/UI/Input';
-import Button from '@/components/UI/Button';
-import Alert from '@/components/UI/Alert';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import bblogo from "../../assets/bblogog.png"
+import { useNavigate, Link } from 'react-router-dom';
+import { toast, Toaster } from 'react-hot-toast';
+import { Mail, ArrowRight, ArrowLeft } from 'lucide-react';
+import { authAPI } from '@/utils/api';
+import Alert from '@/components/UI/Alert';
+import Button from '@/components/UI/Button';
+import bblogo from "../../assets/bblogog.png";
+
 const MediatorForgotPassword: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // const [success, setSuccess] = useState(false);
+  
+  // Animation state to trigger slide-in on mount
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch
+    formState: { errors }
   } = useForm<{ email: string }>();
 
   const onSubmit = async (data: { email: string }) => {
@@ -33,137 +38,273 @@ const MediatorForgotPassword: React.FC = () => {
     try {
       const response = await authAPI.forgotPassword({ email: data.email });
       if (response.success) {
-        // setSuccess(true);
-        navigate('/mediator/reset-password', { state: { email } });
+        navigate('/mediator/reset-password', { state: { email: data.email } });
         toast.success('Password reset OTP sent to your email!');
       }
     } catch (error: any) {
       console.error('Forgot password error:', error);
-      setError(error.response?.data?.message || error.message || 'Failed to send password reset email');
-      toast.error(error.response?.data?.message || error.message || 'Failed to send reset email');
+      setError(error.response?.data?.message || error.message || 'Failed to send reset email');
+      toast.error(error.response?.data?.message || 'Failed to send reset email');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const email = watch("email");
-  // const handleNavigateToReset = () => {
-  //   navigate('/mediator/reset-password', { state: { email } });
-  // };
-
-  // Branding Panel Component - Mediator Theme
-  const BrandingPanel: React.FC = () => (
-    <div className="relative hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
-      <div className="flex items-center space-x-3 z-10">
-        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
-          {/* <Package className="h-7 w-7 text-white" /> */}
-          <img width="70" src = {bblogo} alt = "Logo"/>
-        </div>
-        <h1 className="text-3xl font-bold">Hawk Agency</h1>
-      </div>
-
-      <div className="z-10 max-w-lg">
-        <h2 className="text-5xl font-bold leading-tight mb-4">
-          Reset Your Password
-        </h2>
-        <p className="text-lg text-teal-100 font-light">
-          Enter your email and we'll send you a code to reset your password and get you back to dashboard.
-        </p>
-      </div>
-
-      <div className="z-10 text-sm text-teal-200">
-        &copy; {new Date().getFullYear()} Hawk Agency. All rights reserved.
-      </div>
-
-      <div className="absolute top-0 left-0 w-full h-full opacity-10 overflow-hidden">
-        <svg className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] text-emerald-300" fill="currentColor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" d="M100 0C44.77 0 0 44.77 0 100s44.77 100 100 100c55.23 0 100-44.77 100-100S155.23 0 100 0z" clipRule="evenodd" />
-        </svg>
-        <svg className="absolute -top-1/4 -right-1/4 w-[700px] h-[700px] text-teal-300" fill="currentColor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" d="M170.7 50c9.4 12.5 14.3 28.3 14.3 45 0 16.7-4.9 32.5-14.3 45s-23.3 20-38.2 20c-14.9 0-28.8-7.5-38.2-20s-14.3-28.3-14.3-45 4.9-32.5 14.3-45 23.3-20 38.2-20c14.9 0 28.8 7.5 38.2 20z" clipRule="evenodd" />
-        </svg>
-      </div>
-    </div>
-  );
-
-  // Mobile Header Component
-  const MobileHeader: React.FC = () => (
-    <div className="flex items-center space-x-3 mb-8 lg:hidden">
-      <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
-        {/* <Package className="h-6 w-6 text-white" /> */}
-        <img width="70" src = {bblogo} alt = "Logo"/>
-      </div>
-      <h1 className="text-2xl font-bold text-gray-900">Hawk Agency</h1>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">
-      {/* Branding Panel (Left Side) */}
-      <BrandingPanel />
+    <div className="auth-body">
+      <Toaster />
       
-      {/* Form Panel (Right Side) */}
-      <div className="flex flex-col justify-center py-12 px-6 sm:px-10 lg:px-16 overflow-y-auto">
-        <div className="w-full max-w-md mx-auto">
-          <MobileHeader />
+      {/* Container with animation class */}
+      <div className={`container ${loaded ? 'animate-entry' : ''}`}>
+        
+        {/* Background Shapes (Exact same as Login/Register) */}
+        <div className="curved-shape"></div>
+        <div className="curved-shape2"></div>
+
+        {/* --- MAIN FORM CONTENT --- */}
+        <div className="form-box">
           
-          {(
-            <>
-              <h2 className="text-3xl font-bold text-gray-900">
-                Forgot Password?
-              </h2>
-              <p className="mt-2 text-gray-600">
-                Enter your email and we'll send you a reset code.
-              </p>
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="logo-container mb-4">
+               <img src={bblogo} alt="Logo" className="w-16 mx-auto" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">Reset Password</h2>
+            <p className="text-gray-300 text-sm max-w-xs mx-auto">
+              Enter your registered email and we'll send you a code to reset your password.
+            </p>
+          </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
-                {error && <Alert type="error" message={error} />}
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full px-8">
+            {error && <Alert type="error" message={error} />}
 
-                <Input
-                  label="Email"
-                  type="email"
-                  icon={<Mail className="w-4 h-4" />}
-                  placeholder="mediator@example.com"
-                  required
-                  {...register("email", { 
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Invalid email address"
-                    }
-                  })}
-                  error={errors.email?.message}
-                />
+            <div className="input-box">
+              <input 
+                type="email" 
+                required 
+                {...register("email", { 
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                  }
+                })}
+              />
+              <label>Email Address</label>
+              <Mail className="icon" size={20} color="white" />
+              {errors.email && <span className="text-red-400 text-xs absolute -bottom-5 left-0">{errors.email.message}</span>}
+            </div>
 
-                <Button
-                  type="submit"
-                  variant="primary"
-                  className="w-full py-3 font-semibold text-base flex items-center justify-center group"
-                  style={{ backgroundColor: '#e46033', color: 'white' }}
-                  isLoading={isLoading}
-                >
-                  {isLoading ? 'Sending Code...' : (
-                    <>
-                      Send Reset Code
-                      <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
-                    </>
-                  )}
-                </Button>
+            <div className="mt-8">
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#c9522b] rounded-full transition-all"
+                style={{ backgroundColor: '#e46033', color: 'white' }}
+                isLoading={isLoading}
+              >
+                {isLoading ? 'Sending...' : (
+                  <>
+                    Send Reset Code
+                    <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
+              </Button>
+            </div>
 
-                <div className="text-center pt-4">
-                  <Link
-                    to="/mediator/login"
-                    className="inline-flex items-center text-sm text-emerald-600 hover:text-emerald-700 font-medium"
-                  >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Mediator Login
-                  </Link>
-                </div>
-              </form>
-            </>
-          )}
+            <div className="regi-link">
+              <Link to="/mediator/login" className="flex items-center justify-center gap-2 group">
+                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform"/>
+                 <span>Back to Login</span>
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
+
+      {/* --- CSS STYLES --- */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        .auth-body {
+          margin: 0;
+          padding: 20px;
+          box-sizing: border-box;
+          font-family: 'Poppins', sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          background: #25252b; /* Dark background matching theme */
+          overflow-x: hidden;
+        }
+
+        .container {
+          position: relative;
+          width: 100%;
+          max-width: 750px; /* Compact width for Forgot Password */
+          height: 500px;
+          background: #1f2937; 
+          border: 2px solid #e46033;
+          box-shadow: 0 0 25px #e46033;
+          overflow: hidden;
+          border-radius: 20px;
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+
+        /* Entry Animation */
+        .container.animate-entry {
+          animation: slideInDown 0.8s ease-out forwards;
+        }
+
+        @keyframes slideInDown {
+          0% { opacity: 0; transform: translateY(-50px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .container .form-box {
+          position: absolute;
+          top: 0;
+          left: 0;
+          // width: 100%;
+          // height: 100%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          z-index: 10;
+        }
+
+        .form-box h2 {
+          font-size: 32px;
+          text-align: center;
+          color: white;
+        }
+
+        /* Input Styling - Identical to Login */
+        .input-box {
+          position: relative;
+          width: 100%;
+          height: 50px;
+          margin-top: 25px;
+          margin-bottom: 10px;
+        }
+        
+        .input-box input {
+          width: 100%;
+          height: 100%;
+          background: transparent;
+          border: none;
+          outline: none;
+          font-size: 16px;
+          color: #f4f4f4;
+          font-weight: 600;
+          border-bottom: 2px solid #fff;
+          padding-right: 23px;
+          transition: .5s;
+        }
+
+        .input-box input:focus,
+        .input-box input:valid {
+            border-bottom: 2px solid #e46033 !important;
+        }
+
+        .input-box label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #9ca3af;
+            pointer-events: none;
+            transition: .5s;
+        }
+
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label {
+            top: -5px;
+            color: #e46033;
+            font-size: 12px;
+        }
+
+        .input-box .icon {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            color: transparent; /* Keeping transparent to match your logic if using absolute icon */
+        }
+        
+        /* Note: If you want the icon visible, change color above to white or #9ca3af */
+
+        .regi-link {
+          font-size: 14px;
+          text-align: center;
+          margin-top: 30px;
+        }
+
+        .regi-link a {
+          text-decoration: none;
+          color: #e46033;
+          font-weight: 600;
+          cursor: pointer;
+        }
+
+        .regi-link a:hover {
+          text-decoration: underline;
+        }
+
+        /* Background Shapes - Left and Right */
+        .container .curved-shape {
+          position: absolute;
+          right: 0;
+          top: -5px;
+          height: 600px;
+          width: 850px;
+          background: linear-gradient(45deg, #111827, #e46033);
+          transform: rotate(10deg) skewY(40deg);
+          transform-origin: bottom right;
+          opacity: 0.8;
+        }
+        
+        .container .curved-shape2 {
+          position: absolute;
+          left: -100px;
+          bottom: -200px;
+          height: 400px;
+          width: 850px;
+          background: #25252b;
+          border-top: 3px solid #e46033;
+          transform: rotate(-10deg) skewY(-10deg);
+          transform-origin: bottom left;
+          z-index: 1;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                height: auto;
+                min-height: 550px;
+                max-width: 100%;
+            }
+            
+            .form-box {
+                padding: 40px 20px;
+            }
+
+            /* Adjust shapes for mobile so they don't cover inputs */
+            .container .curved-shape {
+                width: 150%;
+                opacity: 0.5;
+                top: -100px;
+            }
+            
+            .container .curved-shape2 {
+                display: none;
+            }
+        }
+      `}</style>
     </div>
   );
 };
