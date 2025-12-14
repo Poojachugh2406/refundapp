@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import {  Lock, Eye, EyeOff, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import {  Lock, Mail,Eye, EyeOff, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { authAPI } from '@/utils/api';
 import Input from '@/components/UI/Input';
 import Button from '@/components/UI/Button';
