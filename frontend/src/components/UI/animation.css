@@ -154,7 +154,7 @@
   left: 0;
   text-align: left;
   padding: 0 150px 60px 38px;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 /* Info Animations */
@@ -231,7 +231,7 @@
             transform: translateY(-50%);
             font-size: 16px;
             color: #9ca3af;
-            pointer-events: none;
+            pointer-events: auto;
             transition: .5s;
         }
 .input-box input:focus ~ label,
