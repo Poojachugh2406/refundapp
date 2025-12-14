@@ -328,7 +328,7 @@ button {
 
     .container {
         height: auto;
-        min-height: 600px; /* Allow growth */
+        min-height: 580px; /* Allow growth */
         max-width: 100%;
     }
 
