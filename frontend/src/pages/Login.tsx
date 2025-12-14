@@ -28,19 +28,10 @@ const AuthPage = () => {
     }
   };
 
-  // --- HANDLER: Sign Up Redirect ---
   const handleSignUpClick = () => {
     setIsActive(true); 
     setTimeout(() => {
         navigate('/register');
-    }, 1800);
-  };
-
-  // --- HANDLER: Forgot Password Redirect ---
-  const handleForgotClick = () => {
-    setIsActive(true);
-    setTimeout(() => {
-        navigate('/forgot-password');
     }, 1800);
   };
 
@@ -74,23 +65,13 @@ const AuthPage = () => {
               <Lock className="icon" size={20} color="transparent" />
             </div>
 
-            {/* --- FORGOT PASSWORD LINK --- */}
-            <div className="animation flex justify-end mt-2 mb-4" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
-               <span 
-                onClick={handleForgotClick}
-                className="text-sm text-[#e46033] hover:text-[#c9522b] font-medium cursor-pointer"
-              >
-                Forgot password?
-              </span>
-            </div>
-
-            <div className="input-box animation" style={{ '--D': 4, '--S': 25 } as React.CSSProperties}>
+            <div className="input-box animation" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
               <button className="btn" type="submit" disabled={isLoading}>
                 {isLoading ? 'Loading...' : 'Login'}
               </button>
             </div>
 
-            <div className="regi-link animation" style={{ '--D': 5, '--S': 26 } as React.CSSProperties}>
+            <div className="regi-link animation" style={{ '--D': 4, '--S': 25 } as React.CSSProperties}>
               <p>
                 <span className='msg text-[#e46033]'>Don't have an account?</span> <br />
                 <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleSignUpClick}>Sign Up</span>
@@ -100,6 +81,7 @@ const AuthPage = () => {
         </div>
 
         {/* --- INFO PANEL 1 (Welcome Back) --- */}
+        {/* Hidden on Mobile via CSS */}
         <div className="info-content Login">
           <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>WELCOME BACK!</h2>
           <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
@@ -113,16 +95,17 @@ const AuthPage = () => {
           
           <div className="w-full px-8 text-center flex flex-col items-center">
              <p className="animation mb-8 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
-               Please wait while we take you to the requested page.
+               Please wait while we take you to the registration page.
              </p>
           </div>
         </div>
 
         {/* --- INFO PANEL 2 (Join Us) --- */}
+        {/* Hidden on Mobile via CSS */}
         <div className="info-content Register">
-          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>PLEASE WAIT</h2>
+          <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>JOIN US!</h2>
           <p className="animation" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
-            We are redirecting you shortly...
+            We are redirecting you to the account creation form.
           </p>
         </div>
 
@@ -134,7 +117,7 @@ const AuthPage = () => {
 
         .auth-body {
           margin: 0;
-          padding: 20px;
+          padding: 20px; /* Added padding for mobile edges */
           box-sizing: border-box;
           font-family: 'Poppins', sans-serif;
           display: flex;
@@ -148,13 +131,13 @@ const AuthPage = () => {
         .container {
           position: relative;
           width: 100%;
-          max-width: 750px;
-          height: 500px;
+          max-width: 750px; /* Changed from fixed width to max-width */
+          height: 500px; /* Increased slightly for better mobile spacing */
           border: 2px solid #e46033;
           box-shadow: 0 0 25px #e46033;
           overflow: hidden;
-          background: #1f2937;
-          border-radius: 20px;
+          background: #1f2937; /* Ensure background is set */
+          border-radius: 20px; /* Added rounded corners */
         }
 
         .container .form-box {
@@ -166,7 +149,7 @@ const AuthPage = () => {
           justify-content: center;
           flex-direction: column;
           align-items: center;
-          z-index: 10;
+          z-index: 10; /* Ensure forms are above background */
         }
 
         .form-box.Login {
@@ -263,7 +246,7 @@ const AuthPage = () => {
           top: 50%;
           right: 0;
           transform: translateY(-50%);
-          color: transparent;
+          color: transparent; /* Kept transparent as per your code */
         }
 
         .btn {
@@ -406,22 +389,29 @@ const AuthPage = () => {
           transition-delay: 1.2s;
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE RESPONSIVENESS START --- */
         @media (max-width: 768px) {
             .container {
                 height: auto;
-                min-height: 550px;
+                min-height: 650px;
             }
 
+            /* Hide Info Content panels on mobile to save space */
             .info-content {
                 display: none;
             }
 
+            /* Make Forms take full width */
             .container .form-box {
                 width: 100%;
                 padding: 0 20px;
             }
 
+            /* Adjust animations for single column view */
+            /* Even though we move -120% or 120%, because width is 100%, 
+               it correctly slides the full screen */
+            
+            /* Tweak Shape Backgrounds for Mobile */
             .container .curved-shape {
                 width: 150%;
                 height: 400px;
@@ -431,20 +421,23 @@ const AuthPage = () => {
             }
             
             .container .curved-shape2 {
-                display: none;
+                display: none; /* Simplify background on mobile */
             }
 
             .form-box h2 {
                 font-size: 28px;
             }
             
+            /* Ensure the Redirect panel is centered properly */
             .form-box.Register {
-                right: -100%; 
+                right: -100%; /* Initially pushed further out */
             }
             .container.active .form-box.Register {
                 right: 0;
             }
         }
+        /* --- MOBILE RESPONSIVENESS END --- */
+
       `}</style>
     </div>
   );

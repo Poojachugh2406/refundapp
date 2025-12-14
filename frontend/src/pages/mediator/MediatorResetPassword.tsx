@@ -1,417 +1,309 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { toast, Toaster } from 'react-hot-toast';
-import { Lock, Mail, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import {  Lock, Mail, Eye, EyeOff, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { authAPI } from '@/utils/api';
-import Alert from '@/components/UI/Alert';
+import Input from '@/components/UI/Input';
 import Button from '@/components/UI/Button';
+import Alert from '@/components/UI/Alert';
 import OtpInput from '@/components/UI/OtpInput';
-import bblogo from '../../assets/bblogog.png';
-
+import { useForm, FormProvider } from 'react-hook-form';
+import bblogo from "../../assets/bblogog.png"
 interface ResetPasswordFormData {
-  email: string;
-  otp: string[];
-  newPassword: string;
-  confirmPassword: string;
+    email: string;
+    otp: string[];
+    newPassword: string;
+    confirmPassword: string;
 }
 
 const MediatorResetPassword: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  
-  // Animation state
-  const [loaded, setLoaded] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
+    const methods = useForm<ResetPasswordFormData>({
+        defaultValues: {
+            otp: Array(6).fill('')
+        }
+    });
 
-  const methods = useForm<ResetPasswordFormData>({
-    defaultValues: {
-      otp: Array(6).fill('')
-    }
-  });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue,
+        setError: setFormError,
+        watch
+    } = methods;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    setError: setFormError,
-    watch
-  } = methods;
+    // Get email from location state
+    useEffect(() => {
+        if (location.state?.email) {
+            setValue('email', location.state.email);
+        }
+    }, [location.state, setValue]);
 
-  // Get email from location state
-  useEffect(() => {
-    if (location.state?.email) {
-      setValue('email', location.state.email);
-    }
-  }, [location.state, setValue]);
+    const onSubmit = async (data: ResetPasswordFormData) => {
+        setError(null);
 
-  const onSubmit = async (data: ResetPasswordFormData) => {
-    setError(null);
+        // Convert OTP array to string
+        const otpString = data.otp.join('');
 
-    const otpString = data.otp.join('');
+        if (!otpString || otpString.length !== 6) {
+            setError('Please enter the complete 6-digit verification code');
+            return;
+        }
 
-    if (!otpString || otpString.length !== 6) {
-      setError('Please enter the complete 6-digit verification code');
-      return;
-    }
+        if (data.newPassword !== data.confirmPassword) {
+            setFormError('confirmPassword', { message: 'Passwords do not match' });
+            return;
+        }
 
-    if (data.newPassword !== data.confirmPassword) {
-      setFormError('confirmPassword', { message: 'Passwords do not match' });
-      return;
-    }
+        if (data.newPassword.length < 6) {
+            setError('Password must be at least 6 characters');
+            return;
+        }
 
-    setIsLoading(true);
+        setIsLoading(true);
 
-    try {
-      const response = await authAPI.resetPassword({
-        email: data.email,
-        otp: otpString,
-        newPassword: data.newPassword
-      });
+        try {
+            const response = await authAPI.resetPassword({
+                email: data.email,
+                otp: otpString,
+                newPassword: data.newPassword
+            });
 
-      if (response.success) {
-        setSuccess(true);
-        toast.success('Password reset successfully!');
-        setTimeout(() => {
-          navigate('/mediator/login');
-        }, 2000);
-      }
-    } catch (error: any) {
-      console.error('Reset password error:', error);
-      setError(error.response?.data?.message || error.message || 'Failed to reset password');
-      toast.error(error.response?.data?.message || 'Failed to reset password');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+            if (response.success) {
+                setSuccess(true);
+                toast.success('Password reset successfully!');
+                setTimeout(() => {
+                    navigate('/mediator/login');
+                }, 2000);
+            }
+        } catch (error: any) {
+            console.error('Reset password error:', error);
+            setError(error.response?.data?.message || error.message || 'Failed to reset password');
+            toast.error(error.response?.data?.message || error.message || 'Failed to reset password');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  return (
-    <div className="auth-body">
-      <Toaster />
-      
-      {/* Container with animation */}
-      <div className={`container ${loaded ? 'animate-entry' : ''}`}>
-        
-        {/* Background Shapes */}
-        <div className="curved-shape"></div>
-        <div className="curved-shape2"></div>
-
-        {/* --- MAIN CONTENT --- */}
-        <div className="form-box">
-          
-          {/* Header */}
-          <div className="text-center mb-6">
-            <div className="logo-container mb-4">
-               <img src={bblogo} alt="Logo" className="w-16 mx-auto" />
+    // Branding Panel Component - Mediator Theme
+    const BrandingPanel: React.FC = () => (
+        <div className="relative hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+            <div className="flex items-center space-x-3 z-10">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
+                    {/* <Package className="h-7 w-7 text-white" /> */}
+                    <img width="70" src = {bblogo} alt = "Logo"/>
+                </div>
+                <h1 className="text-3xl font-bold">Hawk Agency</h1>
             </div>
-            
-            {success ? (
-               <div className="text-center">
-                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/50">
-                    <CheckCircle className="h-8 w-8 text-green-500" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white mb-2">Success!</h3>
-                  <p className="text-gray-300 mb-6">
-                    Your mediator password has been reset. Redirecting you to login...
-                  </p>
-                  <Button
-                    onClick={() => navigate('/mediator/login')}
-                    variant="primary"
-                    className="w-full py-3 font-semibold text-base bg-[#e46033] text-white hover:bg-[#c9522b]"
-                  >
-                    Go to Login Now
-                  </Button>
-               </div>
-            ) : (
-               <>
-                <h2 className="text-3xl font-bold text-white mb-2">New Password</h2>
-                <p className="text-gray-300 text-sm max-w-xs mx-auto">
-                  Enter the code sent to your email and create a new password.
+
+            <div className="z-10 max-w-lg">
+                <h2 className="text-5xl font-bold leading-tight mb-4">
+                    Reset Your Password
+                </h2>
+                <p className="text-lg text-teal-100 font-light">
+                    Enter the verification code sent to your professional email and create a new secure password for your mediator account.
                 </p>
-               </>
-            )}
-          </div>
+            </div>
 
-          {!success && (
-            <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} className="w-full px-8 overflow-y-auto max-h-[450px] scrollbar-hide">
-                {error && <Alert type="error" message={error} />}
+            <div className="z-10 text-sm text-teal-200">
+                &copy; {new Date().getFullYear()} Brand Mediators. All rights reserved.
+            </div>
 
-                {/* Hidden Email Field (but visible as text) */}
-                <div className="bg-[#e46033]/10 rounded-lg p-3 border border-[#e46033]/30 mb-6 text-center">
-                   <p className="text-sm text-gray-300">
-                     Resetting for: <strong className="text-[#e46033]">{watch('email') || '...'}</strong>
-                   </p>
-                   <input type="hidden" {...register('email')} />
-                </div>
-
-                {/* OTP Input - Custom Dark Styling */}
-                <div className="mb-6 flex justify-center otp-dark-theme">
-                    <OtpInput
-                        name="otp"
-                        length={6}
-                        required={true}
-                        error={errors.otp?.message as string}
-                    />
-                </div>
-
-                <div className="input-box">
-                  <input 
-                    type="password" 
-                    required 
-                    {...register('newPassword', { required: 'Required', minLength: { value: 6, message: 'Min 6 chars' } })}
-                  />
-                  <label>New Password</label>
-                  <Lock className="icon" size={20} color="transparent" /> {/* Icon hidden via transparent for style match */}
-                  {errors.newPassword && <span className="text-red-400 text-xs absolute -bottom-5 left-0">{errors.newPassword.message}</span>}
-                </div>
-
-                <div className="input-box">
-                  <input 
-                    type="password" 
-                    required 
-                    {...register('confirmPassword', { required: 'Required' })}
-                  />
-                  <label>Confirm Password</label>
-                  <Lock className="icon" size={20} color="transparent" />
-                  {errors.confirmPassword && <span className="text-red-400 text-xs absolute -bottom-5 left-0">{errors.confirmPassword.message}</span>}
-                </div>
-
-                <div className="mt-8">
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#c9522b] rounded-full transition-all"
-                    isLoading={isLoading}
-                  >
-                    {isLoading ? 'Resetting...' : (
-                      <>
-                        Reset Password
-                        <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
-                      </>
-                    )}
-                  </Button>
-                </div>
-
-                <div className="regi-link flex justify-between mt-6 mb-4">
-                  <Link to="/mediator/login" className="flex items-center text-gray-400 hover:text-white text-sm transition-colors">
-                     <ArrowLeft className="h-4 w-4 mr-1" /> Back to Login
-                  </Link>
-                  <button 
-                    type="button"
-                    onClick={() => navigate('/mediator/forgot-password')} 
-                    className="text-[#e46033] hover:text-[#c9522b] text-sm font-semibold transition-colors"
-                  >
-                    Resend Code
-                  </button>
-                </div>
-              </form>
-            </FormProvider>
-          )}
+            <div className="absolute top-0 left-0 w-full h-full opacity-10 overflow-hidden">
+                <svg className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] text-emerald-300" fill="currentColor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M100 0C44.77 0 0 44.77 0 100s44.77 100 100 100c55.23 0 100-44.77 100-100S155.23 0 100 0z" clipRule="evenodd" />
+                </svg>
+                <svg className="absolute -top-1/4 -right-1/4 w-[700px] h-[700px] text-teal-300" fill="currentColor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M170.7 50c9.4 12.5 14.3 28.3 14.3 45 0 16.7-4.9 32.5-14.3 45s-23.3 20-38.2 20c-14.9 0-28.8-7.5-38.2-20s-14.3-28.3-14.3-45 4.9-32.5 14.3-45 23.3-20 38.2-20c14.9 0 28.8 7.5 38.2 20z" clipRule="evenodd" />
+                </svg>
+            </div>
         </div>
-      </div>
+    );
 
-      {/* --- CSS STYLES --- */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    // Mobile Header Component
+    const MobileHeader: React.FC = () => (
+        <div className="flex items-center space-x-3 mb-8 lg:hidden">
+            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
+                {/* <Package className="h-6 w-6 text-white" /> */}
+                <img width="70" src = {bblogo} alt = "Logo"/>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">Brand Mediators</h1>
+        </div>
+    );
 
-        .auth-body {
-          margin: 0;
-          padding: 20px;
-          box-sizing: border-box;
-          font-family: 'Poppins', sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 100vh;
-          background: #25252b;
-          overflow-x: hidden;
-        }
 
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
 
-        .container {
-          position: relative;
-          width: 100%;
-          max-width: 750px; /* Slightly wider for OTP inputs */
-          height: 500px;
-          background: #1f2937; 
-          border: 2px solid #e46033;
-          box-shadow: 0 0 25px #e46033;
-          overflow: hidden;
-          border-radius: 20px;
-          opacity: 0;
-          transform: translateY(-50px);
-        }
+    return (
+        <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">
+            {/* Branding Panel (Left Side) */}
+            <BrandingPanel />
 
-        .container.animate-entry {
-          animation: slideInDown 0.8s ease-out forwards;
-        }
+            {/* Form Panel (Right Side) */}
+            <div className="flex flex-col justify-center py-12 px-6 sm:px-10 lg:px-16 overflow-y-auto">
+                <div className="w-full max-w-md mx-auto">
+                    <MobileHeader />
 
-        @keyframes slideInDown {
-          0% { opacity: 0; transform: translateY(-50px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
+                    {success ? (<div className="text-center">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <CheckCircle className="h-8 w-8 text-green-600" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">Password Reset Successful!</h3>
+                        <p className="text-gray-600 mb-4">
+                            Your mediator account password has been reset successfully. Redirecting to login...
+                        </p>
+                        <div className="space-y-4">
+                            <Button
+                                onClick={() => navigate('/mediator/login')}
+                                variant="primary"
+                                className="w-full py-3 font-semibold text-base flex items-center justify-center group"
+                                style={{ backgroundColor: '#e46033', color: 'white' }}
+                            >
+                                Go to Mediator Login
+                                <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
+                            </Button>
+                        </div>
+                    </div>) : (
+                        <>
+                            <h2 className="text-3xl font-bold text-gray-900">
+                                Reset Mediator Password
+                            </h2>
+                            <p className="mt-2 text-gray-600">
+                                Enter the verification code and create your new secure password.
+                            </p>
 
-        .container .form-box {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          align-items: center;
-          z-index: 10;
-        }
+                            <FormProvider {...methods}>
+                                <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
+                                    {error && <Alert type="error" message={error} />}
 
-        .form-box h2 {
-          font-size: 32px;
-          text-align: center;
-          color: white;
-        }
+                                    {location.state?.email && (
+                                        <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                                            <p className="text-sm text-emerald-800 text-center">
+                                                ✓ Reset code sent to <strong>{watch('email')}</strong>
+                                            </p>
+                                        </div>
+                                    )}
 
-        /* Input Styling */
-        .input-box {
-          position: relative;
-          width: 100%;
-          height: 50px;
-          margin-top: 25px;
-          margin-bottom: 10px;
-        }
-        
-        .input-box input {
-          width: 100%;
-          height: 100%;
-          background: transparent;
-          border: none;
-          outline: none;
-          font-size: 16px;
-          color: #f4f4f4;
-          font-weight: 600;
-          border-bottom: 2px solid #fff;
-          padding-right: 23px;
-          transition: .5s;
-        }
+                                    <Input
+                                        label="Professional Email"
+                                        type="email"
+                                        icon={<Mail className="h-5 w-5" />}
+                                        placeholder="mediator@example.com"
+                                        required
+                                        {...register('email', {
+                                            required: 'Email is required',
+                                            pattern: {
+                                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                message: 'Invalid email address'
+                                            }
+                                        })}
+                                        error={errors.email?.message}
+                                        disabled={!!location.state?.email}
+                                        className={location.state?.email ? "bg-gray-100 cursor-not-allowed" : ""}
+                                    />
 
-        .input-box input:focus,
-        .input-box input:valid {
-            border-bottom: 2px solid #e46033 !important;
-        }
+                                    <OtpInput
+                                        name="otp"
+                                        length={6}
+                                        required={true}
+                                        error={errors.otp?.message as string}
+                                        focusColor="emerald"
+                                        filledColor="emerald"
+                                        className="mt-4" 
+                                    />
 
-        .input-box label {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #9ca3af;
-            pointer-events: none;
-            transition: .5s;
-        }
+                                    <Input
+                                        label="New Password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        icon={<Lock className="h-5 w-5" />}
+                                        placeholder="Enter new secure password (min. 6 characters)"
+                                        required
+                                        rightIcon={
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="text-gray-400 hover:text-gray-600"
+                                            >
+                                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                            </button>
+                                        }
+                                        {...register('newPassword', {
+                                            required: 'Password is required',
+                                            minLength: {
+                                                value: 6,
+                                                message: 'Password must be at least 6 characters'
+                                            }
+                                        })}
+                                        error={errors.newPassword?.message}
+                                    />
 
-        .input-box input:focus ~ label,
-        .input-box input:valid ~ label {
-            top: -5px;
-            color: #e46033;
-            font-size: 12px;
-        }
+                                    <Input
+                                        label="Confirm New Password"
+                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        icon={<Lock className="h-5 w-5" />}
+                                        placeholder="Confirm your new password"
+                                        required
+                                        rightIcon={
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                className="text-gray-400 hover:text-gray-600"
+                                            >
+                                                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                            </button>
+                                        }
+                                        {...register('confirmPassword', {
+                                            required: 'Please confirm your password'
+                                        })}
+                                        error={errors.confirmPassword?.message}
+                                    />
 
-        /* OTP Styling Override */
-        .otp-dark-theme input {
-            background-color: transparent !important;
-            border: 1px solid #4b5563 !important;
-            color: white !important;
-            width: 40px !important;
-            height: 50px !important;
-            border-radius: 8px;
-            font-size: 20px;
-            margin: 0 5px;
-        }
-        .otp-dark-theme input:focus {
-            border-color: #e46033 !important;
-            outline: none;
-            box-shadow: 0 0 5px #e46033;
-        }
+                                    <Button
+                                        type="submit"
+                                        variant="primary"
+                                        className="w-full py-3 font-semibold text-base flex items-center justify-center group"
+                                        style={{ backgroundColor: '#e46033', color: 'white' }}
+                                        isLoading={isLoading}
+                                    >
+                                        {isLoading ? 'Resetting Password...' : (
+                                            <>
+                                                Reset Mediator Password
+                                                <ArrowRight className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" />
+                                            </>
+                                        )}
+                                    </Button>
 
-        .regi-link a {
-          text-decoration: none;
-          cursor: pointer;
-        }
-
-        /* Background Shapes */
-        .container .curved-shape {
-          position: absolute;
-          right: 0;
-          top: -5px;
-          height: 600px;
-          width: 850px;
-          background: linear-gradient(45deg, #111827, #e46033);
-          transform: rotate(10deg) skewY(40deg);
-          transform-origin: bottom right;
-          opacity: 0.8;
-        }
-        
-        .container .curved-shape2 {
-          position: absolute;
-          left: -100px;
-          bottom: -200px;
-          height: 400px;
-          width: 850px;
-          background: #25252b;
-          border-top: 3px solid #e46033;
-          transform: rotate(-10deg) skewY(-10deg);
-          transform-origin: bottom left;
-          z-index: 1;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .container {
-                height: auto;
-                min-height: 550px;
-                max-width: 100%;
-            }
-            
-            .form-box {
-                padding: 40px 10px;
-            }
-
-            .container .curved-shape {
-                width: 150%;
-                opacity: 0.5;
-                top: -100px;
-            }
-            
-            .container .curved-shape2 {
-                display: none;
-            }
-            
-            /* Smaller OTP inputs on mobile */
-            .otp-dark-theme input {
-                width: 35px !important;
-                height: 45px !important;
-                margin: 0 3px;
-                font-size: 16px;
-            }
-        }
-      `}</style>
-    </div>
-  );
+                                    <div className="flex items-center justify-between pt-4">
+                                        <Link
+                                            to="/mediator/login"
+                                            className="inline-flex items-center text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                                        >
+                                            <ArrowLeft className="h-4 w-4 mr-2" />
+                                            Back to Mediator Login
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            onClick={() => navigate('/mediator/forgot-password')}
+                                            className="text-sm text-gray-600 hover:text-gray-800 font-medium hover:cursor-pointer"
+                                        >
+                                            Resend Code
+                                        </button>
+                                    </div>
+                                </form>
+                            </FormProvider>
+                        </>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default MediatorResetPassword;
