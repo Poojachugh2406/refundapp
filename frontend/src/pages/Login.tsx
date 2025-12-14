@@ -4,23 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import { User, Lock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext'; 
-// import bblogo from "../assets/bblogog.png"; 
-// import Alert from '@/components/UI/Alert';
-// import Input from '@/components/UI/Input';
-//import Button from '@/components/UI/Button';
+import bblogo from "../assets/bblogog.png"; 
 
 const AuthPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth(); 
   
-  // State to toggle animation (false = Login, true = Register Info)
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Login Form Hook
   const { register: registerLogin, handleSubmit: handleSubmitLogin } = useForm();
 
-  // Login Handler
   const onLogin = async (data: any) => {
     setIsLoading(true);
     try {
@@ -34,12 +28,8 @@ const AuthPage = () => {
     }
   };
 
-  // --- MODIFIED HANDLER ---
   const handleSignUpClick = () => {
-    // 1. Trigger the slide animation
     setIsActive(true); 
-    
-    // 2. Wait for animation (700ms) then redirect to Register page
     setTimeout(() => {
         navigate('/register');
     }, 1800);
@@ -51,17 +41,15 @@ const AuthPage = () => {
       
       <div className={`container ${isActive ? 'active' : ''}`}>
         
-        {/* The Animated Shapes (Orange Theme) */}
-        
-        
-        
-        
-        
+        {/* The Animated Shapes */}
         <div className="curved-shape"></div>
         <div className="curved-shape2"></div>
 
-        {/* --- PANEL 1: LOGIN FORM (Visible by default) --- */}
+        {/* --- PANEL 1: LOGIN FORM --- */}
         <div className="form-box Login">
+          <div className="logo-container animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>
+             <img src={bblogo} alt="Logo" className="w-16 mx-auto mb-2" />
+          </div>
           <h2 className="animation" style={{ '--D': 0, '--S': 21 } as React.CSSProperties}>Login</h2>
           <form onSubmit={handleSubmitLogin(onLogin)}>
             
@@ -85,15 +73,15 @@ const AuthPage = () => {
 
             <div className="regi-link animation" style={{ '--D': 4, '--S': 25 } as React.CSSProperties}>
               <p>
-                Don't have an account? <br />
-                {/* Clicking this triggers the animation + redirect */}
+                <span className='msg text-[#e46033]'>Don't have an account?</span> <br />
                 <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleSignUpClick}>Sign Up</span>
               </p>
             </div>
           </form>
         </div>
 
-        {/* --- INFO PANEL 1: WELCOME BACK (Visible on right when Login is active) --- */}
+        {/* --- INFO PANEL 1 (Welcome Back) --- */}
+        {/* Hidden on Mobile via CSS */}
         <div className="info-content Login">
           <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>WELCOME BACK!</h2>
           <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
@@ -101,8 +89,7 @@ const AuthPage = () => {
           </p>
         </div>
 
-        {/* --- PANEL 2: REDIRECT MESSAGE (Hidden until active - Right Side) --- */}
-        {/* This is the "Extra Content" you wanted hidden/simplified. It now just says Redirecting. */}
+        {/* --- PANEL 2: REDIRECT MESSAGE --- */}
         <div className="form-box Register"> 
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Redirecting...</h2>
           
@@ -110,11 +97,11 @@ const AuthPage = () => {
              <p className="animation mb-8 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
                Please wait while we take you to the registration page.
              </p>
-             {/* Removed Buttons and Links here for a cleaner transition */}
           </div>
         </div>
 
-        {/* --- INFO PANEL 2: JOIN US (Visible on left when Register Info is active) --- */}
+        {/* --- INFO PANEL 2 (Join Us) --- */}
+        {/* Hidden on Mobile via CSS */}
         <div className="info-content Register">
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>JOIN US!</h2>
           <p className="animation" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
@@ -124,13 +111,13 @@ const AuthPage = () => {
 
       </div>
 
-      {/* --- CSS STYLES (Unchanged) --- */}
+      {/* --- CSS STYLES --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
         .auth-body {
           margin: 0;
-          padding: 0;
+          padding: 20px; /* Added padding for mobile edges */
           box-sizing: border-box;
           font-family: 'Poppins', sans-serif;
           display: flex;
@@ -138,16 +125,19 @@ const AuthPage = () => {
           align-items: center;
           min-height: 100vh;
           background: #25252b;
-        
+          overflow-x: hidden;
         }
 
         .container {
           position: relative;
-          width: 750px;
-          height: 450px;
+          width: 100%;
+          max-width: 750px; /* Changed from fixed width to max-width */
+          height: 500px; /* Increased slightly for better mobile spacing */
           border: 2px solid #e46033;
           box-shadow: 0 0 25px #e46033;
           overflow: hidden;
+          background: #1f2937; /* Ensure background is set */
+          border-radius: 20px; /* Added rounded corners */
         }
 
         .container .form-box {
@@ -159,6 +149,7 @@ const AuthPage = () => {
           justify-content: center;
           flex-direction: column;
           align-items: center;
+          z-index: 10; /* Ensure forms are above background */
         }
 
         .form-box.Login {
@@ -166,7 +157,6 @@ const AuthPage = () => {
           padding: 0 40px;
         }
 
-        /* Animation Logic */
         .form-box.Login .animation {
           transform: translateX(0%);
           transition: .7s;
@@ -182,7 +172,7 @@ const AuthPage = () => {
 
         .form-box.Register {
           right: 0;
-          padding: 0 60px;
+          padding: 0 40px;
         }
 
         .form-box.Register .animation {
@@ -204,6 +194,7 @@ const AuthPage = () => {
           font-size: 32px;
           text-align: center;
           margin-bottom: 10px;
+          color: white;
         }
 
         .form-box .input-box {
@@ -255,9 +246,7 @@ const AuthPage = () => {
           top: 50%;
           right: 0;
           transform: translateY(-50%);
-
-          color: transparent
-
+          color: transparent; /* Kept transparent as per your code */
         }
 
         .btn {
@@ -298,18 +287,7 @@ const AuthPage = () => {
           margin: 20px 0 10px;
         }
 
-        .regi-link a, .regi-link span {
-          text-decoration: none;
-          color: #e46033;
-          font-weight: 600;
-          cursor: pointer;
-        }
-
-        .regi-link a:hover, .regi-link span:hover {
-          text-decoration: underline;
-        }
-
-        /* Info Content Styles */
+        /* INFO CONTENT Styles */
         .info-content {
           position: absolute;
           top: 0;
@@ -373,7 +351,7 @@ const AuthPage = () => {
           font-size: 16px;
         }
 
-        /* Curved Shapes */
+        /* CURVED SHAPES */
         .container .curved-shape {
           position: absolute;
           right: 0;
@@ -410,6 +388,56 @@ const AuthPage = () => {
           transform: rotate(-11deg) skewY(-41deg);
           transition-delay: 1.2s;
         }
+
+        /* --- MOBILE RESPONSIVENESS START --- */
+        @media (max-width: 768px) {
+            .container {
+                height: auto;
+                min-height: 650px;
+            }
+
+            /* Hide Info Content panels on mobile to save space */
+            .info-content {
+                display: none;
+            }
+
+            /* Make Forms take full width */
+            .container .form-box {
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            /* Adjust animations for single column view */
+            /* Even though we move -120% or 120%, because width is 100%, 
+               it correctly slides the full screen */
+            
+            /* Tweak Shape Backgrounds for Mobile */
+            .container .curved-shape {
+                width: 150%;
+                height: 400px;
+                top: -50px;
+                right: -25%;
+                transform: rotate(10deg) skewY(10deg);
+            }
+            
+            .container .curved-shape2 {
+                display: none; /* Simplify background on mobile */
+            }
+
+            .form-box h2 {
+                font-size: 28px;
+            }
+            
+            /* Ensure the Redirect panel is centered properly */
+            .form-box.Register {
+                right: -100%; /* Initially pushed further out */
+            }
+            .container.active .form-box.Register {
+                right: 0;
+            }
+        }
+        /* --- MOBILE RESPONSIVENESS END --- */
+
       `}</style>
     </div>
   );

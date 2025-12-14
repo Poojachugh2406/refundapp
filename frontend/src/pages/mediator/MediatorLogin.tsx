@@ -61,21 +61,12 @@ const MediatorLogin: React.FC = () => {
     }
   };
 
-  // --- MODIFIED FUNCTION ---
   const handleApplyClick = () => {
-    // 1. Trigger the sliding animation
     setIsActive(true); 
-
-    // 2. Wait for the animation to finish (700ms matches the .7s CSS transition)
-    // Then navigate to the register page automatically
     setTimeout(() => {
         navigate('/mediator/register');
     }, 1800);
   };
-
-  // const handleBackToLogin = () => {
-  //   setIsActive(false); 
-  // };
 
   return (
     <div className="auth-body">
@@ -90,7 +81,7 @@ const MediatorLogin: React.FC = () => {
         {/* --- PANEL 1: LOGIN FORM (Visible by default) --- */}
         <div className="form-box Login">
           <div className="logo-container animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>
-             <img src={bblogo} alt="Logo" className="w-16 mx-auto mb-2" />
+             <img src={bblogo} alt="Logo" className="w-16 mx-auto mb-0" />
           </div>
           <h2 className="animation" style={{ '--D': 0, '--S': 21 } as React.CSSProperties}>Mediator Login</h2>
           
@@ -131,7 +122,7 @@ const MediatorLogin: React.FC = () => {
             <div className="animation flex justify-end mb-4" style={{ '--D': 3, '--S': 24 } as React.CSSProperties}>
                <Link
                 to={'/mediator/forgot-password'}
-                className="text-sm text-[#e46033] hover:text-[#047857] font-medium"
+                className="text-sm text-[#e46033] hover:text-[#c9522b] font-medium"
               >
                 Forgot password?
               </Link>
@@ -142,7 +133,7 @@ const MediatorLogin: React.FC = () => {
                 type="submit"
                 variant="primary"
                 style={{ backgroundColor: '#e46033', color: 'white' }}
-                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#e46033]"
+                className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#c9522b]"
                 isLoading={isLoading}
               >
                 {isLoading ? 'Accessing...' : (
@@ -156,7 +147,7 @@ const MediatorLogin: React.FC = () => {
 
             <div className="regi-link animation" style={{ '--D': 5, '--S': 26 } as React.CSSProperties}>
               <p>
-                New Mediator? <br />
+                <span className='msg text-[#e46033]'>New Mediator?</span> <br />
                 {/* Clicking this triggers handleApplyClick which animates then navigates */}
                 <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleApplyClick}>Apply for Account</span>
               </p>
@@ -180,7 +171,6 @@ const MediatorLogin: React.FC = () => {
              <p className="animation mb-6 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
                Please wait while we take you to the registration page.
              </p>
-             {/* Note: I removed the extra button here since navigation is now automatic */}
           </div>
         </div>
 
@@ -194,12 +184,13 @@ const MediatorLogin: React.FC = () => {
 
       </div>
 
-      {/* --- CSS STYLES (Kept identical for animation) --- */}
+      {/* --- CSS STYLES --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-.auth-body {
+
+        .auth-body {
           margin: 0;
-          padding: 0;
+          padding: 20px;
           box-sizing: border-box;
           font-family: 'Poppins', sans-serif;
           display: flex;
@@ -208,19 +199,21 @@ const MediatorLogin: React.FC = () => {
           min-height: 100vh;
           background: #25252b;
           color: #fff;
+          overflow-x: hidden;
         }
 
         .container {
           position: relative;
-          width: 750px;
-          height: 450px;
+          width: 100%;
+          max-width: 750px;
+          height: 550px;
           border: 2px solid #e46033;
           box-shadow: 0 0 25px #e46033;
           overflow: hidden;
+          background: #1f2937;
+          border-radius: 20px;
         }
 
-       
-        
         .container .form-box {
           position: absolute;
           top: 0;
@@ -230,6 +223,7 @@ const MediatorLogin: React.FC = () => {
           justify-content: center;
           flex-direction: column;
           align-items: center;
+          z-index: 10;
         }
 
         .form-box.Login {
@@ -429,6 +423,47 @@ const MediatorLogin: React.FC = () => {
           transform: rotate(-11deg) skewY(-41deg);
           transition-delay: 1.2s;
         }
+
+        /* --- MOBILE RESPONSIVENESS START --- */
+        @media (max-width: 768px) {
+            .container {
+                height: 550px; 
+            }
+
+            /* Hide Info Content panels on mobile to save space */
+            .info-content {
+                display: none;
+            }
+
+            /* Make Forms take full width */
+            .container .form-box {
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            /* Adjust background shapes */
+            .container .curved-shape {
+                 width: 150%;
+                 height: 400px;
+                 top: -50px;
+                 right: -25%;
+                 transform: rotate(10deg) skewY(10deg);
+                 opacity: 0.5;
+            }
+            .container .curved-shape2 {
+                 display: none;
+            }
+
+            /* Adjust redirect panel position */
+            .form-box.Register {
+                right: -100%; 
+            }
+            .container.active .form-box.Register {
+                right: 0;
+            }
+        }
+        /* --- MOBILE RESPONSIVENESS END --- */
+
       `}</style>
     </div>
   );
