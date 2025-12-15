@@ -127,7 +127,7 @@ const MediatorForgotPassword: React.FC = () => {
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
         .auth-body {
-          margin: 0;
+          margin:  0;
           padding: 20px;
           box-sizing: border-box;
           font-family: 'Poppins', sans-serif;
