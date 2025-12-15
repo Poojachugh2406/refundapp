@@ -527,7 +527,7 @@
 import { useState } from "react";
 import Input from "../UI/Input";
 import { Download, Eye, Filter, Package, RefreshCw, SearchIcon, SquareArrowOutUpRight } from "lucide-react";
-import { exportToExcel, formatOrdersForExport } from '../../utils/exportUtils.ts';
+import { exportToExcel, formatOrdersForExport } from '../../utils/exportUtils-med.ts';
 import Button from '../UI/Button';
 import toast from "react-hot-toast";
 import MediatorOrderModal from "./MediatorOrderModal"; // Make sure path is correct

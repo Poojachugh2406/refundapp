@@ -137,7 +137,7 @@
 //         throw new Error(response.message);
 //       }
 //     } finally {
-//       setIsUpdating(false); // This re-enables the save button in case of error
+//       setIsUpdating(false); // This re-enables the save Button in case of error
 //       setIsEditModalOpen(false);
 //     }
 //   };
@@ -179,12 +179,12 @@
 //               {data.orderStatus === 'pending' &&
 //                 <span className="text-yellow-600 font-bold">[PENDING]</span>
 //               }
-//               <button
+//               <Button
 //                 onClick={onClose}
 //                 className="p-2 hover:bg-gray-100 rounded-full transition-colors hover:cursor-pointer"
 //               >
 //                 <X className="w-6 h-6" />
-//               </button>
+//               </Button>
 //             </div>
 //           </div>
 
@@ -286,7 +286,7 @@
 //             </div>
 //           </div>
 
-//           {/* Modal Footer with new buttons */}
+//           {/* Modal Footer with new Buttons */}
 //           <div className="flex flex-col md:flex-row justify-end items-center p-6 border-t border-gray-200">
 
 //             <div className="flex space-x-4">
@@ -332,24 +332,24 @@
 //           onClick={handleBackdropClick}
 //         >
 //           <div className="relative max-w-6xl max-h-full">
-//             <button
+//             <Button
 //               onClick={closeImage}
 //               className="absolute -top-12 -right-4 bg-white mt-10 rounded-full p-2 z-10 hover:bg-gray-200 transition-colors hover:cursor-pointer"
 //             >
 //               <X className="w-6 h-6 text-gray-800" />
-//             </button>
+//             </Button>
 //             <img
 //               src={selectedImage}
 //               alt="Enlarged view"
 //               className="max-w-full max-h-[90vh] object-contain rounded-lg"
 //             />
 //             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
-//               <button
+//               <Button
 //                 onClick={() => window.open(selectedImage, '_blank')}
 //                 className="text-sm hover:underline"
 //               >
 //                 Open image in new tab
-//               </button>
+//               </Button>
 //             </div>
 //           </div>
 //         </div>
@@ -371,7 +371,7 @@
 //           <div className="bg-white rounded-2xl max-w-md w-full">
 //             <div className="flex items-center justify-between p-6 border-b border-gray-200">
 //               <h3 className="text-xl font-bold text-gray-900">Reject Order</h3>
-//               <button
+//               <Button
 //                 onClick={() => {
 //                   setShowRejectModal(false);
 //                   setRejectionMessage('');
@@ -379,7 +379,7 @@
 //                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
 //               >
 //                 <X className="w-6 h-6" />
-//               </button>
+//               </Button>
 //             </div>
 
 //             <div className="p-6">
@@ -635,12 +635,12 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //                     {data.orderStatus === 'refill' &&
         //                         <span className="text-yellow-600 font-bold">[REFILL]</span>
         //                     }
-        //                     <button
+        //                     <Button
         //                         onClick={onClose}
         //                         className="p-2 hover:bg-gray-100 rounded-full transition-colors hover:cursor-pointer"
         //                     >
         //                         <X className="w-6 h-6" />
-        //                     </button>
+        //                     </Button>
         //                 </div>
         //             </div>
 
@@ -748,7 +748,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //                 </div>
         //             </div>
 
-        //             {/* Modal Footer with new buttons */}
+        //             {/* Modal Footer with new Buttons */}
         //             {/* <div className="flex flex-col md:flex-row justify-end items-center p-6 border-t border-gray-200">
 
         //                 <div className="flex space-x-4">
@@ -861,24 +861,24 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //             onClick={handleBackdropClick}
         //         >
         //             <div className="relative max-w-6xl max-h-full">
-        //                 <button
+        //                 <Button
         //                     onClick={closeImage}
         //                     className="absolute -top-12 -right-4 bg-white mt-10 rounded-full p-2 z-10 hover:bg-gray-200 transition-colors hover:cursor-pointer"
         //                 >
         //                     <X className="w-6 h-6 text-gray-800" />
-        //                 </button>
+        //                 </Button>
         //                 <img
         //                     src={selectedImage}
         //                     alt="Enlarged view"
         //                     className="max-w-full max-h-[90vh] object-contain rounded-lg"
         //                 />
         //                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-lg">
-        //                     <button
+        //                     <Button
         //                         onClick={() => window.open(selectedImage, '_blank')}
         //                         className="text-sm hover:underline"
         //                     >
         //                         Open image in new tab
-        //                     </button>
+        //                     </Button>
         //                 </div>
         //             </div>
         //         </div>
@@ -901,7 +901,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //             <div className="bg-white rounded-2xl max-w-md w-full">
         //                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
         //                     <h3 className="text-xl font-bold text-gray-900">Refill Required </h3>
-        //                     <button
+        //                     <Button
         //                         onClick={() => {
         //                             setShowRefillModal(false);
         //                             setRefillMessage('');
@@ -910,7 +910,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         //                     >
         //                         <ClipboardListIcon className="w-6 h-6" />
-        //                     </button>
+        //                     </Button>
         //                 </div>
 
         //                 <div className="p-6">
@@ -961,7 +961,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //             <div className="bg-white rounded-2xl max-w-md w-full">
         //                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
         //                     <h3 className="text-xl font-bold text-gray-900">Reject Order</h3>
-        //                     <button
+        //                     <Button
         //                         onClick={() => {
         //                             setShowRejectModal(false);
         //                             setRejectionMessage('');
@@ -969,7 +969,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
         //                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         //                     >
         //                         <X className="w-6 h-6" />
-        //                     </button>
+        //                     </Button>
         //                 </div>
 
         //                 <div className="p-6">
@@ -1044,12 +1044,12 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
           {data.orderStatus === 'refill' &&
             <span className="text-yellow-600 font-bold text-xs sm:text-sm">[REFILL]</span>
           }
-          <button
+          <Button
             onClick={onClose}
             className="p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors hover:cursor-pointer"
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -1215,24 +1215,24 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
       onClick={handleBackdropClick}
     >
       <div className="relative max-w-6xl max-h-full">
-        <button
+        <Button
           onClick={closeImage}
           className="absolute -top-8 sm:-top-12 -right-2 sm:-right-4 bg-white rounded-full p-1 sm:p-2 z-10 hover:bg-gray-200 transition-colors hover:cursor-pointer"
         >
           <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-800" />
-        </button>
+        </Button>
         <img
           src={selectedImage}
           alt="Enlarged view"
           className="max-w-full max-h-[85vh] sm:max-h-[90vh] object-contain rounded-lg"
         />
         <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg">
-          <button
+          <Button
             onClick={() => window.open(selectedImage, '_blank')}
             className="text-xs sm:text-sm hover:underline"
           >
             Open image in new tab
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -1254,7 +1254,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
       <div className="bg-white rounded-xl sm:rounded-2xl max-w-md w-full">
         <div className="flex items-center justify-between p-3 sm:p-4 md:p-6 border-b border-gray-200">
           <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Refill Required</h3>
-          <button
+          <Button
             onClick={() => {
               setShowRefillModal(false);
               setRefillMessage('');
@@ -1262,7 +1262,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
             className="p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <ClipboardListIcon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-          </button>
+          </Button>
         </div>
 
         <div className="p-3 sm:p-4 md:p-6">
@@ -1312,7 +1312,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
       <div className="bg-white rounded-xl sm:rounded-2xl max-w-md w-full">
         <div className="flex items-center justify-between p-3 sm:p-4 md:p-6 border-b border-gray-200">
           <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Reject Order</h3>
-          <button
+          <Button
             onClick={() => {
               setShowRejectModal(false);
               setRejectionMessage('');
@@ -1320,7 +1320,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
             className="p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-          </button>
+          </Button>
         </div>
 
         <div className="p-3 sm:p-4 md:p-6">

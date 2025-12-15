@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Input from "../UI/Input";
 import {  Download, Eye, Filter, Package, RefreshCw, SquareArrowOutUpRight } from "lucide-react";
-import { exportToExcel, formatOrdersForExport, formatRefundsForExport } from '../../utils/exportUtils.ts';
+import { exportToExcel, formatOrdersForExport, formatRefundsForExport } from '../../utils/exportUtils-seller.ts';
 import Button from '../UI/Button';
 import toast from "react-hot-toast";
 // import OrderModal from "./OrderModal";
