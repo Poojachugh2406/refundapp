@@ -105,7 +105,7 @@ const AuthPage = () => {
         </div>
 
         {/* --- PANEL 2: REDIRECT MESSAGE --- */}
-        <div className="form-box Register"> 
+        {/* <div className="form-box Register"> 
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Redirecting...</h2>
           
           <div className="w-full px-8 text-center flex flex-col items-center">
@@ -113,7 +113,7 @@ const AuthPage = () => {
                Please wait while we take you to the registration page.
              </p>
           </div>
-        </div>
+        </div> */}
 
         {/* --- INFO PANEL 2 (Join Us) --- */}
         {/* Hidden on Mobile via CSS */}

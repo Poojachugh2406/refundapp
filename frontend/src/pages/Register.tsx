@@ -339,14 +339,14 @@ const Register: React.FC = () => {
         </div>
 
         {/* --- HIDDEN PANEL (Redirecting... appears when active) --- */}
-        <div className="form-box Register"> 
+        {/* <div className="form-box Register"> 
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Redirecting...</h2>
           <div className="w-full px-8 text-center flex flex-col items-center">
              <p className="animation mb-8 text-gray-200" style={{ '--li': 18, '--S': 1 } as React.CSSProperties}>
                Please wait while we take you to the Login page.
              </p>
           </div>
-        </div>
+        </div> */}
 
         {/* --- HIDDEN INFO (Join Us... appears on left when active) --- */}
         <div className="info-content Register">
