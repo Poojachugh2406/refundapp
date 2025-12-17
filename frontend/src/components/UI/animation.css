@@ -375,8 +375,11 @@
     .container.active .form-box.Register {
         right: 0;
     }
-    
-    /* OTP Mobile Adjustment */
+    .already .animation{
+    text-align: center;
+    }
+    /* OTP Mobile Adjust
+    ment */
     .otp-dark-theme input {
         width: 35px !important;
         height: 45px !important;
