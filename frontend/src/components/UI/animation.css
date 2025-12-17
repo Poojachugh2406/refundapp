@@ -229,17 +229,17 @@
     position: absolute;
     top: 50%;
     left: 0;
+    margin-bottom: -20px;
     transform: translateY(-50%);
     transition: .5s;
     pointer-events: none;
-    padding: 10px;
-    margin-top: 2px
+    padding: 1px
 }
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
-    top: 12px;
+    top: 5px;
     color: #e46033 !important;
-    font-size: 12px;
+    font-size: 10px;
 }
 .input-box .icon {
     position: absolute;
