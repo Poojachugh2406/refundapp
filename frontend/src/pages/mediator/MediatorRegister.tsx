@@ -261,10 +261,10 @@ const MediatorRegister: React.FC = () => {
                 )}
               </Button>
             </div>
-
+            <span className='already '>Already have an account?</span> <br />
             <div className="regi-link animation" style={{ '--D': 5, '--S': 26 } as React.CSSProperties}>
               <p>
-                <span className='msg text-[#e46033]'>Already have an account?</span> <br />
+                
                 {/* Triggers animation + redirection */}
                 <span className="SignUpLink text-[#e46033] font-bold hover:underline cursor-pointer" onClick={handleLoginClick}>Sign In</span>
               </p>

@@ -113,12 +113,19 @@
   margin-bottom: 20px;
   color: white;
 }
-
+.already{
+  text-align: center;
+  text-decoration: none;
+  color: #e46033;
+  padding-left: 22px;
+  font-weight: 600;
+}
 .regi-link {
-  font-size: 14px;
+  /* font-size: 14px; */
   text-align: center;
   margin-top: 10px;
   color: #d1d5db;
+  padding-bottom: 40px;
 }
 
 .regi-link a, .regi-link span {
