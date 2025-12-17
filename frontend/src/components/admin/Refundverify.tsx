@@ -1,8 +1,8 @@
 // src/components/admin/RefundTable.tsx
 import React, { useState } from 'react';
-import { ScanText, Loader2, ShieldCheck, ShieldAlert, Eye } from 'lucide-react';
+import { ScanText, Loader2, ShieldCheck, ShieldAlert} from 'lucide-react';
 // Ensure the file name matches exactly (ocrService vs ocrservice)
-import { checkImageVerification } from '@/utils/ocrService';
+// import { checkImageVerification } from '@/utils/ocrService';
 import { toast } from 'react-hot-toast';
 
 export interface Refund {
