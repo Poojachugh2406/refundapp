@@ -261,7 +261,7 @@ const MediatorRegister: React.FC = () => {
                 )}
               </Button>
             </div>
-            <span className='already '>Already have an account?</span> <br />
+            <span className='already animation'>Already have an account?</span> <br />
             <div className="regi-link animation" style={{ '--D': 5, '--S': 26 } as React.CSSProperties}>
               <p>
                 
