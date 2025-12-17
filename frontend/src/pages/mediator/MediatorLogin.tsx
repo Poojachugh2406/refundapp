@@ -169,7 +169,7 @@ const MediatorLogin: React.FC = () => {
         </div>
 
         {/* --- PANEL 2: REDIRECTING MESSAGE (Hidden until active) --- */}
-        <div className="form-box Register"> 
+        {/* <div className="form-box Register"> 
           <h2 className="animation" style={{ '--li': 17, '--S': 0 } as React.CSSProperties}>Redirecting...</h2>
           
           <div className="w-full px-8 text-center">
@@ -177,7 +177,7 @@ const MediatorLogin: React.FC = () => {
                Please wait while we take you to the registration page.
              </p>
           </div>
-        </div>
+        </div> */}
 
         {/* --- INFO PANEL 2: APPLY (Visible on left when Apply is active) --- */}
         <div className="info-content Register">

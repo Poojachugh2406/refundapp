@@ -29,6 +29,8 @@ const navigationItems = [
   { id: 'mediators', label: 'Mediators', icon: UsersRound, to: '/admin/mediators' },
   { id: 'sellers', label: 'Sellers', icon: Users, to: '/admin/sellers' },
   { id: 'profile', label: 'Profile', icon: UserCog, to: '/admin/profile' },
+  { id: 'test', label: 'test', icon: UserCog, to: '/admin/test' },
+
 ];
 
 const AdminLayout: React.FC = () => {
