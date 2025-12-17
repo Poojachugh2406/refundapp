@@ -128,9 +128,9 @@
   cursor: pointer;
 }
 
-.regi-link a:hover, .regi-link span:hover {
+/* .regi-link a:hover, .regi-link span:hover {
   text-decoration: underline;
-}
+} */
 
 /* --- INFO CONTENT PANELS --- */
 .info-content {
@@ -232,10 +232,12 @@
     transform: translateY(-50%);
     transition: .5s;
     pointer-events: none;
+    padding: 10px;
+    margin-top: 2px
 }
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
-    top: 0px;
+    top: 12px;
     color: #e46033 !important;
     font-size: 12px;
 }

@@ -188,7 +188,7 @@ const MediatorRegister: React.FC = () => {
                         {...registerForm.register('nickName')}
                         // error={registerForm.formState.errors.nickName?.message}
                     />
-                    <label>Nick Name</label>
+                    <label>Mediator Name</label>
                 </div>
             </div>
 
