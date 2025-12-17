@@ -128,9 +128,9 @@
   cursor: pointer;
 }
 
-/* .regi-link a:hover, .regi-link span:hover {
+.regi-link a:hover, .regi-link span:hover {
   text-decoration: underline;
-} */
+}
 
 /* --- INFO CONTENT PANELS --- */
 .info-content {
