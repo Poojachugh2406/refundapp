@@ -250,6 +250,7 @@ const MediatorRegister: React.FC = () => {
               <Button
                 type="submit"
                 variant="primary"
+                style={{ backgroundColor: '#e46033', color: 'white' }}
                 className="w-full py-3 font-semibold text-base flex items-center justify-center group bg-[#e46033] text-white hover:bg-[#c9522b]"
                 isLoading={isLoading}
               >
