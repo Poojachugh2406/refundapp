@@ -23,7 +23,7 @@ const OrderFormPage: React.FC = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [orderScreenshot, setOrderScreenshot] = useState<File | null>(null);
-    const [priceBreakup, setPriceBreakup] = useState<File | null>(null);
+    // const [priceBreakup, setPriceBreakup] = useState<File | null>(null);
     const [products, setProducts] = useState<ActiveProduct[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<ActiveProduct | null>(null);
     const [mediators, setMediators] = useState<ActiveMediators[]>([]);
@@ -152,7 +152,7 @@ const OrderFormPage: React.FC = () => {
     const isReplacement = watch("isReplacement");
 
     const onSubmit = async (data: CreateOrderData) => {
-        if (!orderScreenshot || !priceBreakup) {
+        if (!orderScreenshot ) {
             toast.error("Please upload both order screenshot and price breakup");
             return;
         }
@@ -175,7 +175,7 @@ const OrderFormPage: React.FC = () => {
 
             formData.append("data", JSON.stringify(data));
             formData.append("orderSS", orderScreenshot);
-            formData.append("priceBreakupSS", priceBreakup);
+            // formData.append("priceBreakupSS", priceBreakup);
 
             // console.log("Form Data:", formData);
 
@@ -185,7 +185,7 @@ const OrderFormPage: React.FC = () => {
 
             if (response.success) {
                 toast.success("Order submitted successfully!");
-                navigate("/");
+                navigate("/user/dashboard");
             } else {
                 if (response.errors && response.errors.length > 0) {
                     const errorMessage = response.errors[0].msg || "Validation failed";
@@ -372,11 +372,64 @@ const OrderFormPage: React.FC = () => {
                             <div className="bg-gray-50/50 rounded-2xl p-6 space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                                    <Input
+                                        <Input
                                         label="Order Number"
                                         placeholder="Enter order number"
                                         required
-                                        register={register("orderNumber", { required: "order number is required" })}
+                                        register={register("orderNumber", {
+                                            required: "Order number is required",
+                                            validate: (value) => {
+                                                // Get the current selected platform (convert to lowercase to be safe)
+                                                const platform = selectedProduct?.productPlatform.toLowerCase() || ""; 
+                                                
+                                                // Remove any non-digit characters if you only want to count numbers
+                                                // const length = value.replace(/\D/g, '').length; 
+                                                // const length = value.length;
+
+                                                if (platform === 'amazon') {
+                                                    // Regex: 3 digits, hyphen, 7 digits, hyphen, 7 digits
+                                                    const amazonPattern = /^\d{3}-\d{7}-\d{7}$/;
+                                                    
+                                                    if (!amazonPattern.test(value)) {
+                                                        return "Format must be: 000-0000000-0000000";
+                                                    }
+                                                }
+                                                else if (platform === 'flipkart') {
+                                                        // Regex: Starts with OD, followed by exactly 18 digits
+                                                        const flipkartPattern = /^OD\d{18}$/;
+
+                                                        if (!value.startsWith("OD")) {
+                                                            return "Flipkart order must start with 'OD'";
+                                                        }
+                                                        
+                                                        // Check if the total length is correct (Example is 20 chars)
+                                                        if (value.length !== 20) {
+                                                            return `Flipkart order must be 20 characters (OD + 18 digits). Current: ${value.length}`;
+                                                        }
+
+                                                        if (!flipkartPattern.test(value)) {
+                                                            return "Flipkart order must start with OD followed by digits only";
+                                                        }
+                                                    }
+                                                else if (platform === 'myntra') {
+                                                    // Regex: Starts with #, followed by exactly 21 digits
+                                                    const myntraPattern = /^#\d{21}$/;
+
+                                                    if (!value.startsWith("#")) {
+                                                        return "Myntra order must start with '#'";
+                                                    }
+
+                                                    if (!myntraPattern.test(value)) {
+                                                        return "Myntra order must be '#' followed by exactly 21 digits";
+                                                    }
+                                                }
+                                                
+                                                // Optional: Check if it contains only numbers (if required)
+                                                // if (!/^\d+$/.test(value)) return "Order number must contain only digits";
+                                                
+                                                return true;
+                                            }
+                                        })}
                                         error={errors.orderNumber?.message}
                                     />
                                     <Input
@@ -530,13 +583,13 @@ const OrderFormPage: React.FC = () => {
                                     onChange={setOrderScreenshot}
                                     required
                                 />
-                                <FileUpload
+                                {/* <FileUpload
                                     label="Price Breakup Screenshot"
                                     // accept="image/*,.pdf"
                                     value={priceBreakup}
                                     onChange={setPriceBreakup}
                                     required
-                                />
+                                /> */}
                             </div>
                         </div>
 
@@ -545,14 +598,14 @@ const OrderFormPage: React.FC = () => {
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => navigate("/")}
+                                onClick={() => navigate("/user/dashboard")}
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 isLoading={isSubmitting}
-                                disabled={!orderScreenshot || !priceBreakup || isSubmitting}
+                                disabled={!orderScreenshot || isSubmitting}
                             >
                                 {isSubmitting ? "Submitting..." : "Submit Order"}
                             </Button>
