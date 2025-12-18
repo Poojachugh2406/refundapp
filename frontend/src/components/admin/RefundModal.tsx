@@ -1265,7 +1265,7 @@ const RefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refundId }) 
                                     {data.order.isReplacement == 'yes' && <p className="xs:col-span-2"><span className="font-medium text-gray-800">Old Order Number:</span> {data.order?.oldOrderNumber ?? "N/A"}</p>}
                                     <p><span className="font-medium text-gray-800">Less Price:</span> {data?.order.lessPrice ?? "N/A"}</p>
                                     <p><span className="font-medium text-gray-800">Exchange Product:</span> {data?.order?.exchangeProduct ?? "N/A"}</p>
-                                    <p><span className="font-medium text-gray-800">Refund Amount:</span> {data?.order?.orderAmount - data.order?.lessPrice}</p>
+                                    <p><span className="font-medium text-gray-800">Refund Amount:</span> {data?.order?.orderAmount + data.order?.lessPrice}</p>
                                     {/* <p><span className="font-medium text-gray-800">Mediator Name:</span> {data?.order?.mediator?.nickName ?? "N/A"}</p>
                                */}
                                 </div>

@@ -448,20 +448,21 @@ const OrderFormPage: React.FC = () => {
                                         required
                                         register={register("orderAmount", {
                                             required: "Order amount is required",
-                                            min: { value: 0, message: "Order amount must be positive" }
+                                            min: { value: 9, message: "Order amount must be positive" }
                                         })}
                                         error={errors.orderAmount?.message}
                                     />
                                     <Input
-                                        label="Your Less Price"
+                                        label="Your Less Price (Put a '-' for less  and '+' for commissiondeal)"
                                         type="number"
                                         icon={<IndianRupee className="w-4 h-4" />}
                                         placeholder="0.00"
                                         required
                                         register={register("lessPrice", {
                                             required: "Less price is required",
-                                            min: { value: 0, message: "Less price must be positive" }
+                                            // min: { value: 0, message: "Less price must be positive" }
                                         })}
+                                       
                                         error={errors.lessPrice?.message}
                                     />
                                     <Select

@@ -1119,7 +1119,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
               <p><span className="font-medium">Product Link:</span> <a target="_blank" className="text-blue-600 text-xs sm:text-sm break-all" href={data.product?.productLink ?? "N/A"}>{data.product?.productLink ?? "N/A"}</a></p>
               <p><span className="font-medium">Order Amount:</span> {data.orderAmount}</p>
               <p><span className="font-medium">Less Price:</span> {data.lessPrice}</p>
-              <p><span className="font-medium">Refund Amount:</span> {data.orderAmount - data.lessPrice}</p>
+              <p><span className="font-medium">Refund Amount:</span> {data.orderAmount + data.lessPrice}</p>
             </div>
           </div>
         </div>

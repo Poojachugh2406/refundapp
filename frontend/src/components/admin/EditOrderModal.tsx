@@ -892,7 +892,7 @@ const EditOrderModal: React.FC<EditOrderModalProps> = ({ onClose, data, onSave, 
                                         required
                                         register={register("lessPrice", {
                                             required: "Less price is required",
-                                            min: { value: 0, message: "Less price must be positive" },
+                                            // min: { value: 0, message: "Less price must be positive" },
                                             valueAsNumber: true
                                         })}
                                         error={errors.lessPrice?.message}

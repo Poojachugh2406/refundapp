@@ -1234,7 +1234,7 @@ export const getAllFiltersData = async (req, res) => {
       mediators,
       sellers,
       products,
-      platforms
+      platforms,
     ] = await Promise.all([
       // Get all mediators (users with role 'mediator')
       User.find({ role: 'mediator', isActive: true , isVerified:true })
