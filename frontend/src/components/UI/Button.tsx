@@ -26,11 +26,11 @@
     // Variant styles with gradient option
     const variantClasses = {
       primary: gradient 
-        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 focus:ring-blue-500'
-        : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-      secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-      outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-blue-500',
-      danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+        ? 'bg-gradient-to-r from-orange-700 to-purple-700 text-white hover:from-orange-700 hover:to-purple-700 focus:ring-orange-500'
+        : 'bg-orange-700 text-white hover:bg-orange-700 focus:ring-orange-500',
+      secondary: 'bg-gray-700 text-white hover:bg-gray-700 focus:ring-gray-500',
+      outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-orange-500',
+      danger: 'bg-red-700 text-white hover:bg-red-700 focus:ring-red-500',
     };
     
     // Size styles
