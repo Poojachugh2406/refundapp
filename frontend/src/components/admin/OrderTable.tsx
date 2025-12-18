@@ -1052,6 +1052,23 @@ function OrderTable() {
                             ))}
                         </select>
                     </div>
+                    
+                            {/* Brand Name Filter */}
+                    <div className="xs:col-span-1">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Brand</label>
+                        <select
+                            value={filters.productName}
+                            onChange={(e) => handleFilterChange('productName', e.target.value)}
+                            className="w-full px-2 sm:px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">All Brands</option>
+                            {filtersData?.products?.map((product: any) => (
+                                <option key={product._id} value={product._id}>
+                                    {product.brand}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
                     {/* Platform Filter */}
                     <div className="xs:col-span-1 sm:col-span-1">
