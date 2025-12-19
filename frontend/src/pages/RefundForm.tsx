@@ -192,7 +192,7 @@ const RefundFormPage: React.FC = () => {
 
       if (response.success && response.data) {
         toast.success('Refund request submitted successfully!');
-        navigate('/track', {
+        navigate('/user/refunds', {
           state: { orderNumber: data.orderNumber }
         });
       } else {

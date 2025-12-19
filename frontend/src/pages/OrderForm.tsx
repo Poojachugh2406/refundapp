@@ -185,7 +185,7 @@ const OrderFormPage: React.FC = () => {
 
             if (response.success) {
                 toast.success("Order submitted successfully!");
-                navigate("/user/dashboard");
+                navigate("/user/orders");
             } else {
                 if (response.errors && response.errors.length > 0) {
                     const errorMessage = response.errors[0].msg || "Validation failed";
