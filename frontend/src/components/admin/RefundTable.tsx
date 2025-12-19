@@ -646,6 +646,7 @@ function RefundTable() {
             }
         },
         staleTime: 50 * 60 * 1000, // 5 0 minutes
+        refetchInterval: 1000,
     });
 
     // --- Mutation for Deleting ---

@@ -481,6 +481,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderId }) => 
             }
             return response.data as OrderWithDetails;
         },
+        refetchInterval: 1000,
         enabled: isOpen, // Only fetch when the modal is open
     });
 

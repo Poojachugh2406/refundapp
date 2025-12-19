@@ -647,6 +647,7 @@ function OrderTable() {
         queryFn: fetchFiltersData,
         placeholderData: (prev) => prev,
         staleTime: 10 * 60 * 1000, // 10 minutes
+        refetchInterval: 1000,
     });
 
     // Delete order mutation
