@@ -455,7 +455,8 @@ const MediatorActiveDeals: React.FC<ActiveDealsProps> = () => {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["mediatorActiveDeals", searchTerm , filters],
-    queryFn: userAPI.getAllActiveProducts
+    queryFn: userAPI.getAllActiveProducts,
+     refetchInterval: 1000,
   });
 
 

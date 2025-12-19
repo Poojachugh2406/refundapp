@@ -635,6 +635,10 @@ function OrderTable() {
         queryFn: fetchOrders,
         placeholderData: (prev) => prev,
         staleTime: 5 * 60 * 1000, // 5 minutes
+        // staleTime: 5 * 60 * 1000, // 5 minutes
+        
+        // // 👇 ADD THIS LINE HERE 👇
+        refetchInterval: 1000,
     });
 
     // Filters query

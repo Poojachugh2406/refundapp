@@ -55,6 +55,7 @@ function MediatorRefundTable() {
         queryFn: fetchRefunds,
         placeholderData: (prev) => prev,
         staleTime: 5 * 2 * 60 * 1000, // 10 minutes
+         refetchInterval: 1000,
     });
 
     const refunds: any[] = data?.data || [];
