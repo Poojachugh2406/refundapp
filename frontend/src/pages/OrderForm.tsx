@@ -599,7 +599,7 @@ const OrderFormPage: React.FC = () => {
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => navigate("/user/dashboard")}
+                                onClick={() => navigate("/user/orders")}
                             >
                                 Cancel
                             </Button>
