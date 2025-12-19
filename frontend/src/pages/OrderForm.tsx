@@ -151,10 +151,7 @@ const OrderFormPage: React.FC = () => {
 
     const isReplacement = watch("isReplacement");
 
-    const onSubmit = async (data: CreateOrderData, e?: React.FormEvent) => {
-        if (e) {
-        e.preventDefault();
-    }
+    const onSubmit = async (data: CreateOrderData) => {
         if (!orderScreenshot ) {
             toast.error("Please upload both order screenshot and price breakup");
             return;
@@ -188,7 +185,7 @@ const OrderFormPage: React.FC = () => {
 
             if (response.success) {
                 toast.success("Order submitted successfully!");
-                navigate("/user/orders", { replace: true });
+                navigate("/user/orders");
             } else {
                 if (response.errors && response.errors.length > 0) {
                     const errorMessage = response.errors[0].msg || "Validation failed";
@@ -199,11 +196,7 @@ const OrderFormPage: React.FC = () => {
             }
         } catch (error: any) {
             console.error("Order submission error:", error);
-            if(error.response?.status === 401) {
-            toast.error("Session expired. Please log in again.");
-            // This is likely where the automatic login redirect was happening
-        }
-         else   if (error.response?.data) {
+            if (error.response?.data) {
                 const errorData = error.response.data;
                 if (errorData.errors && errorData.errors.length > 0) {
                     toast.error(errorData.errors[0].msg || "Validation failed");
