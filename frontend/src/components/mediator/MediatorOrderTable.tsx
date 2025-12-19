@@ -591,6 +591,7 @@ function MediatorOrderTable() {
         queryFn: fetchOrders,
         placeholderData: (prev) => prev,
         staleTime: 5 * 60 * 1000, // 5 minutes
+         refetchInterval: 1000,
     });
 
     // Filters query
