@@ -80,6 +80,7 @@ function UserDashboard() {
   const {data, isLoading , isError} = useQuery({
     queryKey:["dashboardStats"],
     queryFn :()=>apiGet('/user/dashboard')
+    
   })
 
   const getStatusColor = (status: string) => {

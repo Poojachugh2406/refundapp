@@ -299,7 +299,7 @@ function App() {
                 </ProtectedUserRoute>
               }
             >
-              {/* This is the default page for /admin */}
+              {/* This is the default page for /user */}
               <Route index element={<UserDashboard />} />
               {/* <Route path="/user/dashboard" element={<UserDashboard />} /> */}
               <Route path="/user/orders" element={<UserOrders/>} />

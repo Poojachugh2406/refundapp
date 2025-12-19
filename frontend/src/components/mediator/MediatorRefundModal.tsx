@@ -36,6 +36,7 @@ const MediatorRefundModal: React.FC<RefundModalProps> = ({ isOpen, onClose, refu
             }
             throw new Error(response.message || 'Failed to fetch refund details');
         },
+         refetchInterval: 1000,
         enabled: isOpen, // Only fetch when the modal is open
     });
 

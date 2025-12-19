@@ -465,6 +465,7 @@ const MediatorOrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderI
             }
             return response.data as OrderWithDetails;
         },
+        refetchInterval: 1000,
         enabled: isOpen, // Only fetch when the modal is open
     });
 

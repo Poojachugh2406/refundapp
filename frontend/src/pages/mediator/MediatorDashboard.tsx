@@ -72,6 +72,7 @@ function MediatorDashboard() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["dashboardStats"],
     queryFn: () => apiGet(`/mediator/dashboard`),
+    refetchInterval: 1000,
   });
   
 

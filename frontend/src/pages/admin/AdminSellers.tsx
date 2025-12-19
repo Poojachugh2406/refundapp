@@ -282,6 +282,7 @@ function AdminSellers() {
       throw new Error(response.message || 'Failed to fetch sellers');
     },
     staleTime: 20* 60 * 1000 // 20 minutes
+    // refetchInterval: 1000,
   });
 
   // Filter pending sellers (not verified)

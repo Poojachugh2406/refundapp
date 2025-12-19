@@ -292,6 +292,7 @@ function AdminMediators() {
       }
       throw new Error(response.message || 'Failed to fetch mediators');
     },
+     refetchInterval: 1000,
   });
 
   // Filter pending mediators (not verified)
