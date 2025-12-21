@@ -406,6 +406,7 @@ function AdminProducts() {
       }
       throw new Error(response.message || 'Failed to fetch sellers');
     },
+     refetchInterval: 1000,
   });
 
   // Delete product mutation
