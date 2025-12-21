@@ -387,14 +387,14 @@ const ProductCreateComp = ({ onClose, sellers }: { onClose: () => void, sellers:
                             error={errors.onlyOrderSlots?.message}
                             placeholder="Enter only order slots"
                         />
-                        <Input
+                        {/* <Input
                             type='number'
                             min={0}
                             label="Review Submit Slots"
                             {...register('reviewSubmittedSlots')}
                             error={errors.reviewSubmittedSlots?.message}
                             placeholder="Enter reviews submit slots"
-                        />
+                        /> */}
                     </div>
 {/* --- NEWLY ADDED LESS SECTION --- */}
   <div className="border-t border-gray-200 mt-6 pt-6">

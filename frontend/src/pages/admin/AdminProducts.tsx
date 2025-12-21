@@ -835,10 +835,10 @@ function AdminProducts() {
                         <span> {product.bookedOnlyOrderSlots || 0} / </span>
                         <span>{product.onlyOrderSlots || 0}</span>
                       </div>
-                      <div>Review Submit:
+                      {/* <div>Review Submit:
                         <span> {product.bookedReviewSubmitted || 0} / </span>
                         <span>{product.reviewSubmittedSlots || 0}</span>
-                      </div>
+                      </div> */}
                 </td>
 
                 <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap text-gray-900">

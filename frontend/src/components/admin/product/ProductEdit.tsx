@@ -410,14 +410,14 @@ const ProductEdit = ({ onClose, sellers, product }: { onClose: () => void, selle
                             error={errors.onlyOrderSlots?.message}
                             placeholder="Enter only order slots"
                         />
-                        <Input
+                        {/* <Input
                             type='number'
                             min={0}
                             label="Review Submit Slots"
                             {...register('reviewSubmittedSlots')}
                             error={errors.reviewSubmittedSlots?.message}
                             placeholder="Enter reviews submit slots"
-                        />
+                        /> */}
                         <Input
                             type='number'
                             min={0} 

@@ -621,7 +621,7 @@ export const getActiveProducts = async (req, res) => {
           totalRatingSlots: { $toInt: { $ifNull: ["$ratingSlots", 0] } },
           totalReviewSlots: { $toInt: { $ifNull: ["$reviewSlots", 0] } },
           totalOnlyOrderSlots: { $toInt: { $ifNull: ["$onlyOrderSlots", 0] } },
-          totalReviewSubmitted: { $toInt: { $ifNull: ["$reviewSubmitted", 0] } },
+          totalReviewSubmitted: { $toInt: { $ifNull: ["$reviewSubmittedSlots", 0] } },
         }
       },
       
@@ -705,7 +705,8 @@ export const getSlots = async (req, res) => {
       {
         $match: {
           product: new mongoose.Types.ObjectId(id),
-          orderStatus: { $in: ['pending', 'accepted', 'payment_done'] }
+          orderStatus: { $in: ['pending', 'accepted', 'payment_done','refund_placed'] },
+          // orderStatus:  {$ne:['rejected']}
         }
       },
       {
@@ -774,7 +775,7 @@ export const getSlots = async (req, res) => {
             },
             { label:'Review Submit', 
               slots: availableSlots.reviewSubmitted.availableSlots||0,
-              value :'rview_submitted'
+              value :'review_submitted'
             }
           ]
       }
