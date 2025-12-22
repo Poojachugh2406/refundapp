@@ -776,11 +776,11 @@ deals.hawkagency.in
                       Only Order: {product.availableOnlyOrderSlots}
                     </span>
                   )}
-                  {product && !!product.availableReviewSubmitted &&  product.availableReviewSubmitted > 0 && (
-                    <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${getSlotAvailabilityColor(product.availableReviewSubmitted)}`}>
-                      Review Submit: {product.availableReviewSubmitted}
-                    </span>
-                  )}
+                  {/* {product && !!product.availableReviewSubmitted &&  product.availableReviewSubmitted > 0 && (
+                    // <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${getSlotAvailabilityColor(product.availableReviewSubmitted)}`}>
+                    //   Review Submit: {product.availableReviewSubmitted}
+                    // </span>
+                  )} */}
                 </div>
               </td>
               
@@ -793,8 +793,9 @@ deals.hawkagency.in
                     disabled={
                       product.availableRatingSlots === 0 && 
                       product.availableOnlyOrderSlots === 0 && 
-                      product.availableReviewSlots === 0 &&
-                      product.availableReviewSubmitted === 0
+                      product.availableReviewSlots === 0 
+                      // &&
+                      // product.availableReviewSubmitted === 0
                     }
                     className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-xs px-3 py-1.5 rounded"
                   >
