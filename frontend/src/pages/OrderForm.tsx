@@ -347,14 +347,28 @@ console.log(products)
                                         })}
                                         error={errors.orderNumber?.message}
                                     />
-                                    <Input
-                                        label="Order Date"
-                                        type="date"
-                                        icon={<Calendar className="w-4 h-4" />}
-                                        required
-                                        register={register("orderDate", { required: "Order date is required" })}
-                                        error={errors.orderDate?.message}
-                                    />
+                                   <Input
+  label="Order Date"
+  type="date"
+  icon={<Calendar className="w-4 h-4" />}
+  required
+  register={register("orderDate", {
+    required: "Order date is required",
+    validate: (value) => {
+      const selectedDate = new Date(value);
+      const today = new Date();
+      // Reset time to midnight (00:00:00) to ensure "today" is valid
+      today.setHours(0, 0, 0, 0); 
+      
+      // Fix for timezone offset issues when parsing YYYY-MM-DD
+      // (Optional but recommended: ensure selectedDate is treated as local time)
+      const selectedDateWithTime = new Date(selectedDate.toDateString());
+
+      return selectedDateWithTime >= today || "Order date cannot be in the past";
+    }
+  })}
+  error={errors.orderDate?.message}
+/>
                                     <Input
                                         label="Total Order Amount"
                                         type="number"
