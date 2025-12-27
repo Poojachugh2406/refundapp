@@ -5,8 +5,8 @@ import { useAuth } from '../../contexts/AuthContext';
 // import { useAuth } from '../contexts/AuthContext'; // Assuming useAuth provides a logout function
 
 const navigationItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: Home, to: '/user' },
-  { id: 'orders', label: 'My Orders', icon: Package, to: '/user/orders' },
+  // { id: 'dashboard', label: 'Dashboard', icon: Home, to: '/user' },
+  { id: 'orders', label: 'My Orders', icon: Package, to: '/user' },
   { id: 'refunds', label: 'My Refunds', icon: RefreshCw, to: '/user/refunds' },
   { id: 'activedeals', label: 'Active Deals', icon: ShoppingCart, to: '/user/activedeals' },
   { id: 'profile', label: 'Profile', icon: User, to: '/user/profile' },
