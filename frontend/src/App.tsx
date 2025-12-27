@@ -300,9 +300,9 @@ function App() {
               }
             >
               {/* This is the default page for /user */}
-              <Route index element={<UserDashboard />} />
+              {/* <Route index element={<UserDashboard />} /> */}
               {/* <Route path="/user/dashboard" element={<UserDashboard />} /> */}
-              <Route path="/user/orders" element={<UserOrders/>} />
+              <Route path="/user" element={<UserOrders/>} />
               <Route path="/user/refunds" element={<UserRefunds />} />
               <Route path="/user/profile" element={<UserProfile/>} />
               <Route path="/user/activedeals" element={<UserActiveDeals />} />
