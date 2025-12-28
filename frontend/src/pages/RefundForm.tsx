@@ -387,15 +387,22 @@ const RefundFormPage: React.FC = () => {
 
               {/* --- Refund Form Section --- */}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-                <Input
-                  label="Review Link"
-                  icon={<Link className="w-4 h-4" />}
-                  placeholder="Paste your review link here (optional)"
-                  type = "url"
-                  register={register('reviewLink',{required:"Review Link is Required"})}
-                  required
-                />
-
+               <Input
+                    label="Review Link"
+                    icon={<Link className="w-4 h-4" />}
+                    placeholder="Paste your review link here (optional)"
+                    // Change type to text to allow "www." without "http://"
+                    type="text" 
+                    register={register('reviewLink', {
+                      required: "Review Link is Required",
+                      pattern: {
+                        // This regex allows http, https, or just www.
+                        value: /^((https?:\/\/)|(www\.))[\w-]+\.[a-z]{2,}(\/.*)?$/i,
+                        message: "Please enter a valid link (e.g., www.example.com or https://example.com)"
+                      }
+                    })}
+                    required
+                  />
                 {/* --- Payment Information Section --- */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
