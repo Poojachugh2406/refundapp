@@ -192,7 +192,7 @@ const Home: React.FC = () => {
               <span className="text-orange-600">Hawk Agency</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Streamline your order and refund process with our comprehensive management system.
+              Streamline your order and reimbursement process with our comprehensive management system.
               Check Active Deals, Submit orders, request refunds, and track your submissions all in one place.
             </p>
           </div>
