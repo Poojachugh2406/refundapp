@@ -26,7 +26,7 @@ import AdminActiveDeals from './pages/admin/Adminactivedeals';
  // <-- Make sure this path is correct!
 import AdminProfile from './pages/admin/AdminProfile';
 import UserLayout from './components/Layout/UserLayout';
-import UserDashboard from './pages/user/UserDashboard';
+// import UserDashboard from './pages/user/UserDashboard';
 import UserOrders from './pages/user/UserOrders';
 import UserRefunds from './pages/user/UserRefunds';
 // import UserProfile from './pages/user/UserProfile.js';
@@ -35,7 +35,7 @@ import MediatorDashboard from './pages/mediator/MediatorDashboard';
 import MediatorOrders from './pages/mediator/MediatorOrders';
 // import MediatorActiveDeals from './pages/Mediator/MediatorActiveDeals'; // <-- Check this path!
 import MediatorProfile from './pages/mediator/MediatorProfile';
-//import Home from './pages/Home';
+import Home from './pages/Home';
 import MediatorRefund from './pages/mediator/MediatorRefund';
 import UserActiveDeals from './pages/user/UserActiveDeals';
 import UserProfile from './pages/user/UserProfile';
@@ -145,7 +145,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Login/>} />
+            <Route path="/" element={<Home/>} />
             <Route path="/order" element={<OrderForm/>} />
             <Route path="/refund" element={<RefundForm/>} />
             <Route path="/track" element={<Tracking/>} />
@@ -300,7 +300,7 @@ function App() {
               }
             >
               {/* This is the default page for /user */}
-              <Route index element={<UserDashboard />} />
+              <Route index element={<UserOrders />} />
               {/* <Route path="/user/dashboard" element={<UserDashboard />} /> */}
               <Route path="/user/orders" element={<UserOrders/>} />
               <Route path="/user/refunds" element={<UserRefunds />} />
