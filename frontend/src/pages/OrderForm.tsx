@@ -12,11 +12,11 @@ import Input from "@/components/UI/Input";
 import RadioGroup from "@/components/UI/RadioGroup";
 import FileUpload from "@/components/UI/FileUpload";
 import Button from "@/components/UI/Button";
-import SearchableSelect from "@/components/UI/Select";
+import SearchableSelect from "@/components/UI/SearchableSelect";
 import type { ActiveProduct } from "@/types/products";
 import type { ActiveMediators } from "@/types/users";
 import { useAuth } from "@/contexts/AuthContext";
-// import SearchableSelect from "@/components/UI/Select";
+// import Select from "@/components/UI/Select";
 
 const OrderFormPage: React.FC = () => {
     const navigate = useNavigate();

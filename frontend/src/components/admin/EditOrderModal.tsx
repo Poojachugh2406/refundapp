@@ -566,7 +566,7 @@ import {
 import Button from '../UI/Button';
 import type { OrderWithDetails, UpdateOrderData } from '@/types/orders';
 import { useForm,Controller } from 'react-hook-form';
-import SearchableSelect from '../UI/Select';
+import SearchableSelect from '../UI/SearchableSelect';
 import { apiGet, userAPI } from '@/utils/api';
 import type { ActiveProduct } from '@/types/products';
 import Input from '../UI/Input';
