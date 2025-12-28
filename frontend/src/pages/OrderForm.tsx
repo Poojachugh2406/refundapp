@@ -382,13 +382,14 @@ console.log(products)
                                         error={errors.orderAmount?.message}
                                     />
                                     <Input
-                                        label="Your Less Price (- for less, + for commission)"
+                                        label="Your Less Price "
                                         type="number"
                                         icon={<IndianRupee className="w-4 h-4" />}
                                         placeholder="0.00"
                                         required
                                         register={register("lessPrice", {
                                             required: "Less price is required",
+                                             min: { value: 0, message: "Must be positive" }
                                         })}
                                         error={errors.lessPrice?.message}
                                     />
