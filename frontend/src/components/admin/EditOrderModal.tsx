@@ -280,7 +280,7 @@
 //                   required
 //                   value={selectedProduct?._id}
 //                   placeholder="Choose a product"
-//                   options={productOptions}
+//                   options={[...productOptions].sort((a, b) => a.label.localeCompare(b.label))}
 //                   {...register('product', { required: 'Product selection is required' })}
 //                   error={errors.product?.message}
 //                 />
@@ -565,8 +565,8 @@ import {
 } from 'lucide-react';
 import Button from '../UI/Button';
 import type { OrderWithDetails, UpdateOrderData } from '@/types/orders';
-import { useForm } from 'react-hook-form';
-import Select from '../UI/Select';
+import { useForm,Controller } from 'react-hook-form';
+import SearchableSelect from '../UI/Select';
 import { apiGet, userAPI } from '@/utils/api';
 import type { ActiveProduct } from '@/types/products';
 import Input from '../UI/Input';
@@ -614,6 +614,7 @@ const EditOrderModal: React.FC<EditOrderModalProps> = ({ onClose, data, onSave, 
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors },
         watch,
     } = useForm<UpdateOrderData>({
@@ -759,15 +760,22 @@ const EditOrderModal: React.FC<EditOrderModalProps> = ({ onClose, data, onSave, 
                         <section className="space-y-6">
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <Select
-                                    label="Product"
-                                    required
-                                    value={selectedProduct?._id}
-                                    placeholder="Choose a product"
-                                    options={productOptions}
-                                    {...register('product', { required: 'Product selection is required' })}
-                                    error={errors.product?.message}
-                                />
+                               <Controller
+  name="product"
+  control={control}
+  rules={{ required: "Product is required" }} // Add your validation rules here
+  render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+    <SearchableSelect
+      ref={ref}
+      name="product"
+      value={value}
+      onChange={onChange} // Controller handles the string-to-state update
+      error={error?.message}
+      options={[...productOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for product options
+      placeholder="Select a product" // Add if needed
+    />
+  )}
+/>
                                 <Input
                                     label="Product Name"
                                     required

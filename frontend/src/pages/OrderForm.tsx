@@ -1,3 +1,5 @@
+import { Controller } from "react-hook-form";
+// ... other imports
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,10 +12,11 @@ import Input from "@/components/UI/Input";
 import RadioGroup from "@/components/UI/RadioGroup";
 import FileUpload from "@/components/UI/FileUpload";
 import Button from "@/components/UI/Button";
-import Select from "@/components/UI/Select";
+import SearchableSelect from "@/components/UI/Select";
 import type { ActiveProduct } from "@/types/products";
 import type { ActiveMediators } from "@/types/users";
 import { useAuth } from "@/contexts/AuthContext";
+// import SearchableSelect from "@/components/UI/Select";
 
 const OrderFormPage: React.FC = () => {
     const navigate = useNavigate();
@@ -75,6 +78,7 @@ const OrderFormPage: React.FC = () => {
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors },
         watch,
         setValue
@@ -207,15 +211,23 @@ console.log(products)
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Select
-                                    label="Product Code"
-                                    required
-                                    placeholder="Choose a product"
-                                    options={productOptions}
-                                    {...register('product', { required: 'Product selection is required' })}
-                                    error={errors.product?.message}
-                                    value={selectedProduct?._id}
-                                />
+                               {/* REPLACEMENT CODE FOR LINE 210 */}
+<Controller
+  name="product"
+  control={control}
+  rules={{ required: "Product is required" }} // Add your validation rules here
+  render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+    <SearchableSelect
+      ref={ref}
+      name="product"
+      value={value}
+      onChange={onChange} // Controller handles the string-to-state update
+      error={error?.message}
+      options={[...productOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for product options
+      placeholder="Select a product" // Add if needed
+    />
+  )}
+/>
                                 <Input
                                     label="Product Name"
                                     required
@@ -393,14 +405,32 @@ console.log(products)
                                         })}
                                         error={errors.lessPrice?.message}
                                     />
-                                    <Select
+                                    {/* <Select
                                         label="Mediator"
                                         required
                                         placeholder="Choose a mediator"
-                                        options={mediatorOptions}
+                                        options={[...mediatorOptions].sort((a, b) => a.label.localeCompare(b.label))}
                                         {...register("mediator", { required: "Mediator selection is required" })}
                                         error={errors.mediator?.message}
-                                    />
+                                    /> */}
+                                    {/* REPLACEMENT CODE FOR LINE 396 */}
+<Controller
+  name="mediator"
+  control={control}
+  rules={{ required: "Mediator is required" }} // Add your validation rules here
+  render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+    <SearchableSelect
+      ref={ref}
+      name="mediator"
+      value={value}
+      onChange={onChange}
+      error={error?.message}
+      options={[...mediatorOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for mediator options
+    //   min={0} // The error log mentioned a 'min' prop, ensure you keep it if needed
+      placeholder="Select a mediator" // Add if needed
+    />
+  )}
+/>
                                 </div>
                             </div>
 
