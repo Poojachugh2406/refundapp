@@ -352,8 +352,13 @@ console.log(products)
                                                 }
                                                 else if (platform === 'myntra') {
                                                     if (!value.startsWith("#")) return "Must start with '#'";
-                                                    if (!/^#\d{21}$/.test(value)) return "Format: # + 21 digits";
+                                                    if (!/^#\d{21}$/.test(value)) return 'Format: # + 21 digits Current: ${value.length}';
                                                 }
+                                                else if (platform === 'blinkit') {
+                                                    if (!value.startsWith("ORD")) return "Must start with 'ORD'";
+                                                    if (!/^ORD\d{11}$/.test(value)) return "Format: ORD + 11 digits Current: ${value.length}";
+                                                }
+                                                
                                                 return true;
                                             }
                                         })}

@@ -1,6 +1,7 @@
 import Refund from '../models/Refund.js';
 import Order from '../models/Order.js';
 import mongoose from 'mongoose';
+import { sendRefundConfirmationEmail } from '../services/otpService.js';
 // @desc    Create new refund
 // @route   POST /api/refunds
 // @access  Public
@@ -76,6 +77,7 @@ export const createRefund = async (req, res) => {
 
     const newRefund = new Refund(refundData);
     const refund = await newRefund.save();
+     await sendRefundConfirmationEmail(isOrderExists.email , isOrderExists.orderNumber);
     isOrderExists.orderStatus = 'refund_placed';
     await isOrderExists.save();
     console.log('Refund created successfully:', refund._id);

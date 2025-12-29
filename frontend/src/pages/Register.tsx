@@ -4,10 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import '@/components/UI/animation.css';
 import { 
-  
-  ArrowRight, 
-  
-  CheckCircle,
+    ArrowRight, 
+    CheckCircle,
   ArrowLeft
 } from 'lucide-react';
 import bblogo from "../assets/bblogog.png";
@@ -61,6 +59,7 @@ const Register: React.FC = () => {
   };
 
   // 2. Submit Registration
+ // 2. Submit Registration (Updated)
   const onSubmitRegister = async (data: RegisterFormData) => {
     if (data.password !== data.confirmPassword) {
       registerForm.setError('confirmPassword', { message: 'Passwords do not match' });
@@ -88,13 +87,47 @@ const Register: React.FC = () => {
     } catch (error: any) {
       console.error('Registration error:', error);
       const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
+      
+      // --- LOGIC START: Handle Existing User ---
+      // Check if the error indicates the user already exists (Adjust string to match your exact API error)
+      const isUserExisting = errorMessage.toLowerCase().includes('already exists') || 
+                             errorMessage.toLowerCase().includes('email is taken');
+
+      if (isUserExisting) {
+         try {
+            // Attempt to resend OTP to this email
+            toast.loading('Account exists. Sending verification code...');
+            const resendResponse = await authAPI.resendVerification(data.email);
+            toast.dismiss();
+
+            if (resendResponse.success) {
+               toast.success('Verification code sent! Please verify.');
+               setRegisteredEmail(data.email);
+               verifyForm.reset({ email: data.email, otp: Array(6).fill('') });
+               setStep('verify'); // <--- Redirects to OTP screen
+              //  setIsLoading(false);
+               return; // Stop here, don't show the error toast
+            }
+         } catch (resendError: any) {
+            toast.dismiss();
+            // Optional: If resend fails because they are ALREADY verified, send them to login
+            const resendMsg = resendError.response?.data?.message || "";
+            if (resendMsg.toLowerCase().includes('verified')) {
+               toast.success("Account already verified. Redirecting to login...");
+               handleLoginClick();
+              //  setIsLoading(false);
+               return;
+            }
+         }
+      }
+      // --- LOGIC END ---
+
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
-
   // 3. Submit OTP
   const onSubmitVerify = async (data: VerifyFormData) => {
     setIsLoading(true);
