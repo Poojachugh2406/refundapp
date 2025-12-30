@@ -428,16 +428,20 @@ const RefundFormPage: React.FC = () => {
 
                   {paymentMethod === 'upi' && (
                     <Input
-                      label="UPI ID"
-                      icon={<CreditCard className="w-4 h-4" />}
-                      placeholder="Enter your UPI ID"
-                      required
-                      register={register('upiId', {
-                        required: 'UPI ID is required',
-                      })}
-                      error={errors.upiId?.message}
-                      helperText="e.g., yourname@oksbi"
-                    />
+                        label="UPI ID"
+                        icon={<CreditCard className="w-4 h-4" />}
+                        placeholder="Enter your UPI ID"
+                        required
+                        register={register('upiId', {
+                          required: 'UPI ID is required',
+                          pattern: {
+                            value: /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/,
+                            message: 'Invalid UPI ID format (e.g. name@oksbi)',
+                          },
+                        })}
+                        error={errors.upiId?.message}
+                        helperText="e.g., yourname@oksbi"
+                      />
                   )}
 
                   {paymentMethod === 'bank' && (
