@@ -397,7 +397,7 @@ const RefundFormPage: React.FC = () => {
                       required: "Review Link is Required",
                       pattern: {
                         // This regex allows http, https, or just www.
-                        value: /^((https?:\/\/)|(www\.))[\w-]+\.[a-z]{2,}(\/.*)?$/i,
+                        value: /^(https?:\/\/)?(([\w-]+\.)+[a-z]{2,}|localhost)(:\d{1,5})?(\/.*)?$/i,
                         message: "Please enter a valid link (e.g., www.example.com or https://example.com)"
                       }
                     })}
