@@ -390,7 +390,7 @@ const RefundFormPage: React.FC = () => {
                <Input
                     label="Review Link"
                     icon={<Link className="w-4 h-4" />}
-                    placeholder="Paste your review link here (optional)"
+                    placeholder="For rating deal write Rating.com"
                     // Change type to text to allow "www." without "http://"
                     type="text" 
                     register={register('reviewLink', {
