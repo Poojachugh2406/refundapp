@@ -910,6 +910,13 @@ export const deleteRefund = async (req, res) => {
       });
     }
 
+    // Update the referred Order status to "pending"
+    if (deletedRefund.order) {
+      await Order.findByIdAndUpdate(deletedRefund.order, {
+        orderStatus: 'pending'
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: 'Refund deleted successfully',
@@ -1007,7 +1014,7 @@ export const updateRefundStatus = async (req, res) => {
         message: 'Refund not found'
       });
     }
-    await Order.findByIdAndUpdate(updatedRefund.order._id, { $set: { orderStatus: status } });
+    // await Order.findByIdAndUpdate(updatedRefund.order._id, { $set: { orderStatus: status } });
     res.status(200).json({
       success: true,
       message: `Refund status updated to ${status} successfully`,

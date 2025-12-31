@@ -421,7 +421,11 @@ export const getAllOrders = async (req, res) => {
       ];
     }
 
-    if (status) filter.orderStatus = status;
+    if (status) {
+      status === 'refund_not_placed' ?
+        filter.orderStatus = { $ne: 'refund_placed' } :
+        filter.orderStatus = status;
+    }
     if (product && mongoose.Types.ObjectId.isValid(product)) filter.product = product;
     if (mediator && mongoose.Types.ObjectId.isValid(mediator)) filter.mediator = mediator;
 

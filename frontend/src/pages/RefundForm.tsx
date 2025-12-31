@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import {  format } from "date-fns";
+import { format } from "date-fns";
 import {
   ShoppingBag,
   Upload,
@@ -22,20 +22,21 @@ import Alert from '../components/UI/Alert';
 import RadioGroup from '../components/UI/RadioGroup';
 import FileUpload from '../components/UI/FileUpload';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePersistRHF } from '@/hooks/usePersistRHF';
 
 // 1. Define the Order type based on your response fields
 interface verifyOrder {
   order: string; // This is what you want to submit
-  orderNumber:string;
+  orderNumber: string;
   name: string;
   email: string;
-  phone:string;
+  phone: string;
   productCode: string;
   brandCode: string;
   orderAmount: number;
   lessPrice: number;
   mediatorName: string;
-  createdAt:Date;
+  createdAt: Date;
 
 }
 
@@ -60,10 +61,10 @@ const RefundFormPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
 
-  
+
   // 3. Use the specific Order type
   const [verifiedOrder, setVerifiedOrder] = useState<verifyOrder | null>(null);
-  
+
   const [verificationError, setVerificationError] = useState<string | null>(
     null,
   );
@@ -74,30 +75,53 @@ const RefundFormPage: React.FC = () => {
   const [reviewScreenshot, setReviewScreenshot] = useState<File | null>(null);
   const [sellerFeedbackScreenshot, setSellerFeedbackScreenshot] =
     useState<File | null>(null);
-  
+
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     watch,
     setValue
   } = useForm<CreateRefundData>({
-    // 4. Set a default payment method
     defaultValues: {
       paymentMethod: 'upi',
     },
+    shouldUnregister: false
   });
+
+  usePersistRHF<CreateRefundData>(
+    "refund-form-draft",
+    control,
+    setValue,
+    true // yahan async dependency nahi hai
+  );
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && authUser) {
-      setValue("upiId", authUser.upiId || "");
-      setValue("accountNumber", authUser.accountNumber || "");
-      setValue("ifscCode", authUser.accountIfsc || "");
+      const currentUpi = watch("upiId");
+      const currentAcc = watch("accountNumber");
+      const currentIfsc = watch("ifscCode");
+
+      if (!currentUpi && authUser.upiId) {
+        setValue("upiId", authUser.upiId);
+      }
+
+      if (!currentAcc && authUser.accountNumber) {
+        setValue("accountNumber", authUser.accountNumber);
+      }
+
+      if (!currentIfsc && authUser.accountIfsc) {
+        setValue("ifscCode", authUser.accountIfsc);
+      }
     }
-  }, [authUser, isAuthenticated, isLoading, setValue]);
-
-
-
+  }, [
+    authUser,
+    isAuthenticated,
+    isLoading,
+    setValue,
+    watch
+  ]);
 
   // 5. Watch for changes in paymentMethod and return window status
   const paymentMethod = watch('paymentMethod');
@@ -143,12 +167,12 @@ const RefundFormPage: React.FC = () => {
   };
 
 
-  useEffect(()=>{
-    if(location.state && location.state.orderNumber){
-      setValue('orderNumber' , location.state.orderNumber);
+  useEffect(() => {
+    if (location.state && location.state.orderNumber) {
+      setValue('orderNumber', location.state.orderNumber);
       verifyOrder(location.state.orderNumber);
     }
-  },[location.state]);
+  }, [location.state]);
 
   // 7. Modified onSubmit to send the exact payload you requested
   const onSubmit = async (data: CreateRefundData) => {
@@ -167,7 +191,7 @@ const RefundFormPage: React.FC = () => {
         reviewLink: data.reviewLink,
         isReturnWindowClosed: data.isReturnWindowClosed,
       };
-      
+
       if (data.paymentMethod === 'upi') {
         payload.upiId = data.upiId;
       } else if (data.paymentMethod === 'bank') {
@@ -191,6 +215,7 @@ const RefundFormPage: React.FC = () => {
       console.log('API Response:', response);
 
       if (response.success && response.data) {
+        localStorage.removeItem("refund-form-draft");
         toast.success('Refund request submitted successfully!');
         navigate('/user/refunds', {
           state: { orderNumber: data.orderNumber }
@@ -209,20 +234,20 @@ const RefundFormPage: React.FC = () => {
       }
     } catch (error: any) {
       console.error('Refund submission error:', error);
-      
+
       // Handle timeout errors
       if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
         toast.error('Request timed out. Please check your internet connection and try again.');
         return;
       }
-      
+
       // Handle duplicate refund errors
       if (error.response?.status === 409) {
         const errorData = error.response.data;
         toast.error(errorData.message || 'A refund already exists for this order.');
         return;
       }
-      
+
       if (error.response?.data) {
         const errorData = error.response.data;
         if (
@@ -257,7 +282,7 @@ const RefundFormPage: React.FC = () => {
           <div className="flex justify-between items-center mb-4">
             <Button variant="outline" onClick={() => navigate(-1)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
-            
+
             </Button>
             <h1 className="text-4xl font-bold text-gray-900">Request Refund</h1>
             <div className="w-24"></div> {/* Spacer */}
@@ -270,7 +295,7 @@ const RefundFormPage: React.FC = () => {
 
         {/* Form Card */}
         <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-3xl p-8 border border-white/20">
-          
+
           {/* Order Verification Section - Always visible until verified */}
           {!verifiedOrder && (
             <div className="space-y-6">
@@ -368,41 +393,41 @@ const RefundFormPage: React.FC = () => {
                     <span className="text-gray-500">Product Code:</span>
                     <span className="font-medium text-gray-800">{verifiedOrder.productCode}</span>
                   </div>
-                   <div className="flex justify-between border-b pb-2">
+                  <div className="flex justify-between border-b pb-2">
                     <span className="text-gray-500">Less Price:</span>
                     <span className="font-medium text-gray-800">₹{verifiedOrder.lessPrice}</span>
                   </div>
-                  
-                   <div className="flex justify-between border-b pb-2">
+
+                  <div className="flex justify-between border-b pb-2">
                     <span className="text-gray-500">ASIN Code:</span>
                     <span className="font-medium text-gray-800">{verifiedOrder.brandCode}</span>
                   </div>
-                   <div className="flex justify-between border-b pb-2">
+                  <div className="flex justify-between border-b pb-2">
                     <span className="text-gray-500">Order Form Submitted on:</span>
                     <span className="font-medium text-gray-800">{format(verifiedOrder.createdAt, "dd MMM yyyy")}</span>
                   </div>
-                   
+
                 </div>
               </div>
 
               {/* --- Refund Form Section --- */}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-               <Input
-                    label="Review Link"
-                    icon={<Link className="w-4 h-4" />}
-                    placeholder="Paste your review link here (optional)"
-                    // Change type to text to allow "www." without "http://"
-                    type="text" 
-                    register={register('reviewLink', {
-                      required: "Review Link is Required",
-                      pattern: {
-                        // This regex allows http, https, or just www.
-                        value: /^((https?:\/\/)|(www\.))[\w-]+\.[a-z]{2,}(\/.*)?$/i,
-                        message: "Please enter a valid link (e.g., www.example.com or https://example.com)"
-                      }
-                    })}
-                    required
-                  />
+                <Input
+                  label="Review Link"
+                  icon={<Link className="w-4 h-4" />}
+                  placeholder="Paste your review link here (optional)"
+                  // Change type to text to allow "www." without "http://"
+                  type="text"
+                  register={register('reviewLink', {
+                    required: "Review Link is Required",
+                    pattern: {
+                      // This regex allows http, https, or just www.
+                      value: /^((https?:\/\/)|(www\.))[\w-]+\.[a-z]{2,}(\/.*)?$/i,
+                      message: "Please enter a valid link (e.g., www.example.com or https://example.com)"
+                    }
+                  })}
+                  required
+                />
                 {/* --- Payment Information Section --- */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
@@ -465,7 +490,7 @@ const RefundFormPage: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
+
                 {/* --- Return Window Section --- */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
@@ -489,7 +514,7 @@ const RefundFormPage: React.FC = () => {
                     required
                     error={errors.isReturnWindowClosed?.message}
                   />
-                  
+
                   {isReturnWindowClosed === 'no' && (
                     <Alert
                       type="info"

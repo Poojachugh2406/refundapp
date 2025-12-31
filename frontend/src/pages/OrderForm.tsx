@@ -16,6 +16,7 @@ import SearchableSelect from "@/components/UI/SearchableSelect";
 import type { ActiveProduct } from "@/types/products";
 import type { ActiveMediators } from "@/types/users";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePersistRHF } from "@/hooks/usePersistRHF";
 // import Select from "@/components/UI/Select";
 
 const OrderFormPage: React.FC = () => {
@@ -27,8 +28,8 @@ const OrderFormPage: React.FC = () => {
     const [products, setProducts] = useState<ActiveProduct[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<ActiveProduct | null>(null);
     const [mediators, setMediators] = useState<ActiveMediators[]>([]);
-    const [availableSlots, setAvailableSlots] = useState<{ label: string; value: string }[]>([]); 
-    
+    const [availableSlots, setAvailableSlots] = useState<{ label: string; value: string }[]>([]);
+
     const { user: authUser, isAuthenticated, isLoading } = useAuth();
 
     // 1. Initial Data Fetch
@@ -86,8 +87,16 @@ const OrderFormPage: React.FC = () => {
         defaultValues: {
             product: "",
             mediator: ""
-        }
+        },
+        shouldUnregister: false
     });
+
+    usePersistRHF<CreateOrderData>(
+        "order-form",
+        control,
+        setValue,
+        products.length > 0 && mediators.length > 0
+      );
 
     useEffect(() => {
         if (location.state?.productId) {
@@ -102,7 +111,7 @@ const OrderFormPage: React.FC = () => {
     useEffect(() => {
         if (selectedProductId && products.length > 0) {
             const product = products.find(p => p._id === selectedProductId);
-            
+
             if (product) {
                 setSelectedProduct(product);
 
@@ -133,13 +142,13 @@ const OrderFormPage: React.FC = () => {
             setAvailableSlots([]);
         }
     }, [selectedProductId, products]);
-console.log(products)
+    console.log(products)
     // 3. Auto-fill User Details
     useEffect(() => {
         if (!isLoading && isAuthenticated && authUser) {
-            setValue("email", authUser.email || "");
-            setValue("phone", authUser.phone || "");
-            setValue("name", authUser.name || "");
+            setValue("email", authUser.email || "", { shouldDirty: false });
+            setValue("phone", authUser.phone || "", { shouldDirty: false });
+            setValue("name", authUser.name || "", { shouldDirty: false });
         }
     }, [authUser, isAuthenticated, isLoading, setValue]);
 
@@ -170,6 +179,7 @@ console.log(products)
             const response: any = await apiUpload("/order/create-order", formData);
 
             if (response.success) {
+                localStorage.removeItem("order-form");
                 toast.success("Order submitted successfully!");
                 navigate("/user/orders");
             } else {
@@ -211,23 +221,23 @@ console.log(products)
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                               {/* REPLACEMENT CODE FOR LINE 210 */}
-<Controller
-  name="product"
-  control={control}
-  rules={{ required: "Product is required" }} // Add your validation rules here
-  render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
-    <SearchableSelect
-      ref={ref}
-      name="product"
-      value={value}
-      onChange={onChange} // Controller handles the string-to-state update
-      error={error?.message}
-      options={[...productOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for product options
-      placeholder="Select a product" // Add if needed
-    />
-  )}
-/>
+                                {/* REPLACEMENT CODE FOR LINE 210 */}
+                                <Controller
+                                    name="product"
+                                    control={control}
+                                    rules={{ required: "Product is required" }} // Add your validation rules here
+                                    render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                                        <SearchableSelect
+                                            ref={ref}
+                                            name="product"
+                                            value={value}
+                                            onChange={onChange} // Controller handles the string-to-state update
+                                            error={error?.message}
+                                            options={[...productOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for product options
+                                            placeholder="Select a product" // Add if needed
+                                        />
+                                    )}
+                                />
                                 <Input
                                     label="Product Name"
                                     required
@@ -358,34 +368,34 @@ console.log(products)
                                                     if (!value.startsWith("ORD")) return "Must start with 'ORD'";
                                                     if (!/^ORD\d{11}$/.test(value)) return "Format: ORD + 11 digits Current: ${value.length}";
                                                 }
-                                                
+
                                                 return true;
                                             }
                                         })}
                                         error={errors.orderNumber?.message}
                                     />
-                                   <Input
-  label="Order Date"
-  type="date"
-  icon={<Calendar className="w-4 h-4" />}
-  required
-  register={register("orderDate", {
-    required: "Order date is required",
-    validate: (value) => {
-      const selectedDate = new Date(value);
-      const today = new Date();
-      // Reset time to midnight (00:00:00) to ensure "today" is valid
-      today.setHours(0, 0, 0, 0); 
-      
-      // Fix for timezone offset issues when parsing YYYY-MM-DD
-      // (Optional but recommended: ensure selectedDate is treated as local time)
-      const selectedDateWithTime = new Date(selectedDate.toDateString());
+                                    <Input
+                                        label="Order Date"
+                                        type="date"
+                                        icon={<Calendar className="w-4 h-4" />}
+                                        required
+                                        register={register("orderDate", {
+                                            required: "Order date is required",
+                                            validate: (value) => {
+                                                const selectedDate = new Date(value);
+                                                const today = new Date();
+                                                // Reset time to midnight (00:00:00) to ensure "today" is valid
+                                                today.setHours(0, 0, 0, 0);
 
-      return selectedDateWithTime >= today || "Order date cannot be in the past";
-    }
-  })}
-  error={errors.orderDate?.message}
-/>
+                                                // Fix for timezone offset issues when parsing YYYY-MM-DD
+                                                // (Optional but recommended: ensure selectedDate is treated as local time)
+                                                const selectedDateWithTime = new Date(selectedDate.toDateString());
+
+                                                return selectedDateWithTime >= today || "Order date cannot be in the past";
+                                            }
+                                        })}
+                                        error={errors.orderDate?.message}
+                                    />
                                     <Input
                                         label="Total Order Amount"
                                         type="number"
@@ -406,7 +416,7 @@ console.log(products)
                                         required
                                         register={register("lessPrice", {
                                             required: "Less price is required",
-                                             min: { value: 0, message: "Must be positive" }
+                                            min: { value: 0, message: "Must be positive" }
                                         })}
                                         error={errors.lessPrice?.message}
                                     />
@@ -419,23 +429,23 @@ console.log(products)
                                         error={errors.mediator?.message}
                                     /> */}
                                     {/* REPLACEMENT CODE FOR LINE 396 */}
-<Controller
-  name="mediator"
-  control={control}
-  rules={{ required: "Mediator is required" }} // Add your validation rules here
-  render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
-    <SearchableSelect
-      ref={ref}
-      name="mediator"
-      value={value}
-      onChange={onChange}
-      error={error?.message}
-      options={[...mediatorOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for mediator options
-    //   min={0} // The error log mentioned a 'min' prop, ensure you keep it if needed
-      placeholder="Select a mediator" // Add if needed
-    />
-  )}
-/>
+                                    <Controller
+                                        name="mediator"
+                                        control={control}
+                                        rules={{ required: "Mediator is required" }} // Add your validation rules here
+                                        render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                                            <SearchableSelect
+                                                ref={ref}
+                                                name="mediator"
+                                                value={value}
+                                                onChange={onChange}
+                                                error={error?.message}
+                                                options={[...mediatorOptions].sort((a, b) => a.label.localeCompare(b.label))} // Ensure this matches your variable name for mediator options
+                                                //   min={0} // The error log mentioned a 'min' prop, ensure you keep it if needed
+                                                placeholder="Select a mediator" // Add if needed
+                                            />
+                                        )}
+                                    />
                                 </div>
                             </div>
 
