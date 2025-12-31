@@ -12,7 +12,6 @@ export const createRefund = async (req, res) => {
     //   hasFiles: !!req.files,
     //   fileCount: req.files ? Object.keys(req.files).length : 0
     // });
-
     const refundData = req.body.data;
 
     if (!refundData) {
@@ -22,16 +21,6 @@ export const createRefund = async (req, res) => {
       });
     }
 
-    // Handle file uploads
-    if (req.files?.deliveredSS?.[0]) {
-      refundData.deliveredSS = req.files.deliveredSS[0].path || req.files.deliveredSS[0].secure_url;
-    }
-    if (req.files?.reviewSS?.[0]) {
-      refundData.reviewSS = req.files.reviewSS[0].path || req.files.reviewSS[0].secure_url;
-    }
-    if (req.files?.sellerFeedbackSS?.[0]) {
-      refundData.sellerFeedbackSS = req.files.sellerFeedbackSS[0].path || req.files.sellerFeedbackSS[0].secure_url;
-    }
 
     // Validate required fields
     if (!refundData.order) {

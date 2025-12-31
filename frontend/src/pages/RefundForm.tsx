@@ -23,6 +23,7 @@ import RadioGroup from '../components/UI/RadioGroup';
 import FileUpload from '../components/UI/FileUpload';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePersistRHF } from '@/hooks/usePersistRHF';
+import { uploadToCloudinary } from '@/utils/cloudinary';
 
 // 1. Define the Order type based on your response fields
 interface verifyOrder {
@@ -186,10 +187,30 @@ const RefundFormPage: React.FC = () => {
     }
     setIsSubmitting(true);
     try {
+      const uploads = await toast.promise(
+        Promise.all([
+          uploadToCloudinary(deliveredScreenshot!),
+          uploadToCloudinary(reviewScreenshot!),
+          uploadToCloudinary(sellerFeedbackScreenshot!),
+        ]),
+        {
+          loading: 'Uploading screenshots...',
+          success: 'Screenshots uploaded',
+          error: (err) =>
+            err.message || 'Screenshot upload failed',
+        }
+      );
+
+      const [deliveredUpload, reviewUpload, sellerFeedbackUpload] = uploads;
+
       const payload: any = {
         order: verifiedOrder.order, // Use orderId from verified order
         reviewLink: data.reviewLink,
         isReturnWindowClosed: data.isReturnWindowClosed,
+
+        deliveredSS: deliveredUpload.url,
+        reviewSS: reviewUpload.url,
+        sellerFeedbackSS: sellerFeedbackUpload.url,
       };
 
       if (data.paymentMethod === 'upi') {
@@ -203,12 +224,6 @@ const RefundFormPage: React.FC = () => {
 
       const formData = new FormData();
       formData.append('data', JSON.stringify(payload));
-      formData.append('deliveredSS', deliveredScreenshot);
-      formData.append('reviewSS', reviewScreenshot);
-      formData.append(
-        'sellerFeedbackSS',
-        sellerFeedbackScreenshot || new Blob(),
-      );
 
       const response: any = await apiUpload('/refund/create-refund', formData);
 

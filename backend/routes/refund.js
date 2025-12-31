@@ -23,11 +23,7 @@ const router = express.Router();
 // @desc    Create new refund
 // @route   POST /api/refund
 router.post('/create-refund', 
-  upload.fields([
-    { name: 'deliveredSS', maxCount: 1 },
-    { name: 'reviewSS', maxCount: 1 },
-    { name: 'sellerFeedbackSS', maxCount: 1 }
-  ]),
+  upload.none(),
   parseData,
   refundLimiter,
   createRefund
