@@ -412,22 +412,22 @@ const RefundFormPage: React.FC = () => {
 
               {/* --- Refund Form Section --- */}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-                <Input
-                  label="Review Link"
-                  icon={<Link className="w-4 h-4" />}
-                  placeholder="Paste your review link here (optional)"
-                  // Change type to text to allow "www." without "http://"
-                  type="text"
-                  register={register('reviewLink', {
-                    required: "Review Link is Required",
-                    pattern: {
-                      // This regex allows http, https, or just www.
-                      value: /^((https?:\/\/)|(www\.))[\w-]+\.[a-z]{2,}(\/.*)?$/i,
-                      message: "Please enter a valid link (e.g., www.example.com or https://example.com)"
-                    }
-                  })}
-                  required
-                />
+               <Input
+                    label="Review Link"
+                    icon={<Link className="w-4 h-4" />}
+                    placeholder="For rating deal write Rating.com"
+                    // Change type to text to allow "www." without "http://"
+                    type="text" 
+                    register={register('reviewLink', {
+                      required: "Review Link is Required",
+                      pattern: {
+                        // This regex allows http, https, or just www.
+                        value: /^(https?:\/\/)?(([\w-]+\.)+[a-z]{2,}|localhost)(:\d{1,5})?(\/.*)?$/i,
+                        message: "Please enter a valid link (e.g., www.example.com or https://example.com)"
+                      }
+                    })}
+                    required
+                  />
                 {/* --- Payment Information Section --- */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
@@ -453,16 +453,20 @@ const RefundFormPage: React.FC = () => {
 
                   {paymentMethod === 'upi' && (
                     <Input
-                      label="UPI ID"
-                      icon={<CreditCard className="w-4 h-4" />}
-                      placeholder="Enter your UPI ID"
-                      required
-                      register={register('upiId', {
-                        required: 'UPI ID is required',
-                      })}
-                      error={errors.upiId?.message}
-                      helperText="e.g., yourname@oksbi"
-                    />
+                        label="UPI ID"
+                        icon={<CreditCard className="w-4 h-4" />}
+                        placeholder="Enter your UPI ID"
+                        required
+                        register={register('upiId', {
+                          required: 'UPI ID is required',
+                          pattern: {
+                            value: /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/,
+                            message: 'Invalid UPI ID format (e.g. name@oksbi)',
+                          },
+                        })}
+                        error={errors.upiId?.message}
+                        helperText="e.g., yourname@oksbi"
+                      />
                   )}
 
                   {paymentMethod === 'bank' && (
