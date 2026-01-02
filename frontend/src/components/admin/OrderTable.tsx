@@ -1360,7 +1360,7 @@ function OrderTable() {
                       <Trash2Icon className="w-3 h-3 sm:w-4 sm:h-4 text-red-500" />
                     </Button>
 
-                    {(item.orderStatus === "refund_placed" || item.orderStatus === "accepted" || item.orderStatus === "payment_done") && (
+                    {(item.orderStatus === "refund_placed" || item.orderStatus === "payment_done") && (
                       <Button
                         size="sm"
                         variant="outline"

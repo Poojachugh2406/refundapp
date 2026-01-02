@@ -13,15 +13,6 @@ export const createOrder = async (req, res) => {
   try {
     const orderData = req.body.data;
 
-    // Handle file uploads
-    if (req.files?.orderSS?.[0]) {
-      orderData.orderSS = req.files.orderSS[0].path || req.files.orderSS[0].secure_url;
-    }
-    if (req.files?.priceBreakupSS?.[0]) {
-      orderData.priceBreakupSS = req.files.priceBreakupSS[0].path || req.files.priceBreakupSS[0].secure_url;
-    }
-
-
     const [isMediatorExists, isProductExists, isOrderExists] = await Promise.all([
       User.findOne({ _id: orderData.mediator, role: MEDIATOR }).select('_id').lean(),
       Product.findOne({ _id: orderData.product }).select('_id').lean(),
