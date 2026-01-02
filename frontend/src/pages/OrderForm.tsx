@@ -17,6 +17,7 @@ import type { ActiveProduct } from "@/types/products";
 import type { ActiveMediators } from "@/types/users";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePersistRHF } from "@/hooks/usePersistRHF";
+import { uploadToCloudinary } from "@/utils/cloudinary";
 // import Select from "@/components/UI/Select";
 
 const OrderFormPage: React.FC = () => {
@@ -172,10 +173,23 @@ const OrderFormPage: React.FC = () => {
 
         setIsSubmitting(true);
         try {
+            const uploads = await toast.promise(
+                    Promise.all([
+                      uploadToCloudinary(orderScreenshot!)
+                    ]),
+                    {
+                      loading: 'Uploading screenshots...',
+                      success: 'Screenshots uploaded',
+                      error: (err) =>
+                        err.message || 'Screenshot upload failed',
+                    }
+                  );
+            
+            const [orderUpload] = uploads;
+            data.orderSS = orderUpload.url;
+            
             const formData = new FormData();
             formData.append("data", JSON.stringify(data));
-            formData.append("orderSS", orderScreenshot);
-
             const response: any = await apiUpload("/order/create-order", formData);
 
             if (response.success) {

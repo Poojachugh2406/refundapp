@@ -25,10 +25,7 @@ const router = express.Router();
 // @desc    Create new order
 // @route   POST /api/order/create-order
 router.post('/create-order', 
-  upload.fields([
-    { name: 'orderSS', maxCount: 1 },
-    { name: 'priceBreakupSS', maxCount: 1 }
-  ]),
+  upload.none(),
   orderLimiter,
   parseData,
   validateOrder,
