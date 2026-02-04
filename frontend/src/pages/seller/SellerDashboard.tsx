@@ -101,7 +101,7 @@ function SellerDashboard() {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* Total Products */}
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg transition-transform duration-300 hover:-translate-y-2">
           <div className="flex justify-between items-start">
@@ -117,7 +117,7 @@ function SellerDashboard() {
         </div>
 
         {/* Total Orders */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg transition-transform duration-300 hover:-translate-y-2">
+        {/* <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg transition-transform duration-300 hover:-translate-y-2">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-blue-100 text-sm font-medium">Total Refund Amount</p>
@@ -128,7 +128,7 @@ function SellerDashboard() {
               <IndianRupee className="w-6 h-6" />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Total Revenue */}
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white shadow-lg transition-transform duration-300 hover:-translate-y-2">

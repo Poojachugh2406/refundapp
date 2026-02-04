@@ -250,9 +250,9 @@ const ProductCreateComp = ({ onClose, sellers }: { onClose: () => void, sellers:
                 reviewSlots: Number(data.reviewSlots),
                 onlyOrderSlots: Number(data.onlyOrderSlots),
                 reviewSubmittedSlots: Number(data.reviewSubmittedSlots),
-                adminless: Number(data.adminLess),
-                medless: Number(data.medLess),
-                buyerless: Number(data.buyerLess),  
+                adminLess: Number(data.adminLess),
+                medLess: Number(data.medLess),
+                buyerLess: Number(data.buyerLess),  
             };
             return adminAPI.createProduct(processedData);
         },
