@@ -1,6 +1,6 @@
 import  { useState, useEffect } from 'react';
 import { apiGet } from '@/utils/api';
-import {IndianRupee, TrendingUp,  ShoppingCart } from 'lucide-react';
+import {TrendingUp,  ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface DashboardData {
