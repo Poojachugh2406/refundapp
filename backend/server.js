@@ -32,7 +32,7 @@ app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? ['https://deals.hawkagency.in' , 'refundapp-anp3.vercel.app'] 
-    : ['https://deals.hawkagency.in','refundapp-anp3.vercel.app', 'https://hawkagency-portal-frontend-qa.vercel.app', 'http://localhost:5173' , 'http://localhost:4173'],
+    : ['https://deals.hawkagency.in','refundapp-anp3.vercel.app', 'http://refundapp-anp3.vercel.app/', 'http://localhost:5173' , 'http://localhost:4173'],
   credentials: true
 }));
 
