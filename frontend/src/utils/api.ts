@@ -6,7 +6,7 @@ import type { ActiveMediators, CreateUserData, Mediator, Seller, UpdateProfileDa
 import type { ActiveProduct, CreateProductData, Product, ProductWithDetails, UpdateProductData } from '../types/products';
 import type { CreateOrderData, Order, OrderWithDetails, UpdateOrderData, UpdateOrderStatusData } from '../types/orders.ts';
 import type { CreateRefundData, Refund, RefundWithDetails, UpdateRefundData, UpdateRefundStatusData } from '../types/refunds.ts';
-
+ 
 // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api'; 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://refundapp-tau.vercel.app//api';
 
