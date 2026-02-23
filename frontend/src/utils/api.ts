@@ -8,7 +8,7 @@ import type { CreateOrderData, Order, OrderWithDetails, UpdateOrderData, UpdateO
 import type { CreateRefundData, Refund, RefundWithDetails, UpdateRefundData, UpdateRefundStatusData } from '../types/refunds.ts';
  
 // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api'; 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://refundapp-9m7y.vercel.app';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://refundapp-9m7y.vercel.app/api';
 
 // Create axios instance
 const api = axios.create({
