@@ -36,7 +36,8 @@ function OrderTable({ orders, setOrders }: { orders: OrderWithDetails[], setOrde
             refund_placed: { label: 'Refund Placed', color: 'bg-blue-100 text-blue-800' },
             rejected: { label: 'Rejected', color: 'bg-red-100 text-red-800' },
             accepted: { label: 'Accepted', color: 'bg-blue-100 text-blue-800' },
-            payment_done: { label: 'Payment Done', color: 'bg-green-100 text-green-800' }
+            payment_done: { label: 'Payment Done', color: 'bg-green-100 text-green-800' },
+            brand_released: { label: 'Brand Released', color: 'bg-purple-100 text-purple-800' }
         };
         return statusInfo[status as keyof typeof statusInfo] || { label: status, color: 'bg-gray-100 text-gray-800' };
     };
@@ -134,6 +135,7 @@ function OrderTable({ orders, setOrders }: { orders: OrderWithDetails[], setOrde
                             <option value="refund_placed">Refund Placed</option>
                             <option value="rejected">Rejected</option>
                             <option value="payment_done">Payment Done</option>
+                            <option value="brand_released">Brand Released</option>
                         </select>
                     </div>
                     <div>

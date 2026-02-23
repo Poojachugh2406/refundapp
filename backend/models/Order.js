@@ -59,7 +59,7 @@ const orderSchema = new mongoose.Schema({
     },
     orderStatus:{
         type:String,
-        enum:['accepted','pending','rejected','payment_done','refund_placed','refill'],
+        enum:['accepted','pending','rejected','payment_done','refund_placed','refill', 'brand_released'],
         default:'pending',
     },
     rejectionMessage:{
@@ -88,10 +88,14 @@ const orderSchema = new mongoose.Schema({
       enum: ["rating", "review" , "only_order", "review_submitted"],
       required: true,
     },
-    note:{
-        type:String
+    note: {
+        type: String
+    },
+    lastReminderDate: {
+        type: Date,
+        default: null
     }
-},{timestamps:true});
+}, { timestamps: true });
 
 // orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ orderStatus: 1 });

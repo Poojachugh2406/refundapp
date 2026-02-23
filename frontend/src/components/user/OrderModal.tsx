@@ -64,7 +64,7 @@ const OrderModal: React.FC<{
     // This function is passed to the EditOrderModal
     // setIsUpdating(true);
     try {
-      const response: any = await ordersAPI.updateOrder( orderId , updatedData, files);
+      const response: any = await ordersAPI.update( orderId , updatedData, files);
       if (response.success) {
         onUpdate(response.data);
         setIsEditModalOpen(false); // Close edit modal on success

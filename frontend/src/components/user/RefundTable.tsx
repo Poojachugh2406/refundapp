@@ -100,6 +100,7 @@ function RefundTable({ refunds, setRefunds }: { refunds: RefundWithDetails[], se
               <option value="accepted">Accepted</option>
               <option value="rejected">Rejected</option>
               <option value="payment_done">Payment Done</option>
+              <option value="brand_released">Brand Released</option>
             </select>
           </div>
           <div>

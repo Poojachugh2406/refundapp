@@ -1,8 +1,6 @@
-// src/pages/admin/OrdersPage.tsx
-
-// import OrderTable from '@/components/admin/OrderTable';
-import MediatorOrderTable from '@/components/mediator/MediatorOrderTable';
+import TransactionTable from '@/components/TransactionTable';
 import React from 'react';
+import { Process, Role } from '@/types/transactions';
 
 const MediatorOrders: React.FC = () => {
 
@@ -14,7 +12,7 @@ const MediatorOrders: React.FC = () => {
           {/* <p className="text-gray-600">Review and process all customer orders.</p> */}
         </div>
       </div>
-      <MediatorOrderTable />
+      <TransactionTable role={Role.MEDIATOR} process={Process.ORDER}/>
     </div>
   );
 };

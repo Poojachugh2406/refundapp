@@ -188,9 +188,21 @@ export const userAPI = {
      apiPut('/user/changepass', data),
 }
 
+export interface TransactionsAPI {
+  create: (data: any, files?: { [key: string]: File }) => Promise<ApiResponse<any>>;
+  update: (id: string, data: any, files?: { [key: string]: File }) => Promise<ApiResponse<any>>;
+  updateStatus: (id: string, data: any) => Promise<ApiResponse<any>>;
+  getAll: (params?: any) => Promise<ApiResponse<any[]>>;
+  getById: (id: string) => Promise<ApiResponse<any>>;
+  delete: (id: string) => Promise<ApiResponse>;
+}
+
+
 // Orders API
-export const ordersAPI = {
-  createOrder: (orderData: CreateOrderData, files?: { orderScreenshot?: File; priceBreakup?: File }): Promise<ApiResponse<Order>> => {
+export const ordersAPI: TransactionsAPI & {
+  getByMediator: (mediatorId: string) => Promise<ApiResponse<OrderWithDetails[]>>
+  getByProduct: (productId: string) => Promise<ApiResponse<OrderWithDetails[]>>} = {
+  create: (orderData: CreateOrderData, files?: { orderScreenshot?: File; priceBreakup?: File }): Promise<ApiResponse<Order>> => {
     const formData = new FormData();
     formData.append('orderData', JSON.stringify(orderData));
     
@@ -204,16 +216,16 @@ export const ordersAPI = {
     return apiUpload('/orders/create-order', formData);
   },
 
-  getAllOrders: (params?: SearchParams): Promise<ApiResponse<OrderWithDetails[]>> =>
+  getAll: (params?: SearchParams): Promise<ApiResponse<OrderWithDetails[]>> =>
     apiGet('/order/all-orders', params),
 
-  getOrderById: (id: string): Promise<ApiResponse<OrderWithDetails>> =>
+  getById: (id: string): Promise<ApiResponse<OrderWithDetails>> =>
     apiGet(`/order/${id}`),
 
   // updateOrder: (data: UpdateOrderData , orderId:string): Promise<ApiResponse<OrderWithDetails>> =>
   //   apiPut('/order/update-order/'+orderId, data),
 
-  updateOrder: (id: string, data: UpdateOrderData, files?: { orderSS?: File; priceBreakupSS?: File; }): Promise<ApiResponse<OrderWithDetails>> => {
+  update: (id: string, data: UpdateOrderData, files?: { orderSS?: File; priceBreakupSS?: File; }): Promise<ApiResponse<OrderWithDetails>> => {
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
     
@@ -227,22 +239,23 @@ export const ordersAPI = {
     return apiUpload(`/order/update-order/${id}`, formData);
   },
 
-  updateOrderStatus: (id: string, data: UpdateOrderStatusData): Promise<ApiResponse<OrderWithDetails>> =>
+  updateStatus: (id: string, data: UpdateOrderStatusData): Promise<ApiResponse<OrderWithDetails>> =>
     apiPatch(`/order/update-status/${id}`, data),
 
-  deleteOrder: (id: string): Promise<ApiResponse> =>
+  delete: (id: string): Promise<ApiResponse> =>
     apiDelete(`/orders/${id}`),
 
-  getOrdersByMediator: (mediatorId: string): Promise<ApiResponse<OrderWithDetails[]>> =>
+  getByMediator: (mediatorId: string): Promise<ApiResponse<OrderWithDetails[]>> =>
     apiGet(`/orders/mediator/${mediatorId}`),
 
-  getOrdersByProduct: (productId: string): Promise<ApiResponse<OrderWithDetails[]>> =>
+  getByProduct: (productId: string): Promise<ApiResponse<OrderWithDetails[]>> =>
     apiGet(`/orders/product/${productId}`),
 };
 
 // Refunds API
-export const refundsAPI = {
-  createRefund: (refundData: CreateRefundData, files?: { deliveredSS?: File; reviewSS?: File; sellerFeedbackSS?: File }): Promise<ApiResponse<Refund>> => {
+export const refundsAPI: TransactionsAPI & { 
+  updateRefundLegacy: (data: UpdateRefundData) => Promise<ApiResponse<RefundWithDetails>> } = {
+  create: (refundData: CreateRefundData, files?: { deliveredSS?: File; reviewSS?: File; sellerFeedbackSS?: File }): Promise<ApiResponse<Refund>> => {
     const formData = new FormData();
     formData.append('refundData', JSON.stringify(refundData));
     
@@ -259,13 +272,13 @@ export const refundsAPI = {
     return apiUpload('/refunds/create-refund', formData);
   },
 
-  getAllRefunds: (): Promise<ApiResponse<RefundWithDetails[]>> =>
+  getAll: (): Promise<ApiResponse<RefundWithDetails[]>> =>
     apiGet('/refunds/all-refunds'),
 
-  getRefundById: (id: string): Promise<ApiResponse<RefundWithDetails>> =>
+  getById: (id: string): Promise<ApiResponse<RefundWithDetails>> =>
     apiGet(`/refunds/${id}`),
 
-  updateRefund: (id: string, data: UpdateRefundData, files?: { deliveredSS?: File; reviewSS?: File; sellerFeedbackSS?: File , returnWindowSS?:File }): Promise<ApiResponse<RefundWithDetails>> => {
+  update: (id: string, data: UpdateRefundData, files?: { deliveredSS?: File; reviewSS?: File; sellerFeedbackSS?: File , returnWindowSS?:File }): Promise<ApiResponse<RefundWithDetails>> => {
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
     
@@ -284,10 +297,10 @@ export const refundsAPI = {
     return apiUpload(`/refund/update-refund/${id}`, formData);
   },
 
-  updateRefundStatus: (id: string, data: UpdateRefundStatusData): Promise<ApiResponse<RefundWithDetails>> =>
+  updateStatus: (id: string, data: UpdateRefundStatusData): Promise<ApiResponse<RefundWithDetails>> =>
     apiPut(`/refund/update-status/${id}`, data),
 
-  deleteRefund: (id: string): Promise<ApiResponse> =>
+  delete: (id: string): Promise<ApiResponse> =>
     apiDelete(`/refunds/${id}`),
 
   // Legacy update route

@@ -10,13 +10,14 @@ import {
   deleteRefund, 
   updateRefundStatus,
   verifyOrderForRefund,
-  getAllMediatorRefunds,
   getAllUserRefunds,
   getRefundsForDownload,
   getRefundByOrder,
-  getRefundsForMediatorDownload, 
+  getRefundsForMediatorDownload,
+  bulkUpdateRefundStatus, 
 } from '../controllers/refundController.js';
 import { parseData } from '../middlewares/parseData.js';
+import { Roles } from '../utils/constants.js';
 
 const router = express.Router();
 
@@ -30,19 +31,13 @@ router.post('/create-refund',
 );
 
 // @desc    Get all refunds
-// @route   GET /api/refunds
+// @route   GET /api/all-refunds
 router.get('/all-refunds', 
   protect, 
-  authorize('admin'), 
+  authorize(Roles.ADMIN, Roles.MEDIATOR), 
   getAllRefunds
 );
-// @desc    Get all refunds
-// @route   GET /api/refund/mediator/all-refunds
-router.get('/mediator/all-refunds', 
-  protect, 
-  authorize('mediator'), 
-  getAllMediatorRefunds
-);
+
 // @desc    Get all refunds
 // @route   GET /api/refund/user/all-refunds
 router.get('/user/all-refunds', 
@@ -97,6 +92,14 @@ router.put('/:id',
   updateRefund
 );
 
+// @desc    Bulk Update order status
+// @route   PATCH /api/order/bulk/update-status
+router.patch('/bulk/update-status', 
+  protect, 
+  authorize('admin', 'mediator'),
+  bulkUpdateRefundStatus
+);
+
 // @desc    Update refund status
 // @route   put /api/refund/update-status/:id
 router.put('/update-status/:id', 
@@ -107,7 +110,7 @@ router.put('/update-status/:id',
 
 // @desc    Delete refund
 // @route   DELETE /api/refund/delete/:id
-router.delete('/delete/:id', 
+router.delete('/:id', 
   protect, 
   authorize('admin'), 
   deleteRefund

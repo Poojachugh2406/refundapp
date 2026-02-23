@@ -1,5 +1,6 @@
 // src/pages/admin/OrdersPage.tsx
-import OrderTable from '@/components/admin/OrderTable';
+import TransactionTable from '@/components/TransactionTable';
+import { Process, Role } from '@/types/transactions';
 import React from 'react';
 
 
@@ -11,7 +12,7 @@ const AdminOrders: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Manage Orders</h1>
         </div>
       </div>
-      <OrderTable />
+      <TransactionTable role={Role.ADMIN} process={Process.ORDER}/>
     </div>
   );
 };

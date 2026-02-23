@@ -365,7 +365,7 @@ const Register: React.FC = () => {
 
         {/* --- RIGHT PANEL (Info Panel Default) --- */}
         <div className="info-content Login">
-          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>HAWK AGENCY</h2>
+          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>Relamp Digital</h2>
           <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
              Start your journey with us. Create an account to access your dashboard.
           </p>

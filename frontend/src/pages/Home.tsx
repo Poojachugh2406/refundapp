@@ -12,7 +12,7 @@
 //           <div className="text-center">
 //             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
 //               Welcome to{' '}
-//               <span className="text-orange-700">Hawk Agency</span>
+//               <span className="text-orange-700">Relamp Digital</span>
 //             </h1>
 //             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
 //               Streamline your E-commerce shopping experience with our comprehensive management system.
@@ -107,7 +107,7 @@
 //           {/* Features Section */}
 //           <div className="mt-20">
 //             <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-//               Why Choose Hawk Agency?
+//               Why Choose Relamp Digital?
 //             </h2>
 //             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
 //               <div className="text-center">
@@ -189,7 +189,7 @@ const Home: React.FC = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Welcome to{' '}
-              <span className="text-orange-600">Hawk Agency</span>
+              <span className="text-orange-600">Relamp Digital</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Streamline your order and reimbursement process with our comprehensive management system.
@@ -270,7 +270,7 @@ const Home: React.FC = () => {
           {/* Features Section */}
           <div className="mt-20">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-              Why Choose Hawk Agency?
+              Why Choose Relamp Digital?
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center">

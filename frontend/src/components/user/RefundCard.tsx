@@ -37,6 +37,11 @@ const RefundCard: React.FC<RefundCardProps> = ({ item, onReview }) => {
         label: 'Payment Done', 
         color: 'bg-green-100 text-green-800',
         cardColor: 'bg-emerald-50 border-emerald-200'
+      },
+      brand_released: {
+        label: 'Brand Released',
+        color: 'bg-purple-100 text-purple-800',
+        cardColor: 'bg-purple-50 border-purple-200'
       }
     };
     

@@ -162,7 +162,7 @@ const MediatorLogin: React.FC = () => {
 
         {/* --- INFO PANEL 1: WELCOME (Visible on right when Login is active) --- */}
         <div className="info-content Login">
-          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>HAWK AGENCY</h2>
+          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>Relamp Digital</h2>
           <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
             Welcome to the Mediator Portal. Manage your orders and refunds efficiently.
           </p>

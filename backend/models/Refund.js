@@ -34,7 +34,7 @@ const refundSchema = new mongoose.Schema({
     },
     status:{
         type:String,
-        enum:['accepted', 'rejected', 'pending', 'payment_done' , 'refill'],
+        enum:['accepted', 'rejected', 'pending', 'payment_done' , 'refill', 'brand_released'],
         default:'pending'
     },
     rejectionMessage:{

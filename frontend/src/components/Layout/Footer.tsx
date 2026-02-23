@@ -9,11 +9,11 @@ const Footer: React.FC = () => {
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             {/* <Package className="h-6 w-6 text-blue-600" /> */}
             <img width="70" src = {bblogo} alt = "Logo"/>
-            <span className="text-lg font-semibold text-gray-900">Hawk Agency</span>
+            <span className="text-lg font-semibold text-gray-900">Relamp Digital</span>
           </div>
           
           <div className="text-sm text-gray-600 text-center md:text-right">
-            <p>&copy; 2025 Hawk Agency. All rights reserved.</p>
+            <p>&copy; 2025 Relamp Digital. All rights reserved.</p>
             <p className="mt-1">Streamlining your refund process</p>
           </div>
         </div>

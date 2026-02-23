@@ -98,9 +98,9 @@ const AuthPage = () => {
         {/* --- INFO PANEL 1 (Welcome Back) --- */}
         {/* Hidden on Mobile via CSS */}
         <div className="info-content Login">
-          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>Hawk Agency</h2>
+          <h2 className="animation" style={{ '--D': 0, '--S': 20 } as React.CSSProperties}>Relamp Digital</h2>
           <p className="animation" style={{ '--D': 1, '--S': 21 } as React.CSSProperties}>
-            We welcome you at Hawk agency and are happy to have you with us again. If you need anything, we are here to help.
+            We welcome you at Relamp Digital and are happy to have you with us again. If you need anything, we are here to help.
           </p>
         </div>
 

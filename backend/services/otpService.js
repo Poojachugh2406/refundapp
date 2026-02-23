@@ -176,7 +176,7 @@ export const sendOrderConfirmationEmail = async (email, orderId) => {
         <hr style="margin: 20px 0;" />
 
         <p style="text-align: center; font-size: 12px; color: #999;">
-          © ${new Date().getFullYear()} Hawk Agency. All rights reserved.
+          © ${new Date().getFullYear()} Relamp Digital. All rights reserved.
         </p>
       </div>
     `;
@@ -240,7 +240,7 @@ export const sendRefundConfirmationEmail = async (email, orderId) => {
         <hr style="margin: 20px 0;" />
 
         <p style="text-align: center; font-size: 12px; color: #999;">
-          © ${new Date().getFullYear()} Hawk Agency. All rights reserved.
+          © ${new Date().getFullYear()} Relamp Digital. All rights reserved.
         </p>
       </div>
     `;
@@ -258,5 +258,72 @@ export const sendRefundConfirmationEmail = async (email, orderId) => {
   } catch (error) {
     console.error('Refund confirmation error:', error);
     throw new Error('Failed to send refund confirmation email');
+  }
+};
+
+// Send Order Confirmation Email
+export const sendRefundReminderEmail = async (order) => {
+  try {
+    const transporter = createTransporter();
+
+    const subject = '⏰ Refund Reminder | Order ID: ' + order._id;
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 10px;">
+        <h2 style="color: #333; text-align: center;">Refund Reminder</h2>
+        
+        <p>
+          Dear ${order.name ? order.name.toLowerCase()
+        .split(" ")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ") : 'Customer'},
+          <br/><br/>
+          <br/>This is a reminder that your have not submitted refund request for Order ID <b>${order._id}</b> placed on <b>${new Date(order.orderDate).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</b>.
+          <br/>Please submit your refund request as soon as possible to ensure timely processing.
+        </p>
+        
+        <div style="
+          background: #f4f4f4;
+          padding: 20px;
+          text-align: center;
+          margin: 25px 0;
+          border-radius: 6px;
+        ">
+          <p style="margin: 0; font-size: 14px; color: #666;">Order ID for reference:</p>
+          <h1 style="
+            margin: 10px 0 0 0;
+            letter-spacing: 2px;
+            color: #000;
+          ">
+            ${order._id}
+          </h1>
+        </div>
+        
+        <br>
+        <p style="font-size: 14px; color: #555;">
+          If you did not place this order, please ignore this email.
+        </p>
+
+        <hr style="margin: 20px 0;" />
+
+        <p style="text-align: center; font-size: 12px; color: #999;">
+          © ${new Date().getFullYear()} Relamp Digital. All rights reserved.
+        </p>
+      </div>
+    `;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: order.email,
+      subject,
+      html
+    };
+
+    await transporter.sendMail(mailOptions);
+    return order._id;
+
+  } catch (error) {
+    console.error('Refund reminder error:', error);
+    throw new Error('Failed to send refund reminder email');
   }
 };

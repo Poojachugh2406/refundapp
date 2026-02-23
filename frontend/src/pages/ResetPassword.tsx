@@ -132,7 +132,7 @@
 //               <Package className="h-7 w-7 text-white" />
 //             </div>
 //             <div className="text-left">
-//               <h1 className="text-3xl font-bold text-gray-900">Hawk Agency</h1>
+//               <h1 className="text-3xl font-bold text-gray-900">Relamp Digital</h1>
 //               <p className="text-gray-600 text-sm">Reset Your Password</p>
 //             </div>
 //           </div>
@@ -368,7 +368,7 @@ const ResetPassword: React.FC = () => {
           {/* <Package className="h-7 w-7 text-white" /> */}
           <img width="70" src = {bblogo} alt = "Logo"/>
         </div>
-        <h1 className="text-3xl font-bold">Hawk Agency</h1>
+        <h1 className="text-3xl font-bold">Relamp Digital</h1>
       </div>
 
       <div className="z-10 max-w-lg">
@@ -381,7 +381,7 @@ const ResetPassword: React.FC = () => {
       </div>
 
       <div className="z-10 text-sm text-indigo-200">
-        &copy; {new Date().getFullYear()} Hawk Agency. All rights reserved.
+        &copy; {new Date().getFullYear()} Relamp Digital. All rights reserved.
       </div>
 
       <div className="absolute top-0 left-0 w-full h-full opacity-10 overflow-hidden">
@@ -402,7 +402,7 @@ const ResetPassword: React.FC = () => {
         {/* <Package className="h-6 w-6 text-white" /> */}
         <img width="70" src = {bblogo} alt = "Logo"/>
       </div>
-      <h1 className="text-2xl font-bold text-gray-900">Hawk Agency</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Relamp Digital</h1>
     </div>
   );
   return (

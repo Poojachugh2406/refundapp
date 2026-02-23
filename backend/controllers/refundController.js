@@ -2,6 +2,8 @@ import Refund from '../models/Refund.js';
 import Order from '../models/Order.js';
 import mongoose from 'mongoose';
 import { sendRefundConfirmationEmail } from '../services/otpService.js';
+import {Roles} from '../utils/constants.js';
+
 // @desc    Create new refund
 // @route   POST /api/refunds
 // @access  Public
@@ -157,332 +159,8 @@ export const getAllUserRefunds = async (req, res) => {
   }
 };
 
-// @desc    Get all refunds for a specific mediator
-// @route   GET /api/refund/mediator/all-refunds
-// @access  Private
-// export const getAllMediatorRefundsSlowVala = async (req, res) => {
-//   try {
-//     const mediatorId = req.user._id; // Get the mediator ID from the authenticated user
-
-//     // Find all orders for this mediator
-//     const mediatorOrders = await Order.find({ mediator: mediatorId }).select('_id');
-//     const orderIds = mediatorOrders.map(order => order._id);
-
-//     // Find refunds for orders belonging to this mediator
-//     const refunds = await Refund.find({ order: { $in: orderIds } })
-//       .populate({
-//         path: 'order',
-//         select: 'orderNumber name email phone orderAmount mediator product',
-//         populate: [
-//           {
-//             path: 'mediator',
-//             select: 'name nickName'
-//           },
-//           {
-//             path: 'product',
-//             select: 'name brand'
-//           }
-//         ]
-//       })
-//       .sort({ createdAt: -1 });
-
-//     const allRefunds = refunds.map(refund => {
-//       return {
-//         order: refund.order,
-//         _id: refund._id,
-//         status: refund.status,
-//         createdAt: refund.createdAt,
-//       }
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: 'Refunds retrieved successfully',
-//       data: allRefunds,
-//       count: refunds.length
-//     });
-
-//   } catch (error) {
-//     console.error('Get mediator refunds error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Server error while fetching refunds'
-//     });
-//   }
-// };
-// @desc    Get all refunds
-// @route   GET /api/refunds
-// @access  Private
-// export const getAllRefundsslowvala = async (req, res) => {
-//   try {
-//     const refunds = await Refund.find()
-//       .populate({
-//         path: 'order',
-//         select: 'orderNumber name email phone orderAmount mediator product',
-//         populate: [
-//           {
-//             path: 'mediator',
-//             select: 'nickName '
-//           },
-//           {
-//             path: 'product',
-//             select: 'name brand productPlatform productCode brandCode',
-//             populate: [
-//               {
-//                 path: 'seller',
-//                 select: 'name email'
-//               }
-//             ]
-//           }
-//         ]
-//       })
-//       .sort({ createdAt: -1 });
-
-//     const allRefunds = refunds.map(refund => {
-//       return {
-//         order: refund.order,
-//         _id: refund._id,
-//         status: refund.status,
-//         createdAt: refund.createdAt,
-//       }
-//     })
-//     res.status(200).json({
-//       success: true,
-//       message: 'Refunds retrieved successfully',
-//       data: allRefunds,
-//       count: refunds.length
-//     });
-
-//   } catch (error) {
-//     console.error('Get refunds error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Server error while fetching refunds'
-//     });
-//   }
-// };
-
-
 // @desc    Get all refunds with filters and pagination
-// @route   GET /api/refunds
-// @access  Private
-export const getAllMediatorRefunds = async (req, res) => {
-  try {
-    // --- 1. Get Query Params ---
-    const {
-      page,
-      limit,
-      status,
-    
-      seller,
-      product,
-      platform,
-      fromDate,
-      toDate,
-      searchTerm, // <-- ADDED
-    } = req.query;
-
-    const pageNum = parseInt(page) || 1;
-    const limitNum = parseInt(limit) || 5; // Using 5 as in your example
-    const skip = (pageNum - 1) * limitNum;
-
-    // --- 2. Build Filter Stages ---
-
-    // Initial match (on Refund model) - fast!
-    const initialMatch = {};
-    if (status) {
-      initialMatch.status = status;
-    }
-
-    // Date range filter
-    if (fromDate || toDate) {
-      initialMatch.createdAt = {};
-      if (fromDate) {
-        initialMatch.createdAt.$gte = new Date(fromDate);
-      }
-      if (toDate) {
-        // Set to end of the day
-        const endDate = new Date(toDate);
-        endDate.setHours(23, 59, 59, 999);
-        initialMatch.createdAt.$lte = endDate;
-      }
-    }
-
-    // Final match (on populated data)
-    const finalMatch = {};
-
-      finalMatch['order.mediator._id'] = new mongoose.Types.ObjectId(req.user._id);
-    
-    if (product) {
-      finalMatch['order.product._id'] = new mongoose.Types.ObjectId(product);
-    }
-    if (seller) {
-      finalMatch['order.product.seller._id'] = new mongoose.Types.ObjectId(seller);
-    }
-    if (platform) {
-      finalMatch['order.product.productPlatform'] = platform;
-    }
-
-    // --- ADDED SEARCH LOGIC ---
-    if (searchTerm) {
-      finalMatch.$or = [
-        { 'order.orderNumber': { $regex: searchTerm, $options: 'i' } },
-        { 'order.name': { $regex: searchTerm, $options: 'i' } }, // Reviewer Name
-      ];
-    }
-    // --- END OF ADDED LOGIC ---
-
-    // --- 3. Build Aggregation Pipeline ---
-    const pipeline = [
-      // Stage 1: Filter Refunds (fast)
-      { $match: initialMatch },
-
-      // Stage 2: Join with Orders
-      {
-        $lookup: {
-          from: 'orders', // collection name
-          localField: 'order',
-          foreignField: '_id',
-          as: 'order',
-        },
-      },
-      // Unwind the 'order' array
-      { $unwind: { path: '$order', preserveNullAndEmptyArrays: true } },
-
-      // Stage 3: Join with Products
-      {
-        $lookup: {
-          from: 'products',
-          localField: 'order.product',
-          foreignField: '_id',
-          as: 'order.product',
-        },
-      },
-      { $unwind: { path: '$order.product', preserveNullAndEmptyArrays: true } },
-
-      // Stage 4: Join with Mediators
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'order.mediator',
-          foreignField: '_id',
-          as: 'order.mediator',
-        },
-      },
-      { $unwind: { path: '$order.mediator', preserveNullAndEmptyArrays: true } },
-
-      // Stage 5: Join with Sellers
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'order.product.seller',
-          foreignField: '_id',
-          as: 'order.product.seller',
-        },
-      },
-      { $unwind: { path: '$order.product.seller', preserveNullAndEmptyArrays: true } },
-
-      // Stage 6: Filter on populated data (now includes search)
-      { $match: finalMatch },
-
-      // Stage 7: Sort
-      { $sort: { createdAt: -1 } },
-
-      // Stage 8: Facet for Pagination and Data
-      {
-        $facet: {
-          // Sub-pipeline 1: Get total count
-          metadata: [{ $count: 'total' }],
-          // Sub-pipeline 2: Get paginated data
-          data: [
-            { $skip: skip },
-            { $limit: limitNum },
-            // Project the final shape
-            {
-              $project: {
-                // Refund fields
-                _id: 1,
-                status: 1,
-                createdAt: 1,
-                upiId: 1, // Include other refund fields you need
-                bankInfo: 1,
-                reviewLink: 1,
-                deliveredSS: 1,
-                reviewSS: 1,
-                sellerFeedbackSS: 1,
-                returnWindowSS: 1,
-                rejectionMessage: 1,
-                note: 1,
-                isReturnWindowClosed: 1,
-
-                // Order field (as an object)
-                order: {
-                  _id: '$order._id',
-                  orderNumber: '$order.orderNumber',
-                  name: '$order.name',
-                  email: '$order.email',
-                  phone: '$order.phone',
-                  orderAmount: '$order.orderAmount',
-                  // Nested Mediator
-                  mediator: {
-                    _id: '$order.mediator._id',
-                    nickName: '$order.mediator.nickName',
-                  },
-                  // Nested Product
-                  product: {
-                    _id: '$order.product._id',
-                    name: '$order.product.name',
-                    brand: '$order.product.brand',
-                    productPlatform: '$order.product.productPlatform',
-                    productCode: '$order.product.productCode',
-                    brandCode: '$order.product.brandCode',
-                    // Nested Seller
-                    seller: {
-                      _id: '$order.product.seller._id',
-                      name: '$order.product.seller.name',
-                      email: '$order.product.seller.email',
-                    },
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-    ];
-
-    // --- 4. Execute Pipeline ---
-    const results = await Refund.aggregate(pipeline);
-
-    const refunds = results[0].data;
-    const totalCount = results[0].metadata[0] ? results[0].metadata[0].total : 0;
-
-    // --- 5. Send Response ---
-    res.status(200).json({
-      success: true,
-      message: 'Refunds retrieved successfully',
-      data: refunds,
-      pagination: {
-        total: totalCount,
-        page: pageNum,
-        limit: limitNum,
-        totalPages: Math.ceil(totalCount / limitNum),
-        hasNextPage: pageNum * limitNum < totalCount,
-        hasPrevPage: pageNum > 1,
-      },
-    });
-  } catch (error) {
-    console.error('Get refunds error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error while fetching refunds',
-    });
-  }
-};
-
-
-// @desc    Get all refunds with filters and pagination
-// @route   GET /api/refunds
+// @route   GET /api/all-refunds
 // @access  Private
 export const getAllRefunds = async (req, res) => {
   try {
@@ -509,7 +187,9 @@ export const getAllRefunds = async (req, res) => {
     // Initial match (on Refund model) - fast!
     const initialMatch = {};
     if (status) {
-      initialMatch.status = status;
+      if(req.user.role === Roles.ADMIN && status.includes(","))
+        initialMatch.status = { $in: status.split(",") };
+      else initialMatch.status = status;
     }
 
     // Date range filter
@@ -528,9 +208,16 @@ export const getAllRefunds = async (req, res) => {
 
     // Final match (on populated data)
     const finalMatch = {};
-    if (mediator) {
+
+    if (req.user.role == Roles.ADMIN && mediator) {
       finalMatch['order.mediator._id'] = new mongoose.Types.ObjectId(mediator);
     }
+
+    if(req.user.role === Roles.MEDIATOR) {  
+      finalMatch['order.mediator._id'] = new mongoose.Types.ObjectId(req.user._id);
+    }
+    
+
     if (product) {
       finalMatch['order.product._id'] = new mongoose.Types.ObjectId(product);
     }
@@ -540,6 +227,13 @@ export const getAllRefunds = async (req, res) => {
     if (platform) {
       finalMatch['order.product.productPlatform'] = platform;
     }
+
+    const { brand } = req.query;
+
+    if (brand) {
+      finalMatch['order.product.brand'] = brand;
+    }
+
 
     // --- ADDED SEARCH LOGIC ---
     if (searchTerm) {
@@ -630,6 +324,8 @@ export const getAllRefunds = async (req, res) => {
                 sellerFeedbackSS: 1,
                 returnWindowSS: 1,
                 rejectionMessage: 1,
+                bankInfo: 1,
+                refillMessage:1,
                 note: 1,
                 isReturnWindowClosed: 1,
 
@@ -641,10 +337,21 @@ export const getAllRefunds = async (req, res) => {
                   email: '$order.email',
                   phone: '$order.phone',
                   orderAmount: '$order.orderAmount',
+                  lessPrice: '$order.lessPrice',
+                  dealType: '$order.dealType',
+                  isReplacement: '$order.isReplacement',
+                  oldOrderNumber: '$order.oldOrderNumber',
+                  ratingOrReview: '$order.ratingOrReview',
+                  exchangeProduct: '$order.exchangeProduct',
+                  orderDate: '$order.orderDate',
                   // Nested Mediator
                   mediator: {
                     _id: '$order.mediator._id',
                     nickName: '$order.mediator.nickName',
+                    name: '$order.mediator.name',
+                    email: '$order.mediator.email',
+                    upiId: '$order.mediator.upiId',
+                    phone: '$order.mediator.phone'
                   },
                   // Nested Product
                   product: {
@@ -652,6 +359,7 @@ export const getAllRefunds = async (req, res) => {
                     name: '$order.product.name',
                     brand: '$order.product.brand',
                     productPlatform: '$order.product.productPlatform',
+                    productLink: '$order.product.productLink',
                     productCode: '$order.product.productCode',
                     brandCode: '$order.product.brandCode',
                     // Nested Seller
@@ -679,15 +387,17 @@ export const getAllRefunds = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Refunds retrieved successfully',
-      data: refunds,
-      pagination: {
-        total: totalCount,
-        page: pageNum,
-        limit: limitNum,
-        totalPages: Math.ceil(totalCount / limitNum),
-        hasNextPage: pageNum * limitNum < totalCount,
-        hasPrevPage: pageNum > 1,
-      },
+      data: {
+        items: refunds,
+        pagination: {
+          totalCount: totalCount,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: Math.ceil(totalCount / limitNum),
+          hasNextPage: pageNum * limitNum < totalCount,
+          hasPrevPage: pageNum > 1,
+        },
+      }
     });
   } catch (error) {
     console.error('Get refunds error:', error);
@@ -697,6 +407,7 @@ export const getAllRefunds = async (req, res) => {
     });
   }
 };
+
 // @desc    Get single refund by ID
 // @route   GET /api/refund/:id
 // @access  Private
@@ -933,7 +644,7 @@ export const deleteRefund = async (req, res) => {
 };
 
 // @desc    Update refund status
-// @route   PATCH /api/refunds/:id/status
+// @route   PUT /api/refunds/:id/status
 // @access  Private
 export const updateRefundStatus = async (req, res) => {
   try {
@@ -954,7 +665,12 @@ export const updateRefundStatus = async (req, res) => {
       });
     }
 
-    const validStatuses = ['accepted', 'rejected', 'pending', 'payment_done' , 'refill'];
+    const payment_statuses = ['payment_done'];
+    if (req.user.role === Roles.ADMIN) {
+      payment_statuses.push('brand_released');
+    } 
+    console.log(payment_statuses, status, payment_statuses.includes(status))
+    const validStatuses = ['accepted', 'rejected', 'pending', 'refill', ...payment_statuses];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
@@ -988,7 +704,7 @@ export const updateRefundStatus = async (req, res) => {
         populate: [
           {
             path: 'mediator',
-            select: 'name nickName email phone'
+            select: 'name nickName email phone upiId'
           },
           {
             path: 'product',
@@ -1003,7 +719,7 @@ export const updateRefundStatus = async (req, res) => {
         message: 'Refund not found'
       });
     }
-    if(status === "payment_done") {
+    if(payment_statuses.includes(status)) {
       await Order.findByIdAndUpdate(updatedRefund.order._id, { $set: { orderStatus: status } });
     }
     res.status(200).json({
@@ -1037,6 +753,234 @@ export const updateRefundStatus = async (req, res) => {
     });
   }
 };
+
+// @desc    Bulk update refund status
+// @route   PATCH /api/refund/bulk/update-status
+// @access  Private
+export const bulkUpdateRefundStatus = async (req, res) => {
+  try {
+    const {
+      selectAll,
+      filters = {},
+      selectedIds = [],
+      exclusion = [],
+      status,
+      rejectionMessage,
+      refillMessage,
+      note
+    } = req.body;
+
+    // --------------------
+    // Validations
+    // --------------------
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: 'status is required'
+      });
+    }
+
+    const validStatuses = [
+      'accepted',
+      'pending',
+      'rejected',
+      'payment_done',
+      'refill'
+    ];
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid refund status'
+      });
+    }
+
+    if (!selectAll && (!Array.isArray(selectedIds) || selectedIds.length === 0)) {
+      return res.status(400).json({
+        success: false,
+        message: 'selectedIds is required when selectAll is false'
+      });
+    }
+
+    // --------------------
+    // Build update object
+    // --------------------
+
+    const updateData = { status };
+
+    if (status === 'rejected' && rejectionMessage) {
+      updateData.rejectionMessage = rejectionMessage;
+    }
+
+    if (status === 'refill' && refillMessage) {
+      updateData.refillMessage = refillMessage;
+    }
+
+    if (note) {
+      updateData.note = note;
+    }
+
+    // --------------------
+    // Build query
+    // --------------------
+
+    let query = {};
+
+    if (selectAll) {
+      const {
+        status: filterStatus,
+        mediator,
+        seller,
+        product,
+        platform,
+        fromDate,
+        toDate,
+        searchTerm
+      } = filters;
+
+      // Base refund filters
+      if (filterStatus) {
+        query.status = filterStatus;
+      }
+
+      if (fromDate || toDate) {
+        query.createdAt = {};
+        if (fromDate) query.createdAt.$gte = new Date(fromDate);
+        if (toDate) {
+          const end = new Date(toDate);
+          end.setHours(23, 59, 59, 999);
+          query.createdAt.$lte = end;
+        }
+      }
+
+      // Exclusion
+      if (Array.isArray(exclusion) && exclusion.length > 0) {
+        query._id = { $nin: exclusion };
+      }
+
+      /**
+       * For populated fields (order, product, mediator, etc),
+       * we must first resolve matching refund IDs via aggregation
+       */
+      if (mediator || seller || product || platform || searchTerm) {
+        const pipeline = [
+          { $match: query },
+
+          {
+            $lookup: {
+              from: 'orders',
+              localField: 'order',
+              foreignField: '_id',
+              as: 'order'
+            }
+          },
+          { $unwind: '$order' },
+
+          {
+            $lookup: {
+              from: 'products',
+              localField: 'order.product',
+              foreignField: '_id',
+              as: 'order.product'
+            }
+          },
+          { $unwind: '$order.product' },
+
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'order.mediator',
+              foreignField: '_id',
+              as: 'order.mediator'
+            }
+          },
+          { $unwind: '$order.mediator' },
+
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'order.product.seller',
+              foreignField: '_id',
+              as: 'order.product.seller'
+            }
+          },
+          { $unwind: '$order.product.seller' }
+        ];
+
+        const finalMatch = {};
+
+        if (mediator) {
+          finalMatch['order.mediator._id'] = new mongoose.Types.ObjectId(mediator);
+        }
+        if (product) {
+          finalMatch['order.product._id'] = new mongoose.Types.ObjectId(product);
+        }
+        if (seller) {
+          finalMatch['order.product.seller._id'] = new mongoose.Types.ObjectId(seller);
+        }
+        if (platform) {
+          finalMatch['order.product.productPlatform'] = platform;
+        }
+        if (searchTerm) {
+          finalMatch.$or = [
+            { 'order.orderNumber': { $regex: searchTerm, $options: 'i' } },
+            { 'order.name': { $regex: searchTerm, $options: 'i' } }
+          ];
+        }
+
+        pipeline.push({ $match: finalMatch });
+        pipeline.push({ $project: { _id: 1 } });
+
+        const matchedRefunds = await Refund.aggregate(pipeline);
+        query._id = { $in: matchedRefunds.map(r => r._id) };
+      }
+    } else {
+      query._id = { $in: selectedIds };
+    }
+
+    // --------------------
+    // Execute bulk update
+    // --------------------
+
+    const result = await Refund.updateMany(
+      query,
+      { $set: updateData }
+    );
+
+    // --------------------
+    // Sync order status if payment_done
+    // --------------------
+
+    if (status === 'payment_done') {
+      const refunds = await Refund.find(query).select('order');
+      const orderIds = refunds.map(r => r.order);
+
+      await Order.updateMany(
+        { _id: { $in: orderIds } },
+        { $set: { orderStatus: 'payment_done' } }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Bulk refund status updated to ${status}`,
+      data: {
+        matchedCount: result.matchedCount,
+        modifiedCount: result.modifiedCount
+      }
+    });
+
+  } catch (error) {
+    console.error('Bulk update refund status error:', error);
+
+    res.status(500).json({
+      success: false,
+      message: 'Server error while bulk updating refund status'
+    });
+  }
+};
+
 
 
 // @desc    Verify order for refund

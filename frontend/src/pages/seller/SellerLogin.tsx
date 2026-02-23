@@ -72,7 +72,7 @@ const SellerLogin: React.FC = () => {
           {/* <Package className="h-7 w-7 text-white" /> */}
           <img width="70" src = {bblogo} alt = "Logo"/>
           </div>
-          <h1 className="text-3xl font-bold">Hawk Agency</h1>
+          <h1 className="text-3xl font-bold">Relamp Digital</h1>
         </div>
         
         {/* Welcome Message */}
@@ -89,7 +89,7 @@ const SellerLogin: React.FC = () => {
 
         {/* Footer Text */}
         <div className="z-10 text-sm text-teal-200">
-          &copy; {new Date().getFullYear()} Hawk Agency. All rights reserved.
+          &copy; {new Date().getFullYear()} Relamp Digital. All rights reserved.
         </div>
 
         {/* Abstract background shapes - Seller Theme */}
@@ -112,7 +112,7 @@ const SellerLogin: React.FC = () => {
               {/* <Package className="h-6 w-6 text-white" /> */}
               <img width="70" src = {bblogo} alt = "Logo"/>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Hawk Agency</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Relamp Digital</h1>
           </div>
 
           {/* Form Header */}

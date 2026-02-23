@@ -101,7 +101,7 @@ const MediatorResetPassword: React.FC = () => {
                     {/* <Package className="h-7 w-7 text-white" /> */}
                     <img width="70" src = {bblogo} alt = "Logo"/>
                 </div>
-                <h1 className="text-3xl font-bold">Hawk Agency</h1>
+                <h1 className="text-3xl font-bold">Relamp Digital</h1>
             </div>
 
             <div className="z-10 max-w-lg">

@@ -53,7 +53,7 @@ console.log('isAuthenticated', isAuthenticated);
             <Link to="/" className="flex items-center space-x-2 m-2 p-4">
               {/* <Package className="h-8 w-8 text-blue-600" /> */}
               <img width="180" src = {bblogo} alt = "Logo" className='mt-auto'/>
-              {/* <span className="text-xl font-bold text-gray-900">Hawk Agency</span> */}
+              {/* <span className="text-xl font-bold text-gray-900">Relamp Digital</span> */}
             </Link>
           </div>
           

@@ -62,7 +62,7 @@ const AdminLogin: React.FC = () => {
           {/* <Package className="h-7 w-7 text-white" /> */}
           <img width="70" src = {bblogo} alt = "Logo"/>
           </div>
-          <h1 className="text-3xl font-bold">Hawk Agency</h1>
+          <h1 className="text-3xl font-bold">Relamp Digital</h1>
         </div>
         
         {/* Welcome Message */}
@@ -78,7 +78,7 @@ const AdminLogin: React.FC = () => {
 
         {/* Footer Text */}
         <div className="z-10 text-sm text-violet-200">
-          &copy; {new Date().getFullYear()} Hawk Agency. All rights reserved.
+          &copy; {new Date().getFullYear()} Relamp Digital. All rights reserved.
         </div>
 
         {/* Abstract background shapes - Admin Theme */}
@@ -103,7 +103,7 @@ const AdminLogin: React.FC = () => {
               {/* <Package className="h-6 w-6 text-white" /> */}
               <img width="70" src = {bblogo} alt = "Logo"/>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Hawk Agency Admin</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Relamp Digital Admin</h1>
           </div>
 
           {/* Form Header */}
@@ -127,7 +127,7 @@ const AdminLogin: React.FC = () => {
               label="Admin Email"
               type="email"
               icon={<Mail className="h-5 w-5" />}
-              placeholder="admin@Hawk Agency.com"
+              placeholder="admin@Relamp Digital.com"
               required
               {...register('email', {
                 required: 'Email is required',

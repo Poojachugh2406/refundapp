@@ -7,10 +7,11 @@ import {
   getAllOrders, 
   getOrderById, 
   deleteOrder, 
-  updateOrderStatus, 
+  updateOrderStatus,
+  sendReminderEmail,
+  bulkUpdateOrderStatus, 
   getOrdersByMediator, 
   getOrdersByProduct, 
-  getMediatorOrders,
   getUserOrders,
   getOrdersforDownload,
   getSellerOrders,
@@ -19,6 +20,7 @@ import {
 import { authorize, protect } from '../middlewares/auth.js';
 import { upload } from '../config/cloudinary.js';
 import { parseData } from '../middlewares/parseData.js';
+import { Roles } from '../utils/constants.js';
 
 const router = express.Router();
 
@@ -36,15 +38,9 @@ router.post('/create-order',
 // @route   GET /api/order/all-orders
 router.get('/all-orders', 
   protect, 
-  authorize('admin'), 
+  authorize(Roles.ADMIN, Roles.MEDIATOR),
   getAllOrders
 );
-
-router.get('/mediator/all-orders',
-  protect,
-  authorize('mediator'),
-  getMediatorOrders
-)
 
 router.get('/seller/all-orders',
   protect,
@@ -90,11 +86,27 @@ router.patch('/update-status/:id',
   updateOrderStatus
 );
 
+// @desc    Bulk Update order status
+// @route   PATCH /api/order/bulk/update-status
+router.patch('/bulk/update-status', 
+  protect, 
+  authorize(Roles.ADMIN),
+  bulkUpdateOrderStatus
+);
+
+// @desc    Send reminder email for pending orders
+// @route   POST /api/order/remind
+router.post('/remind', 
+  protect, 
+  authorize(Roles.ADMIN, Roles.MEDIATOR),
+  sendReminderEmail
+);
+
 // @desc    Delete order
 // @route   DELETE /api/order/:id
 router.delete('/:id', 
   protect, 
-  authorize('admin'), 
+  authorize(Roles.ADMIN), 
   deleteOrder
 );
 

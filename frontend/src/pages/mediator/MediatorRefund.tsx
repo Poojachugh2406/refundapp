@@ -1,7 +1,5 @@
-// src/pages/admin/AdminRefunds.tsx
-
-// import type { RefundsResponse } from '@/types/products';
-import MediatorRefundTable from '@/components/mediator/MediatorRefundTable';
+import TransactionTable from '@/components/TransactionTable';
+import { Role, Process } from '@/types/transactions';
 import React from 'react';
 
 
@@ -17,7 +15,7 @@ const MediatorRefunds: React.FC = () => {
         </div>
         
       </div>
-      <MediatorRefundTable/>
+      <TransactionTable role={Role.MEDIATOR} process={Process.REFUND}/>
     </div>
   );
 };

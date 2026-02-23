@@ -1,7 +1,5 @@
-// src/pages/admin/AdminRefunds.tsx
-
-import RefundTable from '@/components/admin/RefundTable';
-// import type { RefundsResponse } from '@/types/products';
+import TransactionTable from '@/components/TransactionTable';
+import { Process, Role } from '@/types/transactions';
 import React from 'react';
 
 
@@ -15,7 +13,7 @@ const AdminRefunds: React.FC = () => {
         </div>
         
       </div>
-      <RefundTable  />
+      <TransactionTable role={Role.ADMIN} process={Process.REFUND}/>
     </div>
   );
 };

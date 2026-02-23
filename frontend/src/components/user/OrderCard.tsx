@@ -21,7 +21,8 @@ function OrderCard({ order, onReview, getStatusInfo }: OrderCardProps) {
       refund_placed: 'bg-green-50 border-green-200',
       rejected: 'bg-red-50 border-red-200',
       accepted: 'bg-blue-50 border-green-200',
-      payment_done: 'bg-emerald-50 border-emerald-200'
+      payment_done: 'bg-emerald-50 border-emerald-200',
+      brand_released: 'bg-purple-50 border-purple-200'
     };
     return colorMap[status as keyof typeof colorMap] || 'bg-gray-50 border-gray-200';
   };
@@ -33,7 +34,7 @@ function OrderCard({ order, onReview, getStatusInfo }: OrderCardProps) {
   const handleFillRefund= ()=>{
     navigate('/refund', {state:{orderNumber:order.orderNumber}});
   }
-
+  console.log(order.mediator)
   return (
     <div onClick={() => onReview(order)} className={`rounded-lg border p-4 transition-all duration-200 hover:shadow-md hover:cursor-pointer ${getCardColor(order.orderStatus)}`}>
       {/* Compact Header */}

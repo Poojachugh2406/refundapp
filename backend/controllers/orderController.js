@@ -2,8 +2,8 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import Refund from '../models/Refund.js';
 import User from '../models/User.js';
-import { sendOrderConfirmationEmail } from '../services/otpService.js';
-import { MEDIATOR } from '../utils/constants.js';
+import { sendOrderConfirmationEmail, sendRefundReminderEmail } from '../services/otpService.js';
+import { OrderStatuses, Roles } from '../utils/constants.js';
 import mongoose from 'mongoose';
 
 // @desc    Create new order
@@ -14,7 +14,7 @@ export const createOrder = async (req, res) => {
     const orderData = req.body.data;
 
     const [isMediatorExists, isProductExists, isOrderExists] = await Promise.all([
-      User.findOne({ _id: orderData.mediator, role: MEDIATOR }).select('_id').lean(),
+      User.findOne({ _id: orderData.mediator, role: Roles.MEDIATOR }).select('_id').lean(),
       Product.findOne({ _id: orderData.product }).select('_id').lean(),
       Order.findOne({ orderNumber: orderData.orderNumber }).select('_id').lean()
     ]);
@@ -127,182 +127,6 @@ export const getSellerOrders = async (req, res) => {
   }
 };
 
-// @desc    Get all orders with filtering and pagination
-// @route   GET /api/order/mediator/all-orders
-// @access  Private(mediator)
-// export const getMediatorOrdersSlowvala = async (req, res) => {
-//   try {
-//     const orders = await Order.find({ mediator: req.user._id })
-//       .populate({
-//         path: 'product',
-//         select: 'name brand productPlatform productCode brandCode seller',
-//         populate: {
-//           path: 'seller',
-//           select: 'name nickName email phone'
-//         }
-//       })
-//       .populate('mediator', 'nickName name email phone')
-//       .sort({ createdAt: -1 });
-
-//     res.status(200).json({
-//       success: true,
-//       message: 'Orders retrieved successfully',
-//       data: orders,
-//     });
-
-//   } catch (error) {
-//     console.error('Get orders error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Server error while fetching orders'
-//     });
-//   }
-// };
-
-
-
-
-// @desc    Get all orders with filtering (accurate count version)
-// @route   GET /api/order/mediator/all-orders
-// @access  Private(admin)
-export const getMediatorOrders = async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const {
-      searchTerm,
-      status,
-      product,
-      brand,
-      seller,
-      platform,
-      fromDate,
-      toDate,
-      sortBy = 'createdAt',
-      sortOrder = 'desc'
-    } = req.query;
-
-    // Build base filter
-    const filter = {};
-
-    // Text search
-    if (searchTerm) {
-      filter.$or = [
-        { orderNumber: { $regex: searchTerm, $options: 'i' } },
-        { name: { $regex: searchTerm, $options: 'i' } }
-      ];
-    }
-
-    if (status) filter.orderStatus = status;
-    if (product && mongoose.Types.ObjectId.isValid(product)) filter.product = product;
-    filter.mediator = req.user._id;
-
-    // Date range
-    if (fromDate || toDate) {
-      filter.createdAt = {};
-      if (fromDate) filter.createdAt.$gte = new Date(fromDate);
-      if (toDate) {
-        const endOfDay = new Date(toDate);
-        endOfDay.setHours(23, 59, 59, 999); // set to maximum time of the day
-        filter.createdAt.$lte = endOfDay;
-      }
-    }
-
-    // Build product match condition for populate
-    const productMatch = {};
-    if (brand) productMatch.brand = { $regex: brand, $options: 'i' };
-    if (platform) productMatch.productPlatform = { $regex: platform, $options: 'i' };
-
-    const populateConditions = [
-      {
-        path: 'product',
-        select: 'name brand productCode brandCode productPlatform seller',
-        match: Object.keys(productMatch).length > 0 ? productMatch : {},
-        populate: {
-          path: 'seller',
-          select: 'name nickName',
-          match: seller && mongoose.Types.ObjectId.isValid(seller) ? { _id: seller } : {}
-        }
-      },
-      {
-        path: 'mediator',
-        select: 'nickName'
-      }
-    ];
-
-    // Get orders
-    const orders = await Order.find(filter)
-      .populate(populateConditions)
-      .select('orderNumber orderDate orderAmount orderStatus name email phone dealType ratingOrReview createdAt')
-      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
-
-      // console.log(orders);
-
-    // Filter out orders where populate conditions didn't match
-    const filteredOrders = orders.filter(order => 
-      !order.product || (order.product && 
-      (!brand || order.product.brand?.toLowerCase().includes(brand.toLowerCase())) &&
-      (!platform || order.product.productPlatform?.toLowerCase().includes(platform.toLowerCase())) &&
-      (!seller || order.product.seller?._id?.toString() === seller))
-    );
-    // console.log('-----------------');
-    // console.log(filteredOrders);
-
-    // Get accurate total count considering all filters
-    let totalCount;
-    if (brand || platform || seller) {
-      // When we have complex filters, we need to count differently
-      const allOrders = await Order.find(filter)
-        .populate(populateConditions)
-        .select('_id')
-        .lean();
-      
-      const allFilteredOrders = allOrders.filter(order => 
-        order.product && 
-        (!brand || order.product.brand?.toLowerCase().includes(brand.toLowerCase())) &&
-        (!platform || order.product.productPlatform?.toLowerCase().includes(platform.toLowerCase())) &&
-        (!seller || order.product.seller?._id?.toString() === seller));
-      
-      totalCount = allFilteredOrders.length;
-    } else {
-      // Simple count for basic filters
-      totalCount = await Order.countDocuments(filter);
-    }
-
-    const totalPages = Math.ceil(totalCount / limit);
-
-    res.status(200).json({
-      success: true,
-      message: 'Orders retrieved successfully',
-      data: {
-        orders: filteredOrders,
-        pagination: {
-          currentPage: page,
-          totalPages,
-          totalCount,
-          hasNextPage: page < totalPages,
-          hasPrevPage: page > 1,
-          limit
-        }
-      },
-    });
-
-  } catch (error) {
-    console.error('Get orders error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error while fetching orders'
-    });
-  }
-};
-
-
-
 
 // @desc    Get all orders with filtering and pagination
 // @route   GET /api/order/user/all-orders
@@ -329,58 +153,9 @@ export const getUserOrders = async (req, res) => {
   }
 };
 
-// @desc    Get all orders 
-// @route   GET /api/order/all-orders
-// @access  Private(admin)
-// export const getAllOrdersSlowvala = async (req, res) => {
-//   try {
-//     const orders = await Order.find()
-//       .populate({
-//         path: 'product',
-//         select: 'name brand productPlatform productCode brandCode seller',
-//         populate: {
-//           path: 'seller',
-//           select: 'name nickName email phone'
-//         }
-//       })
-//       .populate('mediator', 'nickName')
-//       .sort({ createdAt: -1 });
-
-
-//     const allOrders = orders.map(order => {
-//       return {
-//         product: order.product,
-//         mediator: order.mediator,
-//         _id: order._id,
-//         orderNumber: order.orderNumber,
-//         orderDate: order.orderDate,
-//         orderAmount: order.orderAmount,
-//         createdAt: order.createdAt,
-//         name: order.name,
-//         orderStatus: order.orderStatus,
-//       }
-//     });
-
-
-//     res.status(200).json({
-//       success: true,
-//       message: 'Orders retrieved successfully',
-//       data: allOrders,
-//     });
-
-//   } catch (error) {
-//     console.error('Get orders error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Server error while fetching orders'
-//     });
-//   }
-// };
-
-
 // @desc    Get all orders with filtering (accurate count version)
 // @route   GET /api/order/all-orders
-// @access  Private(admin)
+// @access  Private(admin, mediator)
 export const getAllOrders = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -397,111 +172,192 @@ export const getAllOrders = async (req, res) => {
       platform,
       fromDate,
       toDate,
-      sortBy = 'createdAt',
-      sortOrder = 'desc'
+      sortBy = "createdAt",
+      sortOrder = "desc"
     } = req.query;
 
-    // Build base filter
-    const filter = {};
+    const baseMatch = {};
 
     // Text search
     if (searchTerm) {
-      filter.$or = [
-        { orderNumber: { $regex: searchTerm, $options: 'i' } },
-        { name: { $regex: searchTerm, $options: 'i' } }
+      baseMatch.$or = [
+        { orderNumber: { $regex: searchTerm, $options: "i" } },
+        { name: { $regex: searchTerm, $options: "i" } }
       ];
     }
 
+    // Status
     if (status) {
-      status === 'refund_not_placed' ?
-        filter.orderStatus = { $ne: 'refund_placed' } :
-        filter.orderStatus = status;
+      if (req.user.role === Roles.ADMIN && status.includes(","))
+        baseMatch.orderStatus = { $in: status.split(",") };
+      else {
+        baseMatch.orderStatus =
+          status === OrderStatuses.REFUND_NOT_PLACED
+            ? { $ne: OrderStatuses.REFUND_PLACED }
+            : status;
+      }
     }
-    if (product && mongoose.Types.ObjectId.isValid(product)) filter.product = product;
-    if (mediator && mongoose.Types.ObjectId.isValid(mediator)) filter.mediator = mediator;
+
+    // Product filter (direct)
+    if (product && mongoose.Types.ObjectId.isValid(product)) {
+      baseMatch.product = new mongoose.Types.ObjectId(product);
+    }
+
+    // Mediator filter
+    if (
+      req.user.role === Roles.ADMIN &&
+      mediator &&
+      mongoose.Types.ObjectId.isValid(mediator)
+    ) {
+      baseMatch.mediator = new mongoose.Types.ObjectId(mediator);
+    } else if (req.user.role === Roles.MEDIATOR) {
+      baseMatch.mediator = new mongoose.Types.ObjectId(req.user._id);
+    }
 
     // Date range
     if (fromDate || toDate) {
-      filter.createdAt = {};
-      if (fromDate) filter.createdAt.$gte = new Date(fromDate);
+      baseMatch.createdAt = {};
+      if (fromDate) baseMatch.createdAt.$gte = new Date(fromDate);
       if (toDate) {
         const endOfDay = new Date(toDate);
-        endOfDay.setHours(23, 59, 59, 999); // set to maximum time of the day
-        filter.createdAt.$lte = endOfDay;
+        endOfDay.setHours(23, 59, 59, 999);
+        baseMatch.createdAt.$lte = endOfDay;
       }
     }
 
-    // Build product match condition for populate
-    const productMatch = {};
-    if (brand) productMatch.brand = { $regex: brand, $options: 'i' };
-    if (platform) productMatch.productPlatform = { $regex: platform, $options: 'i' };
+    // 🧠 Build pipeline
+    const pipeline = [
+      { $match: baseMatch },
 
-    const populateConditions = [
+      // 🔗 Join product
       {
-        path: 'product',
-        select: 'name brand productCode brandCode productPlatform seller',
-        match: Object.keys(productMatch).length > 0 ? productMatch : {},
-        populate: {
-          path: 'seller',
-          select: 'name nickName',
-          match: seller && mongoose.Types.ObjectId.isValid(seller) ? { _id: seller } : {}
+        $lookup: {
+          from: "products",
+          localField: "product",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      { $unwind: "$product" },
+
+      // Product level filtering
+      {
+        $match: {
+          ...(brand && { "product.brand": { $regex: brand, $options: "i" } }),
+          ...(platform && {
+            "product.productPlatform": { $regex: platform, $options: "i" }
+          }),
+          ...(seller &&
+            mongoose.Types.ObjectId.isValid(seller) && {
+              "product.seller": new mongoose.Types.ObjectId(seller)
+            })
+        }
+      },
+
+      // 🔗 Join seller
+      {
+        $lookup: {
+          from: "users",
+          localField: "product.seller",
+          foreignField: "_id",
+          as: "product.seller"
         }
       },
       {
-        path: 'mediator',
-        select: 'nickName'
+        $unwind: {
+          path: "$product.seller",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+
+      // 🔗 Join mediator
+      {
+        $lookup: {
+          from: "users",
+          localField: "mediator",
+          foreignField: "_id",
+          as: "mediator"
+        }
+      },
+      {
+        $unwind: {
+          path: "$mediator",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+
+      // 📊 Sorting
+      {
+        $sort: {
+          [sortBy]: sortOrder === "asc" ? 1 : -1
+        }
+      },
+
+      // 📦 Facet for pagination + total count
+      {
+        $facet: {
+          data: [
+            { $skip: skip },
+            { $limit: limit },
+            {
+              $project: {
+                orderNumber: 1,
+                orderDate: 1,
+                orderAmount: 1,
+                orderStatus: 1,
+                orderSS: 1,
+                rejectionMessage: 1,
+                refillMessage: 1,
+                priceBreakupSS: 1,
+                name: 1,
+                email: 1,
+                phone: 1,
+                dealType: 1,
+                ratingOrReview: 1,
+                createdAt: 1,
+                lessPrice: 1,
+                isReplacement: 1,
+                lastReminderDate: 1,
+                product: {
+                  name: 1,
+                  brand: 1,
+                  productCode: 1,
+                  brandCode: 1,
+                  productPlatform: 1,
+                  productLink: 1,
+                  seller: {
+                    _id: 1,
+                    name: 1,
+                    nickName: 1
+                  }
+                },
+                mediator: {
+                  _id: 1,
+                  name: 1,
+                  nickName: 1,
+                  email: 1,
+                  phone: 1,
+                  upiId: 1
+                }
+              }
+            }
+          ],
+          totalCount: [{ $count: "count" }]
+        }
       }
     ];
 
-    // Get orders
-    const orders = await Order.find(filter)
-      .populate(populateConditions)
-      .select('orderNumber orderDate orderAmount orderStatus name email phone dealType ratingOrReview createdAt')
-      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    const result = await Order.aggregate(pipeline);
 
-      // console.log(orders);
-
-    // Filter out orders where populate conditions didn't match
-    const filteredOrders = orders.filter(order => 
-      !order.product || (order.product && 
-      (!brand || order.product.brand?.toLowerCase().includes(brand.toLowerCase())) &&
-      (!platform || order.product.productPlatform?.toLowerCase().includes(platform.toLowerCase())) &&
-      (!seller || order.product.seller?._id?.toString() === seller))
-    );
-    // console.log('-----------------');
-    // console.log(filteredOrders);
-
-    // Get accurate total count considering all filters
-    let totalCount;
-    if (brand || platform || seller) {
-      // When we have complex filters, we need to count differently
-      const allOrders = await Order.find(filter)
-        .populate(populateConditions)
-        .select('_id')
-        .lean();
-      
-      const allFilteredOrders = allOrders.filter(order => 
-        order.product && 
-        (!brand || order.product.brand?.toLowerCase().includes(brand.toLowerCase())) &&
-        (!platform || order.product.productPlatform?.toLowerCase().includes(platform.toLowerCase())) &&
-        (!seller || order.product.seller?._id?.toString() === seller));
-      
-      totalCount = allFilteredOrders.length;
-    } else {
-      // Simple count for basic filters
-      totalCount = await Order.countDocuments(filter);
-    }
-
+    const items = result[0].data;
+    const totalCount = result[0].totalCount[0]?.count || 0;
     const totalPages = Math.ceil(totalCount / limit);
 
     res.status(200).json({
       success: true,
-      message: 'Orders retrieved successfully',
+      message: "Orders retrieved successfully",
       data: {
-        orders: filteredOrders,
+        items,
         pagination: {
           currentPage: page,
           totalPages,
@@ -510,17 +366,18 @@ export const getAllOrders = async (req, res) => {
           hasPrevPage: page > 1,
           limit
         }
-      },
+      }
     });
 
   } catch (error) {
-    console.error('Get orders error:', error);
+    console.error("Get orders error:", error);
     res.status(500).json({
       success: false,
-      message: 'Server error while fetching orders'
+      message: "Server error while fetching orders"
     });
   }
 };
+
 
 
 // @desc    Get single order by ID
@@ -598,43 +455,6 @@ export const updateOrder = async (req, res) => {
 
     // Remove id from update fields
     delete updateFields.id;
-
-    // Validate mediator if being updated
-    // if (updateFields.mediator) {
-    //   const isMediatorExists = await User.findOne({ _id: updateFields.mediator, role: MEDIATOR });
-    //   if (!isMediatorExists) {
-    //     return res.status(400).json({
-    //       success: false,
-    //       message: 'Mediator doesnt exists with this id. Please try again.'
-    //     });
-    //   }
-    // }
-    // Validate product if being updated
-    // if (updateFields.product) {
-    //   const isProductExists = await Product.findOne({ _id: updateFields.product });
-    //   if (!isProductExists) {
-    //     return res.status(400).json({
-    //       success: false,
-    //       message: 'Product doesnt exists with this id. Please try again.'
-    //     });
-    //   }
-    // }
-
-    // Check for duplicate order number if being updated
-    // if (updateFields.orderNumber) {
-    //   const existingOrder = await Order.findOne({
-    //     orderNumber: updateFields.orderNumber,
-    //     _id: { $ne: id }
-    //   });
-    //   if (existingOrder) {
-    //     return res.status(400).json({
-    //       success: false,
-    //       message: 'Another order already exists with this order number'
-    //     });
-    //   }
-    // }
-    // console.log("updatedFields", updateFields);
-
 
     // Prepare validation promises conditionally
     const validationPromises = [];
@@ -896,6 +716,296 @@ export const updateOrderStatus = async (req, res) => {
     });
   }
 };
+
+// @desc    Bulk update order status
+// @route   PATCH /api/order/bulk/update-status
+// @access  Private
+export const bulkUpdateOrderStatus = async (req, res) => {
+  try {
+    const {
+      selectAll,
+      filters = {},
+      selectedIds = [],
+      exclusion = [],
+      status,
+      rejectionMessage,
+      refillMessage,
+      note
+    } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ success: false, message: "status is required" });
+    }
+
+    const validStatuses = [
+      "accepted",
+      "pending",
+      "rejected",
+      "payment_done",
+      "refund_placed",
+      "refill"
+    ];
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ success: false, message: "Invalid order status" });
+    }
+
+    const updateData = { orderStatus: status };
+
+    if (status === "rejected" && rejectionMessage)
+      updateData.rejectionMessage = rejectionMessage;
+
+    if (status === "refill" && refillMessage)
+      updateData.refillMessage = refillMessage;
+
+    if (note) updateData.note = note;
+
+    let query = {};
+
+    if (selectAll) {
+      const {
+        searchTerm,
+        status: filterStatus,
+        product,
+        brand,
+        mediator,
+        seller,
+        platform,
+        fromDate,
+        toDate
+      } = filters;
+
+      // Base order filters
+      if (searchTerm) {
+        query.$or = [
+          { orderNumber: { $regex: searchTerm, $options: "i" } },
+          { name: { $regex: searchTerm, $options: "i" } }
+        ];
+      }
+
+      if (filterStatus) {
+        query.orderStatus =
+          filterStatus === "refund_not_placed"
+            ? { $ne: "refund_placed" }
+            : filterStatus;
+      }
+
+      if (product && mongoose.Types.ObjectId.isValid(product)) {
+        query.product = new mongoose.Types.ObjectId(product);
+      }
+
+      if (mediator && mongoose.Types.ObjectId.isValid(mediator)) {
+        query.mediator = new mongoose.Types.ObjectId(mediator);
+      }
+
+      if (fromDate || toDate) {
+        query.createdAt = {};
+        if (fromDate) query.createdAt.$gte = new Date(fromDate);
+        if (toDate) {
+          const endOfDay = new Date(toDate);
+          endOfDay.setHours(23, 59, 59, 999);
+          query.createdAt.$lte = endOfDay;
+        }
+      }
+
+      // PRODUCT LEVEL FILTERING (CORRECT WAY)
+
+      if (brand || seller || platform) {
+        const productFilter = {};
+
+        if (brand)
+          productFilter.brand = { $regex: brand, $options: "i" };
+
+        if (platform)
+          productFilter.productPlatform = { $regex: platform, $options: "i" };
+
+        if (seller && mongoose.Types.ObjectId.isValid(seller))
+          productFilter.seller = new mongoose.Types.ObjectId(seller);
+
+        const products = await Product.find(productFilter, { _id: 1 }).lean();
+
+        const productIds = products.map(p => p._id);
+
+        if (productIds.length === 0) {
+          return res.status(200).json({
+            success: true,
+            message: "No matching orders found",
+            data: { matchedCount: 0, modifiedCount: 0 }
+          });
+        }
+
+        query.product = { $in: productIds };
+      }
+
+      if (Array.isArray(exclusion) && exclusion.length > 0) {
+        query._id = { ...(query._id || {}), $nin: exclusion };
+      }
+
+    } else {
+      query._id = { $in: selectedIds };
+    }
+
+    const result = await Order.updateMany(query, { $set: updateData });
+
+    res.status(200).json({
+      success: true,
+      message: `Bulk status updated to ${status}`,
+      data: {
+        matchedCount: result.matchedCount,
+        modifiedCount: result.modifiedCount
+      }
+    });
+
+  } catch (error) {
+    console.error("Bulk update order status error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while bulk updating order status"
+    });
+  }
+};
+
+
+// @desc    Send reminder email for orders
+// @route   PATCH /api/order/remind
+// @access  Private
+export const sendReminderEmail = async (req, res) => {
+  try {
+    const {
+      selectAll,
+      filters = {},
+      selectedIds = [],
+      exclusion = []
+    } = req.body;
+
+    // --------------------
+    // Validations
+    // --------------------
+
+    if (!selectAll && (!Array.isArray(selectedIds) || selectedIds.length === 0)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Nothing to update. Please provide order IDs, selectAll or selectedIds.'
+      });
+    }
+
+    // --------------------
+    // Build query
+    // --------------------
+
+    let query = {};
+
+    if (selectAll) {
+      /**
+       * Reuse same filter logic as getAllOrders
+       * (IMPORTANT: keep this in sync)
+       */
+      const {
+        searchTerm,
+        status,
+        product,
+        brand,
+        mediator,
+        seller,
+        platform,
+        fromDate,
+        toDate,
+      } = filters;
+
+
+      if (searchTerm) {
+        query.$or = [
+          { orderNumber: { $regex: searchTerm, $options: 'i' } },
+          { name: { $regex: searchTerm, $options: 'i' } }
+        ];
+      }
+
+      if (status) {
+        status === 'refund_not_placed'
+          ? (query.orderStatus = { $ne: 'refund_placed' })
+          : (query.orderStatus = status);
+      }
+
+      if (product && mongoose.Types.ObjectId.isValid(product)) {
+        query.product = product;
+      }
+
+      if (mediator && mongoose.Types.ObjectId.isValid(mediator)) {
+        query.mediator = mediator;
+      }
+
+      if (fromDate || toDate) {
+        query.createdAt = {};
+        if (fromDate) query.createdAt.$gte = new Date(fromDate);
+        if (toDate) {
+          const endOfDay = new Date(toDate);
+          endOfDay.setHours(23, 59, 59, 999);
+          query.createdAt.$lte = endOfDay;
+        }
+      }
+
+      if(brand && brand !== ''){
+        query.product.brand = { $regex: brand, $options: 'i' };
+      }
+
+      if(brandCode && brandCode !== ''){
+        query.product.brandCode = { $regex: brandCode, $options: 'i' };
+      }
+
+      if(productName && productName !== ''){
+        query.product.name = { $regex: productName, $options: 'i' };
+      }
+
+      if(seller && seller !== ''){
+        query.product.seller = seller;
+      }
+
+      if(platform && platform !== ''){
+        query.product.productPlatform = { $regex: platform, $options: 'i' };
+      }
+
+      if (Array.isArray(exclusion) && exclusion.length > 0) {
+        query._id = { $nin: exclusion };
+      }
+    } else {
+      query._id = { $in: selectedIds };
+    }
+
+    const result = await Order.find(query);
+    const successfullReminders = [];
+    // Send reminder email for each order (you can optimize this by sending in batches or using a job queue)
+    for (const order of result) {
+      let processedID = await sendRefundReminderEmail(order);
+      successfullReminders.push(processedID); 
+    }
+
+    // set lastReminderDate for all reminded orders
+    const updateResult = await Order.updateMany(
+      { _id: { $in: successfullReminders } },
+      { $set: { lastReminderDate: new Date() } }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `reminder sent to ${result.length} orders`,
+      data: {
+        total: result.length,
+        successful: successfullReminders,
+        failed: result.length - successfullReminders.length
+      }
+    });
+
+  } catch (error) {
+    console.error('Error sending reminder emails:', error);
+
+    res.status(500).json({
+      success: false,
+      message: 'Server error while sending reminder emails'
+    });
+  }
+};
+
+
 
 // @desc    Get orders by mediator
 // @route   GET /api/orders/mediator/:mediatorId

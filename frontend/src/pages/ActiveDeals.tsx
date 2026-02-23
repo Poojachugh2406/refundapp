@@ -344,7 +344,7 @@
 //                             {/* WhatsApp Button */}
 //                             <div >
 //                               <a
-//                                 href="https://api.whatsapp.com/send?phone=+919068627365&text=Deal%20with%20Hawk Agency%20here%20-%20https://Hawk Agency.com/order/123456789"
+//                                 href="https://api.whatsapp.com/send?phone=+919068627365&text=Deal%20with%20Relamp Digital%20here%20-%20https://Relamp Digital.com/order/123456789"
 //                                 target="_blank"
 //                                 rel="noopener noreferrer"
 //                                 className="inline-flex items-center justify-center p-1.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md transition-colors duration-200 group"
